@@ -1,31 +1,60 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from hylight.loader import load_phonons
+from hylight.mono_phonon import compute_spectra as mono_spectra
 
-from hylight.mp import spectra #, debug_thing
+from hylight.multi_phonons import (
+    compute_spectra as mul_spectra,
+    compute_delta_R,
+    hr_spectra,
+    fc_spectra,
+)
 
 
-nu, I, s = spectra("/mnt/these/bazro3/phonons/OUTCAR",
-                "/mnt/these/bazro3/phonons/POSCAR",
-                "/mnt/these/bazro3/phonons/POSCAR_ES", 2.97)
+prefix = "../test_bzo/"
 
-plt.plot(nu, s)
+phonons, _, _ = load_phonons(prefix + "OUTCAR")
+delta_R = compute_delta_R(prefix + "POSCAR", prefix + "POSCAR_ES")
+
+zpl = 2.97
+
+nu_mul, I_mul = mul_spectra(
+    phonons,
+    delta_R,
+    zpl,
+    sigma=-100,
+    resolution_e=1e-3,
+    e_max=8,
+)
+
+I_mul /= np.max(np.abs(I_mul))
+
+nu_mono, I_mono, _ = mono_spectra(
+    zpl,
+    300,
+    0.2871,
+    0.1091,
+    83.14e-3,
+    e_max=8,
+)
+
+f, fc, dirac_fc = fc_spectra(phonons, delta_R)
+f, s, dirac_s = hr_spectra(phonons, delta_R)
+
+fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+ax1.stackplot(f, s, color="grey")
+ax1.plot(f, dirac_s, color="black")
+ax1.set_ylabel("$S(\\hbar\\omega)$ (A. U.)")
+
+ax2.stackplot(f, fc, color="grey")
+ax2.plot(f, dirac_fc, color="black")
+ax2.set_ylabel("$FC shift$ (A. U.)")
+ax2.set_xlabel("Phonon energy (meV)")
+
 plt.figure()
-n = len(nu)
-ax1 = plt.subplot(2, 1, 1)
-ax2 = plt.subplot(2, 1, 2)
-ax1.sharex(ax2)
-ax1.plot(nu, I.real, label="real")
-ax2.plot(nu, I.imag, label="imag")
-plt.legend()
-
-plt.figure()
-ax1 = plt.subplot(2, 1, 1)
-ax2 = plt.subplot(2, 1, 2)
-ax1.sharex(ax2)
-ax1.plot(nu, np.abs(I), label="magnitude")
-ax2.plot(nu, np.angle(I), label="phase")
+plt.plot(nu_mul, np.abs(I_mul), label="Multi")
+plt.plot(nu_mono, np.abs(I_mono), label="Mono")
+plt.xlim(1, 5)
 plt.legend()
 plt.show()
-
-# locals().update(debug_thing[0])

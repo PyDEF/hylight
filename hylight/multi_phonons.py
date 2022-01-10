@@ -5,56 +5,80 @@ import numpy as np
 import scipy.fft
 
 from .loader import load_phonons, load_poscar
-from .constants import h_si, two_pi, eV_in_J, THz_in_meV
-
-debug_thing = [None]
+from .constants import h_si, two_pi, eV_in_J, THz_in_meV, hbar_si, atomic_mass
 
 
 def spectra(
-    outcar, poscar_gs, poscar_es, zpl, sigma=None, resolution_e=1e-5, N=1_000_000
+    outcar,
+    poscar_gs,
+    poscar_es,
+    zpl,
+    sigma=None,
+    resolution_e=1e-4,
+    e_max=None,
+    bias=0,
 ):
     """
     outcar, poscar_es, poscar_gs are path
     zpl is in eV
     sigma is in s-1 ?
+    resolution_e in eV
+    e_max in eV
     """
 
+    if e_max is None:
+        e_max = zpl * 2.5
     phonons, _, _ = load_phonons(outcar)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
 
     return compute_spectra(
-        phonons, delta_R, zpl, sigma=sigma, resolution_e=resolution_e, N=N
+        phonons,
+        delta_R,
+        zpl,
+        sigma,
+        resolution_e,
+        e_max,
+        bias=bias,
     )
 
 
-def compute_spectra(phonons, delta_R_tot, zpl, sigma, resolution_e, N):
+def compute_spectra(
+    phonons, delta_R_tot, zpl, sigma, resolution_e, e_max, bias=0, window_fn=np.hamming
+):
     """
     zpl in eV
     delta_R_tot in A
     sigma in s-1
     resolution_e in eV
+    e_max in eV
+    bias in eV
     """
 
-    resolution_f = resolution_e * eV_in_J / h_si
-    resolution_t = 1.0 / (resolution_f * N)
+    bias_si = bias * eV_in_J
 
-    print(resolution_t)
+    sample_rate = e_max * eV_in_J / h_si
 
-    top = N * resolution_t
+    resolution_t = 1 / sample_rate
 
-    t = np.arange(0, N) * resolution_t
-    # t = np.linspace(-top, top, N)
-    # t = np.arange(-N // 2, (N - N // 2)) * resolution_t
+    N = int(e_max / resolution_e)
 
+    t = np.arange((-N + 1) // 2, (N + 1) // 2) * resolution_t
+
+    # array of mode specific HR factors
     hrs = get_HR_factors(phonons, delta_R_tot * 1e-10)
+    print(np.max(hrs))
     S = np.sum(hrs)
 
-    pulses = two_pi * get_energies(phonons) / h_si
+    # array of mode specific pulsations/radial frequencies
+    energies = get_energies(phonons)
+    pulses = two_pi * energies / h_si * np.array(energies >= bias_si, dtype=float)
 
     # Fourier transform of individual S_i \delta {(\nu - \nu_i)}
     s_i_t = hrs.reshape((1, -1)) * np.exp(
         -1.0j * pulses.reshape((1, -1)) * t.reshape((-1, 1))
     )
+
+    # sum over the modes:
     s_t = np.sum(s_i_t, axis=1)
     exp_s_t = np.exp(s_t)
 
@@ -67,17 +91,12 @@ def compute_spectra(phonons, delta_R_tot, zpl, sigma, resolution_e, N):
 
     g_t = exp_s_t * np.exp(1.0j * two_pi * zpl * eV_in_J * t / h_si) * np.exp(-S)
 
-    a_t = window(g_t * line_shape, fn=nuttall)
+    a_t = window(g_t * line_shape, fn=window_fn)
 
-    nu = scipy.fft.fftfreq(N, resolution_f)
+    nu = np.arange(0, N) * resolution_e
     A = scipy.fft.fft(a_t)
 
-    nu = scipy.fft.fftshift(nu) * resolution_e / resolution_f
-    A = scipy.fft.fftshift(A)
-
     I = nu ** 3 * A
-
-    debug_thing[0] = locals()
 
     return nu, I
 
@@ -91,9 +110,7 @@ def get_HR_factors(phonons, delta_R_tot):
 
 
 def get_energies(phonons):
-    """
-    Return energies in SI
-    """
+    """Return an array of mode energies in SI"""
     return np.array([ph.energy for ph in phonons])
 
 
@@ -102,29 +119,53 @@ def compute_delta_R(poscar_gs, poscar_es):
     return load_poscar(poscar_gs) - load_poscar(poscar_es)
 
 
-def nuttall(i, n):
-    a0 = 0.355768
-    a1 = 0.487396
-    a2 = 0.144232
-    a3 = 0.012604
-    return (
-        a0
-        - a1 * np.cos(two_pi * i / n)
-        + a2 * np.cos(2 * two_pi * i / n)
-        - a3 * np.cos(3 * two_pi * i / n)
-    )
+def rect(n):
+    return np.ones((n,))
 
 
-def hann(i, n):
-    return np.sin(i * two_pi * 0.5 / n) ** 2
-
-
-def rect(i, n):
-    return np.ones(i.shape)
-
-
-def window(data, fn=nuttall):
+def window(data, fn=np.hanning):
+    """Apply a windowing function to the data.
+    Use hylight.multi_phonons.rect for as a dummy window.
+    """
     n = len(data)
+    return data * fn(n)
 
-    i = np.arange(0, n)
-    return data * fn(i, n)
+
+def stick_smooth_spectra(phonons, delta_R, height, n_points):
+    """
+    delta_R in A
+    """
+    ph_e_meV = [
+        p.energy * 1000 / eV_in_J
+        for p in phonons
+    ]
+
+    mi = min(ph_e_meV)
+    ma = max(ph_e_meV)
+
+    e_meV = np.linspace(mi, ma, n_points)
+
+    w = 2 * (ma - mi) / n_points
+
+    fc_spec = np.zeros(e_meV.shape)
+    fc_sticks = np.zeros(e_meV.shape)
+
+    for i, (e, hr) in enumerate(zip(ph_e_meV, get_HR_factors(phonons, delta_R * 1e-10))):
+        h = height(hr, e)
+        g_thin = gaussian(e_meV - e, w)
+        g_fat = gaussian(e_meV - e, 1)
+        fc_sticks += h * g_thin
+        fc_spec += h * g_fat
+
+    fc_sticks /= np.max(fc_sticks)
+    fc_spec /= np.max(fc_spec)
+
+    return e_meV, fc_spec, fc_sticks
+
+
+def fc_spectra(phonons, delta_R, n_points=5000):
+    return stick_smooth_spectra(phonons, delta_R, lambda hr, e: hr * e, n_points)
+
+
+def hr_spectra(phonons, delta_R, n_points=5000):
+    return stick_smooth_spectra(phonons, delta_R, lambda hr, _e: hr, n_points)

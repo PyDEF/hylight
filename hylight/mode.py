@@ -11,10 +11,10 @@ class Mode:
         self.ref = ref  # equilibrium position in A
         self.delta = delta  # vibrational mode normalized
 
-        self.mass = sum(m * np.linalg.norm(dr) ** 2 for m, dr in zip(masses, delta))
+        masses = np.array(masses) * atomic_mass
 
         # effective mass in kg
-        self.mass = (np.linalg.norm(self.delta, axis=1) ** 2).dot(masses) * atomic_mass
+        self.mass = (np.linalg.norm(self.delta, axis=1) ** 2).dot(masses)
 
     def project(self, delta_R):
         delta_R_dot_mode = np.sum(delta_R * self.delta)
