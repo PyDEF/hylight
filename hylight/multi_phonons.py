@@ -2,7 +2,7 @@
 FIXME This does not work properly just now.
 """
 import numpy as np
-import scipy.fft
+import scipy.fft, scipy.integrate
 
 from .loader import load_phonons, load_poscar
 from .constants import h_si, two_pi, eV_in_J, THz_in_meV, hbar_si, atomic_mass
@@ -43,7 +43,7 @@ def spectra(
 
 
 def compute_spectra(
-    phonons, delta_R_tot, zpl, sigma, resolution_e, e_max, bias=0, window_fn=np.hamming
+    phonons, delta_R_tot, zpl, sigma, resolution_e, e_max, bias=0, window_fn=np.hamming, pre_convolve=None, use_q=False
 ):
     """
     zpl in eV
@@ -62,24 +62,24 @@ def compute_spectra(
 
     N = int(e_max / resolution_e)
 
-    t = np.arange((-N + 1) // 2, (N + 1) // 2) * resolution_t
+    t = np.arange((-N) // 2 + 1, (N) // 2 + 1) * resolution_t
 
     # array of mode specific HR factors
-    hrs = get_HR_factors(phonons, delta_R_tot * 1e-10)
-    print(np.max(hrs))
+    hrs = get_HR_factors(phonons, delta_R_tot * 1e-10, use_q=use_q)
     S = np.sum(hrs)
 
     # array of mode specific pulsations/radial frequencies
     energies = get_energies(phonons)
-    pulses = two_pi * energies / h_si * np.array(energies >= bias_si, dtype=float)
 
-    # Fourier transform of individual S_i \delta {(\nu - \nu_i)}
-    s_i_t = hrs.reshape((1, -1)) * np.exp(
-        -1.0j * pulses.reshape((1, -1)) * t.reshape((-1, 1))
-    )
+    freqs = energies / h_si * np.array(energies >= bias_si, dtype=float)
 
-    # sum over the modes:
-    s_t = np.sum(s_i_t, axis=1)
+    s_t = get_s_t_raw(t, freqs, hrs)
+
+    if pre_convolve is not None:
+        sigma_s = h_si / (pre_convolve * eV_in_J)
+        g = gaussian(t, sigma_s)
+        s_t *= g / np.max(g)
+
     exp_s_t = np.exp(s_t)
 
     if sigma is None:
@@ -89,24 +89,34 @@ def compute_spectra(
     else:
         line_shape = np.array(gaussian(t, 4.0 / sigma), dtype=complex)
 
-    g_t = exp_s_t * np.exp(1.0j * two_pi * zpl * eV_in_J * t / h_si) * np.exp(-S)
+    g_t = exp_s_t * np.exp(1.0j * two_pi * t * zpl * eV_in_J / h_si) * np.exp(-S)
 
     a_t = window(g_t * line_shape, fn=window_fn)
 
-    nu = np.arange(0, N) * resolution_e
+    e = np.arange(0, N) * resolution_e
     A = scipy.fft.fft(a_t)
 
-    I = nu ** 3 * A
+    I = e ** 3 * A
 
-    return nu, I
+    return e, I
+
+
+def get_s_t_raw(t, freqs, hrs):
+    # Fourier transform of individual S_i \delta {(\nu - \nu_i)}
+    s_i_t = hrs.reshape((1, -1)) * np.exp(
+        -1.0j * two_pi * freqs.reshape((1, -1)) * t.reshape((-1, 1))
+    )
+
+    # sum over the modes:
+    return np.sum(s_i_t, axis=1)
 
 
 def gaussian(e, sigma):
     return np.exp(-(e ** 2) / (2 * sigma ** 2)) / (sigma * np.sqrt(two_pi))
 
 
-def get_HR_factors(phonons, delta_R_tot):
-    return np.array([ph.huang_rhys(delta_R_tot) for ph in phonons])
+def get_HR_factors(phonons, delta_R_tot, use_q=False):
+    return np.array([ph.huang_rhys(delta_R_tot, use_q=use_q) for ph in phonons])
 
 
 def get_energies(phonons):

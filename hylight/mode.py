@@ -11,10 +11,10 @@ class Mode:
         self.ref = ref  # equilibrium position in A
         self.delta = delta  # vibrational mode normalized
 
-        masses = np.array(masses) * atomic_mass
+        self.masses = np.array(masses) * atomic_mass
 
         # effective mass in kg
-        self.mass = (np.linalg.norm(self.delta, axis=1) ** 2).dot(masses)
+        self.mass = (np.linalg.norm(self.delta, axis=1) ** 2).dot(self.masses)
 
     def project(self, delta_R):
         delta_R_dot_mode = np.sum(delta_R * self.delta)
@@ -24,12 +24,17 @@ class Mode:
         delta_R_dot_mode = np.sum(delta_R * self.delta)
         return delta_R_dot_mode ** 2
 
-    def huang_rhys(self, delta_R_tot):
+    def huang_rhys(self, delta_R_tot, use_q=False):
         """
         delta_R_tot in SI
         """
         delta_R_i_2 = self.project_coef2(delta_R_tot)  # in SI
-        return 0.5 * self.mass * self.energy / hbar_si ** 2 * delta_R_i_2
+
+        if use_q:
+            delta_Q_i = np.sqrt(self.masses).dot(np.sum(self.delta * delta_R_tot, axis=1))
+            return 0.5 * self.energy / hbar_si ** 2 * delta_Q_i**2
+        else:
+            return 0.5 * self.mass * self.energy / hbar_si ** 2 * delta_R_i_2
 
     def to_traj(self, duration, amplitude):
         from ase import Atoms
