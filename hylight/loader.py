@@ -1,4 +1,5 @@
 import re
+from itertools import islice
 
 import numpy as np
 
@@ -17,36 +18,47 @@ def load_phonons(path):
     masses = []
     names = []
     atoms = []
-    natoms = None
+    n_atoms = None
+    n_modes = 0
     with open(path) as outcar:
-        while True:
-            line = outcar.readline()
-            if not line:
-                break
+        for line in outcar:
             line = line.strip()
-            if "ions per type" in line:
-                pops = list(map(int, line.split("=")[1].strip().split()))
-            elif "VRHFIN" in line:
+            if "VRHFIN" in line:
                 name = line.split("=")[1].strip().split(":")[0].strip()
                 if name == "r":
                     name = "Zr"
                 names.append(name)
-            elif "POMASS" in line and "ZVAL" not in line:
+
+            elif "ions per type" in line:
+                pops = list(map(int, line.split("=")[1].strip().split()))
+                break
+        else:
+            raise ValueError("Unexpected EOF")
+
+        for p, n in zip(pops, names):
+            atoms.extend([n] * p)
+
+        n_atoms = len(atoms)
+
+        for line in outcar:
+            line = line.strip()
+            if "POMASS" in line:
                 masses_ = map(float, line.split("=")[1].strip().split())
                 masses = []
 
                 for p, m in zip(pops, masses_):
                     masses.extend([m] * p)
-                for p, n in zip(pops, names):
-                    atoms.extend([n] * p)
-                natoms = len(atoms)
+                break
+        else:
+            raise ValueError("Unexpected EOF")
 
-            elif m := head_re.fullmatch(line):
+        for line in outcar:
+            line = line.strip()
+            if "THz" in line and (m := head_re.fullmatch(line)):
                 n, im, ener = m.groups()
 
-                outcar.readline()
                 data = np.array(
-                    [outcar.readline().strip().split() for _ in range(natoms)],
+                    [line.strip().split() for line in islice(outcar, 1,  n_atoms + 1)],
                     dtype=float,
                 )
                 ref = data[:, 0:3]
@@ -55,6 +67,11 @@ def load_phonons(path):
                 phonons.append(
                     Mode(atoms, n, im.strip() == "f", float(ener), ref, delta, masses)
                 )
+
+                n_modes += 1
+                if n_modes >= 3 * n_atoms:
+                    break
+
     return phonons, pops, masses
 
 
