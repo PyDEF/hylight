@@ -13,7 +13,7 @@ mass_re = re.compile(r"^\s*POMASS\s+=\s+(\d+\.\d+)\s*;.*$")
 
 
 def load_phonons(path):
-    """ Load phonons from a OUTCAR.
+    """Load phonons from a OUTCAR.
     :returns: (phonons, pops, masses)
       phonons: list of hylight.mode.Mode instances
       pops: population for each atom species
@@ -64,7 +64,7 @@ def load_phonons(path):
                 n, im, ener = m.groups()
 
                 data = np.array(
-                    [line.strip().split() for line in islice(outcar, 1,  n_atoms + 1)],
+                    [line.strip().split() for line in islice(outcar, 1, n_atoms + 1)],
                     dtype=float,
                 )
                 ref = data[:, 0:3]
@@ -82,8 +82,19 @@ def load_phonons(path):
 
 
 def load_poscar(path):
-    """ Read the positions from a POSCAR.
+    """Read the positions from a POSCAR.
 
     :returns: a np.ndarray((natoms, 3), dtype=float)
     """
     return Poscar.from_file(path).raw
+
+
+def load_poscar_latt(path):
+    """Read the positions from a POSCAR.
+
+    :returns: a (np.ndarray((natoms, 3), dtype=float), nd.array((3, 3), dtype=float))
+      first element is the set of positions
+      second element is the lattice parameters
+    """
+    p = Poscar.from_file(path)
+    return p.raw, p.cell_parameters

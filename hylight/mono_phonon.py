@@ -14,7 +14,7 @@ def compute_spectra(
     e_min=0,
     e_max=5,
 ):
-    """ Compute a spectra from a single vibrational mode and some energetic terms.
+    """Compute a spectra from a single vibrational mode and some energetic terms.
 
     :param e_zpl: energy of the zero phonon line, in eV
     :param T: temperature in K
@@ -53,7 +53,7 @@ def compute_spectra(
         # applied before or after broadening of the diracs
         c = (
             # (e_zpl - n * e_phonon_g) ** 3
-            e**3
+            e ** 3
             * khi_e_khi_g_squared
             * gaussian(e_zpl - n * e_phonon_g - e, sig)
         )
@@ -68,10 +68,7 @@ def compute_spectra(
     return (
         e,
         sp / np.max(sp),
-        [
-            [c / np.max(sp) for c in details],
-            1 if hard_osc else e_phonon_e / e_phonon_g
-        ],
+        [[c / np.max(sp) for c in details], 1 if hard_osc else e_phonon_e / e_phonon_g],
     )
 
 
