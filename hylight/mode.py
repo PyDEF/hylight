@@ -3,7 +3,19 @@ import numpy as np
 
 
 class Mode:
+    """ The representation of a vibrational mode.
+    """
     def __init__(self, atoms, n, real, energy, ref, delta, masses):
+        """ Build the mode from OUTCAR data.
+        
+        :param atoms: list of atoms
+        :param n: numeric id in OUTCAR
+        :param real: boolean, has the mode a real frequency ?
+        :param energy: energy/frequency of the mode, expected in meV
+        :param ref: equilibrium position of atoms
+        :param delta: displacement array np.ndarray((natoms, 3), dtype=float)
+        :param masses: masses of the atoms in atomic unit
+        """
         self.atoms = atoms
         self.n = n  # numeric id in VASP
         self.real = real  # False if imaginary coordinates
@@ -17,26 +29,39 @@ class Mode:
         self.mass = (np.linalg.norm(self.delta, axis=1) ** 2).dot(self.masses)
 
     def project(self, delta_R):
+        """ Project delta_R onto the mode
+        """
         delta_R_dot_mode = np.sum(delta_R * self.delta)
         return delta_R_dot_mode * self.delta
 
     def project_coef2(self, delta_R):
+        """ Square lenght of the projection of delta_R onto the mode.
+        """
         delta_R_dot_mode = np.sum(delta_R * self.delta)
         return delta_R_dot_mode ** 2
 
-    def huang_rhys(self, delta_R_tot, use_q=False):
+    def huang_rhys(self, delta_R, use_q=False):
+        r""" Compute the Huang-Rhyes factor
+
+        :param delta_R: displacement in SI
+        :param use_q:
+          true:  S_i = 1/2 \frac{\omega}{\hbar}   {\Delta Q_i}^2
+          false: S_i = 1/2 \frac{\omega}{\hbar} m {\Delta R_i}^2
         """
-        delta_R_tot in SI
-        """
-        delta_R_i_2 = self.project_coef2(delta_R_tot)  # in SI
 
         if use_q:
-            delta_Q_i = np.sqrt(self.masses).dot(np.sum(self.delta * delta_R_tot, axis=1))
+            delta_Q_i = np.sqrt(self.masses).dot(np.sum(self.delta * delta_R, axis=1))
             return 0.5 * self.energy / hbar_si ** 2 * delta_Q_i**2
         else:
+            delta_R_i_2 = self.project_coef2(delta_R)  # in SI
             return 0.5 * self.mass * self.energy / hbar_si ** 2 * delta_R_i_2
 
     def to_traj(self, duration, amplitude):
+        """ Produce a ase trajectory for animation purpose.
+
+        :param duration: duration of the animation in seconds (framerate is 25)
+        :param amplitude: amplitude applied to the mode in A (the modes are normalized)
+        """
         from ase import Atoms
 
         n = int(duration * 25)

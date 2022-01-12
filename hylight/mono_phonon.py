@@ -14,6 +14,19 @@ def compute_spectra(
     e_min=0,
     e_max=5,
 ):
+    """ Compute a spectra from a single vibrational mode and some energetic terms.
+
+    :param e_zpl: energy of the zero phonon line, in eV
+    :param T: temperature in K
+    :param fc_shift_g: Franck-Condon shift of emmission in eV
+    :param fc_shift_e: Franck-Condon shift of absobtion in eV
+    :param e_phonon_g: Mode energy in ground state in eV
+    :param hard_osc: boolean, (optional, False) use the hard oscillator mode:
+      vibration mode has the same energy in GD and ES
+    :param n_points: (optional, 5000) number of points in the spectra
+    :param e_min: (optional, 0) energy lower bound for the spectra, in eV
+    :param e_max: (optional, 5) energy higher bound for the spectra, in eV
+    """
     e = np.linspace(e_min, e_max, n_points)
     sp = np.zeros(e.shape)
 

@@ -13,6 +13,12 @@ mass_re = re.compile(r"^\s*POMASS\s+=\s+(\d+\.\d+)\s*;.*$")
 
 
 def load_phonons(path):
+    """ Load phonons from a OUTCAR.
+    :returns: (phonons, pops, masses)
+      phonons: list of hylight.mode.Mode instances
+      pops: population for each atom species
+      masses: list of SI masses
+    """
     phonons = []
     pops = []
     masses = []
@@ -76,4 +82,8 @@ def load_phonons(path):
 
 
 def load_poscar(path):
+    """ Read the positions from a POSCAR.
+
+    :returns: a np.ndarray((natoms, 3), dtype=float)
+    """
     return Poscar.from_file(path).raw
