@@ -3,9 +3,12 @@ from scipy import fft
 from scipy.integrate import trapezoid as integrate
 
 from .loader import load_phonons, load_poscar_latt
-from .constants import two_pi, eV_in_J, h_si
+from .constants import two_pi, eV_in_J, h_si, pi
 
 from pydef.core.basic_functions import gen_translat
+
+
+sigma_to_fwhm = 2 * np.sqrt(2 * np.log(2))
 
 
 def spectra(
@@ -13,7 +16,7 @@ def spectra(
     poscar_gs,
     poscar_es,
     zpl,
-    sigma=None,
+    fwhm=None,
     resolution_e=1e-4,
     e_max=None,
     bias=0,
@@ -21,7 +24,7 @@ def spectra(
     """
     outcar, poscar_es, poscar_gs are path
     zpl is in eV
-    sigma is in eV
+    fwhm is in eV
     resolution_e in eV
     e_max in eV
     """
@@ -35,7 +38,7 @@ def spectra(
         phonons,
         delta_R,
         zpl,
-        sigma,
+        fwhm,
         resolution_e,
         e_max,
         bias=bias,
@@ -46,24 +49,33 @@ def compute_spectra(
     phonons,
     delta_R,
     zpl,
-    sigma,
+    fwhm,
     resolution_e,
     e_max,
     bias=0,
     window_fn=np.hamming,
     pre_convolve=None,
-    use_q=False,
+    use_q=True,
 ):
     """
+    :param phonons: list of modes
     :param zpl: zero phonon line energy in eV
     :param delta_R: displacement in A
-    :param sigma: zpl line width in s-1
+    :param fwhm: zpl lineshape full width at half maximum in eV or None
+      if fwhm is None: the raw spectra is not convoluted with a line shape
+      if fwhm < 0: the spectra is convoluted with a lorentizan line shape
+      if fwhm > 0: the spectra is convoluted with a gaussian line shape
     :param resolution_e: energy resolution in eV
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param bias: ignore low energy vibrations under bias in eV
     """
 
     bias_si = bias * eV_in_J
+
+    if fwhm is None:
+        sigma_si = None
+    else:
+        sigma_si = fwhm * eV_in_J / sigma_to_fwhm
 
     sample_rate = e_max * eV_in_J / h_si
 
@@ -85,8 +97,8 @@ def compute_spectra(
     s_t = get_s_t_raw(t, freqs, hrs)
 
     if pre_convolve is not None:
-        sigma_s = h_si / (pre_convolve * eV_in_J)
-        g = gaussian(t, sigma_s)
+        sigma_freq = pre_convolve * eV_in_J / h_si / sigma_to_fwhm
+        g = gaussian(t, 1 / (two_pi * sigma_freq))
         if np.max(g) > 0:
             s_t *= g / np.max(g)
 
@@ -94,18 +106,16 @@ def compute_spectra(
 
     g_t = exp_s_t * np.exp(1.0j * two_pi * t * zpl * eV_in_J / h_si)
 
-    if sigma is None:
+    if sigma_si is None:
         line_shape = np.ones(t.shape, dtype=complex)
-        print("No line shape")
-    elif sigma < 0:
-        sigma_si = sigma * eV_in_J / h_si
-        line_shape = np.array(np.exp(sigma_si * np.abs(t)), dtype=complex)
-        print("Lorentzian")
+    elif sigma_si <= 0:
+        sigma_freq = sigma_si / h_si
+        line_shape = np.array(np.exp(pi * sigma_freq * np.abs(t)), dtype=complex)
     else:
-        sigma_si = sigma * eV_in_J / h_si
-        line_shape = np.array(gaussian(t, 4.0 / sigma_si), dtype=complex)
-
-        print("Gaussian")
+        sigma_freq = sigma_si / h_si
+        line_shape = np.sqrt(2) * np.array(
+            gaussian(t, 1 / (two_pi * sigma_freq)), dtype=complex
+        )
 
     a_t = window(g_t * line_shape, fn=window_fn)
 
@@ -140,7 +150,7 @@ def gaussian(e, sigma):
     return np.exp(-(e ** 2) / (2 * sigma ** 2)) / (sigma * np.sqrt(two_pi))
 
 
-def get_HR_factors(phonons, delta_R_tot, use_q=False):
+def get_HR_factors(phonons, delta_R_tot, use_q=True):
     return np.array([ph.huang_rhys(delta_R_tot, use_q=use_q) for ph in phonons])
 
 
@@ -223,9 +233,9 @@ def stick_smooth_spectra(phonons, delta_R, height, n_points, use_q):
     return e_meV, fc_spec, fc_sticks
 
 
-def fc_spectra(phonons, delta_R, n_points=5000, use_q=False):
+def fc_spectra(phonons, delta_R, n_points=5000, use_q=True):
     return stick_smooth_spectra(phonons, delta_R, lambda hr, e: hr * e, n_points, use_q)
 
 
-def hr_spectra(phonons, delta_R, n_points=5000, use_q=False):
+def hr_spectra(phonons, delta_R, n_points=5000, use_q=True):
     return stick_smooth_spectra(phonons, delta_R, lambda hr, _e: hr, n_points, use_q)
