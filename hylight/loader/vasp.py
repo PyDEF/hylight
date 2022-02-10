@@ -5,7 +5,7 @@ import numpy as np
 
 from pydef.core.vasp import Poscar
 
-from .mode import Mode
+from ..mode import Mode
 
 
 head_re = re.compile(r"^(\d+) (f  |f/i)= *.* (\d+\.\d+) meV")
@@ -49,11 +49,17 @@ def load_phonons(path):
         for line in outcar:
             line = line.strip()
             if "POMASS" in line:
-                masses_ = map(float, line.split("=")[1].strip().split())
-                masses = []
+                raw = line.split("=")[1]
 
-                for p, m in zip(pops, masses_):
-                    masses.extend([m] * p)
+                # Unfortunately the format is really broken
+                fmt = " " + "([ .0-9]{6})" * len(names)
+
+                m = re.fullmatch(fmt, raw)
+                assert m, "OUTCAR is not formatted as expected."
+
+                masses = []
+                for p, m in zip(pops, m.groups()):
+                    masses.extend([float(m)] * p)
                 break
         else:
             raise ValueError("Unexpected EOF")
@@ -90,7 +96,7 @@ def load_poscar(path):
 
 
 def load_poscar_latt(path):
-    """Read the positions from a POSCAR.
+    """Read the positions and the lattice parameters from a POSCAR.
 
     :returns: a (np.ndarray((natoms, 3), dtype=float), nd.array((3, 3), dtype=float))
       first element is the set of positions

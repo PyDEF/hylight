@@ -20,6 +20,7 @@ def spectra(
     resolution_e=1e-4,
     e_max=None,
     bias=0,
+    load_phonons=load_phonons,
 ):
     """
     outcar, poscar_es, poscar_gs are path
@@ -207,7 +208,7 @@ def stick_smooth_spectra(phonons, delta_R, height, n_points, use_q):
     mi = min(ph_e_meV)
     ma = max(ph_e_meV)
 
-    e_meV = np.linspace(mi, ma, n_points)
+    e_meV = np.linspace(mi, ma + 0.2 * (ma - mi), n_points)
 
     w = 2 * (ma - mi) / n_points
 
