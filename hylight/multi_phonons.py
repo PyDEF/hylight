@@ -4,6 +4,7 @@ from scipy.integrate import trapezoid as integrate
 
 from .loader import load_phonons, load_poscar_latt
 from .constants import two_pi, eV_in_J, h_si, pi
+from .mono_phonon import sigma_soft
 
 from pydef.core.basic_functions import gen_translat
 
@@ -16,24 +17,97 @@ def spectra(
     poscar_gs,
     poscar_es,
     zpl,
-    fwhm=None,
-    resolution_e=1e-4,
+    T,
+    fc_shift_gs,
+    fc_shift_es=None,
     e_max=None,
+    resolution_e=1e-4,
     bias=0,
     load_phonons=load_phonons,
+    pre_convolve=None,
 ):
     """
-    outcar, poscar_es, poscar_gs are path
-    zpl is in eV
-    fwhm is in eV
-    resolution_e in eV
-    e_max in eV
+    :param outcar: path to the OUTCAR for the vibration computation
+    :param poscar_gs: path to the ground state relaxed POSCAR
+    :param poscar_es: path to the excited state relaxed POSCAR
+    :param zpl: zero phonon line energy in eV
+    :param T: temperature in K
+    :param fc_shift_gs: Ground state/absorption Franck-Condon shift in eV
+    :param fc_shift_es: (optional, equal to fc_shift_gs) Exited state/emmission Franck-Condon shift in eV
+    :param e_max: max energy in eV (should be at least > 2*zpl)
+    :param resolution_e: energy resolution in eV
+    :param bias: (optional, 0) ignore low energy vibrations under bias in eV
+    :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
+    :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
+    :param use_q: (optional, True) if True use the DeltaQ whane computing the HR factor, else use DeltaR
     """
 
     if e_max is None:
         e_max = zpl * 2.5
     phonons, _, _ = load_phonons(outcar)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
+
+    if fc_shift_es is None:
+        fc_shift_es = fc_shift_gs
+
+    e, I = compute_spectra_soft(
+        phonons,
+        delta_R,
+        zpl,
+        resolution_e,
+        T,
+        fc_shift_gs,
+        fc_shift_es,
+        e_max,
+        bias=bias,
+        pre_convolve=pre_convolve,
+    )
+
+    return e, np.abs(I)
+
+
+def compute_spectra_soft(
+    phonons,
+    delta_R,
+    zpl,
+    T,
+    fc_shift_gs,
+    fc_shift_es,
+    e_max,
+    resolution_e,
+    bias=0,
+    window_fn=np.hamming,
+    pre_convolve=None,
+    use_q=True,
+):
+    """
+    :param phonons: list of modes
+    :param delta_R: displacement in A
+    :param zpl: zero phonon line energy in eV
+    :param T: temperature in K
+    :param fc_shift_gs: Ground state/absorption Franck-Condon shift in eV
+    :param fc_shift_es: Exceited state/emmission Franck-Condon shift in eV
+    :param e_max: max energy in eV (should be at least > 2*zpl)
+    :param resolution_e: energy resolution in eV
+    :param bias: (optional, 0) ignore low energy vibrations under bias in eV
+    :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
+    :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
+    :param use_q: (optional, True) if True use the DeltaQ whane computing the HR factor, else use DeltaR
+    """
+
+    hrs = np.array([ph.huang_rhys(delta_R) for ph in phonons])
+    fcs = np.array([ph.huang_rhys(delta_R) * ph.energy for ph in phonons]) / eV_in_J
+
+    e_phonon_eff = np.sum(fcs) / np.sum(hrs)
+
+    e_phonon_eff_e = e_phonon_eff * np.sqrt(fc_shift_es / fc_shift_gs)
+
+    S_abs = fc_shift_es / e_phonon_eff_e
+    S_em = fc_shift_gs / e_phonon_eff
+
+    sig = sigma_soft(T, S_abs, S_em, e_phonon_eff, e_phonon_eff_e)
+
+    fwhm = sig * sigma_to_fwhm
 
     return compute_spectra(
         phonons,
@@ -43,6 +117,10 @@ def spectra(
         resolution_e,
         e_max,
         bias=bias,
+        window_fn=window_fn,
+        pre_convolve=pre_convolve,
+        pre_convolve=pre_convolve,
+        use_q=use_q,
     )
 
 
@@ -51,8 +129,8 @@ def compute_spectra(
     delta_R,
     zpl,
     fwhm,
-    resolution_e,
     e_max,
+    resolution_e,
     bias=0,
     window_fn=np.hamming,
     pre_convolve=None,
@@ -60,15 +138,18 @@ def compute_spectra(
 ):
     """
     :param phonons: list of modes
-    :param zpl: zero phonon line energy in eV
     :param delta_R: displacement in A
+    :param zpl: zero phonon line energy in eV
     :param fwhm: zpl lineshape full width at half maximum in eV or None
       if fwhm is None: the raw spectra is not convoluted with a line shape
       if fwhm < 0: the spectra is convoluted with a lorentizan line shape
       if fwhm > 0: the spectra is convoluted with a gaussian line shape
-    :param resolution_e: energy resolution in eV
     :param e_max: max energy in eV (should be at least > 2*zpl)
-    :param bias: ignore low energy vibrations under bias in eV
+    :param resolution_e: energy resolution in eV
+    :param bias: (optional, 0) ignore low energy vibrations under bias in eV
+    :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
+    :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
+    :param use_q: (optional, True) if True use the DeltaQ whane computing the HR factor, else use DeltaR
     """
 
     bias_si = bias * eV_in_J
@@ -95,11 +176,11 @@ def compute_spectra(
 
     freqs = energies / h_si * np.array(energies >= bias_si, dtype=float)
 
-    s_t = get_s_t_raw(t, freqs, hrs)
+    s_t = _get_s_t_raw(t, freqs, hrs)
 
     if pre_convolve is not None:
         sigma_freq = pre_convolve * eV_in_J / h_si / sigma_to_fwhm
-        g = gaussian(t, 1 / (two_pi * sigma_freq))
+        g = _gaussian(t, 1 / (two_pi * sigma_freq))
         if np.max(g) > 0:
             s_t *= g / np.max(g)
 
@@ -115,40 +196,17 @@ def compute_spectra(
     else:
         sigma_freq = sigma_si / h_si
         line_shape = np.sqrt(2) * np.array(
-            gaussian(t, 1 / (two_pi * sigma_freq)), dtype=complex
+            _gaussian(t, 1 / (two_pi * sigma_freq)), dtype=complex
         )
 
-    a_t = window(g_t * line_shape, fn=window_fn)
+    a_t = _window(g_t * line_shape, fn=window_fn)
 
     e = np.arange(0, N) * resolution_e
     A = fft.fft(a_t)
 
-    I = e ** 3 * A
+    I = e**3 * A
 
     return e, I
-
-
-def get_s_t_raw(t, freqs, hrs):
-    # Fourier transform of individual S_i \delta {(\nu - \nu_i)}
-    try:
-        # This can create a huge array if freqs is too big
-        # but it let numpy handle everything so it is really fast
-        s_i_t = hrs.reshape((1, -1)) * np.exp(
-            -1.0j * two_pi * freqs.reshape((1, -1)) * t.reshape((-1, 1))
-        )
-    except MemoryError:
-        # Slower less memory intensive solution
-        s_t = np.zeros(t.shape, dtype=complex)
-        for hr, fr in zip(hrs, freqs):
-            s_t += hr * np.exp(-1.0j * two_pi * fr * t)
-        return s_t
-    else:
-        # sum over the modes:
-        return np.sum(s_i_t, axis=1)
-
-
-def gaussian(e, sigma):
-    return np.exp(-(e ** 2) / (2 * sigma ** 2)) / (sigma * np.sqrt(two_pi))
 
 
 def get_HR_factors(phonons, delta_R_tot, use_q=True):
@@ -187,11 +245,30 @@ def compute_delta_R(poscar_gs, poscar_es):
     return res
 
 
-def rect(n):
-    return np.ones((n,))
+def _get_s_t_raw(t, freqs, hrs):
+    # Fourier transform of individual S_i \delta {(\nu - \nu_i)}
+    try:
+        # This can create a huge array if freqs is too big
+        # but it let numpy handle everything so it is really fast
+        s_i_t = hrs.reshape((1, -1)) * np.exp(
+            -1.0j * two_pi * freqs.reshape((1, -1)) * t.reshape((-1, 1))
+        )
+    except MemoryError:
+        # Slower less memory intensive solution
+        s_t = np.zeros(t.shape, dtype=complex)
+        for hr, fr in zip(hrs, freqs):
+            s_t += hr * np.exp(-1.0j * two_pi * fr * t)
+        return s_t
+    else:
+        # sum over the modes:
+        return np.sum(s_i_t, axis=1)
 
 
-def window(data, fn=np.hanning):
+def _gaussian(e, sigma):
+    return np.exp(-(e**2) / (2 * sigma**2)) / (sigma * np.sqrt(two_pi))
+
+
+def _window(data, fn=np.hamming):
     """Apply a windowing function to the data.
     Use hylight.multi_phonons.rect for as a dummy window.
     """
@@ -199,7 +276,17 @@ def window(data, fn=np.hanning):
     return data * fn(n)
 
 
-def stick_smooth_spectra(phonons, delta_R, height, n_points, use_q):
+def fc_spectra(phonons, delta_R, n_points=5000, use_q=True):
+    return _stick_smooth_spectra(
+        phonons, delta_R, lambda hr, e: hr * e, n_points, use_q
+    )
+
+
+def hr_spectra(phonons, delta_R, n_points=5000, use_q=True):
+    return _stick_smooth_spectra(phonons, delta_R, lambda hr, _e: hr, n_points, use_q)
+
+
+def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q):
     """
     delta_R in A
     """
@@ -223,8 +310,8 @@ def stick_smooth_spectra(phonons, delta_R, height, n_points, use_q):
 
     for i, (e, hr) in enumerate(zip(ph_e_meV, hrs)):
         h = height(hr, e)
-        g_thin = gaussian(e_meV - e, w)
-        g_fat = gaussian(e_meV - e, 1)
+        g_thin = _gaussian(e_meV - e, w)
+        g_fat = _gaussian(e_meV - e, 1)
         fc_sticks += h * g_thin
         fc_spec += h * g_fat
 
@@ -234,9 +321,6 @@ def stick_smooth_spectra(phonons, delta_R, height, n_points, use_q):
     return e_meV, fc_spec, fc_sticks
 
 
-def fc_spectra(phonons, delta_R, n_points=5000, use_q=True):
-    return stick_smooth_spectra(phonons, delta_R, lambda hr, e: hr * e, n_points, use_q)
-
-
-def hr_spectra(phonons, delta_R, n_points=5000, use_q=True):
-    return stick_smooth_spectra(phonons, delta_R, lambda hr, _e: hr, n_points, use_q)
+def rect(n):
+    """A dummy windowing function that works like numpy.hamming, but as no effect on data."""
+    return np.ones((n,))
