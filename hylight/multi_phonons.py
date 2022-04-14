@@ -3,10 +3,12 @@ from scipy import fft
 from scipy.integrate import trapezoid as integrate
 
 from .loader import load_phonons, load_poscar_latt
-from .constants import two_pi, eV_in_J, h_si, pi
+from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J
 from .mono_phonon import sigma_soft
 
 from pydef.core.basic_functions import gen_translat
+
+import logging
 
 
 sigma_to_fwhm = 2 * np.sqrt(2 * np.log(2))
@@ -27,9 +29,9 @@ def spectra(
     pre_convolve=None,
 ):
     """
-    :param outcar: path to the OUTCAR for the vibration computation
-    :param poscar_gs: path to the ground state relaxed POSCAR
-    :param poscar_es: path to the excited state relaxed POSCAR
+    :param path_vib: path to the vibration computation output file (by default an OUTCAR)
+    :param path_struct_gs: path to the ground state relaxed structure file (by default a POSCAR)
+    :param path_struct_es: path to the excited state relaxed structure file (by default a POSCAR)
     :param zpl: zero phonon line energy in eV
     :param T: temperature in K
     :param fc_shift_gs: Ground state/absorption Franck-Condon shift in eV
@@ -37,9 +39,8 @@ def spectra(
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param resolution_e: energy resolution in eV
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
-    :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :param use_q: (optional, True) if True use the DeltaQ whane computing the HR factor, else use DeltaR
+    :param load_phonons: a function that takes path_vib and produce a list of phonons. By default expect an OUTCAR.
     """
 
     if e_max is None:
@@ -54,16 +55,38 @@ def spectra(
         phonons,
         delta_R,
         zpl,
-        resolution_e,
         T,
         fc_shift_gs,
         fc_shift_es,
         e_max,
+        resolution_e,
         bias=bias,
         pre_convolve=pre_convolve,
     )
 
     return e, np.abs(I)
+
+
+def plot_spectral_function(outcar, poscar_es, poscar_gs, load_phonons=load_phonons):
+    from matplotlib import pyplot as plt
+
+    phonons, _, _ = load_phonons(outcar)
+    delta_R = compute_delta_R(poscar_gs, poscar_es)
+
+    f, fc, dirac_fc = fc_spectra(phonons, delta_R)
+    f, s, dirac_s = hr_spectra(phonons, delta_R)
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+    ax1.stackplot(f, s, color="grey")
+    ax1.plot(f, dirac_s, color="black", lw=1)
+    ax1.set_ylabel("$S(\\hbar\\omega)$ (A. U.)")
+
+    ax2.stackplot(f, fc, color="grey")
+    ax2.plot(f, dirac_fc, color="black", lw=1)
+    ax2.set_ylabel("FC shift (A. U.)")
+    ax2.set_xlabel("Phonon energy (meV)")
+
+    return fig
 
 
 def compute_spectra_soft(
@@ -95,30 +118,30 @@ def compute_spectra_soft(
     :param use_q: (optional, True) if True use the DeltaQ whane computing the HR factor, else use DeltaR
     """
 
-    hrs = np.array([ph.huang_rhys(delta_R) for ph in phonons])
-    fcs = np.array([ph.huang_rhys(delta_R) * ph.energy for ph in phonons]) / eV_in_J
+    hrs = np.array([ph.huang_rhys(delta_R * 1e-10, use_q=use_q) for ph in phonons if ph.energy >= bias * eV_in_J])
+    fcs = np.array([ph.huang_rhys(delta_R * 1e-10, use_q=use_q) * ph.energy for ph in phonons if ph.energy >= bias * eV_in_J]) / eV_in_J
 
-    e_phonon_eff = np.sum(fcs) / np.sum(hrs)
+    S_abs = np.sum(hrs)
+    S_em = np.sum(hrs) / np.sqrt(fc_shift_es / fc_shift_gs)
+
+    e_phonon_eff = np.sum(fcs) / S_abs
 
     e_phonon_eff_e = e_phonon_eff * np.sqrt(fc_shift_es / fc_shift_gs)
-
-    S_abs = fc_shift_es / e_phonon_eff_e
-    S_em = fc_shift_gs / e_phonon_eff
 
     sig = sigma_soft(T, S_abs, S_em, e_phonon_eff, e_phonon_eff_e)
 
     fwhm = sig * sigma_to_fwhm
+    logging.info(f"FWHM {fwhm} meV")
 
     return compute_spectra(
         phonons,
         delta_R,
         zpl,
         fwhm,
-        resolution_e,
         e_max,
+        resolution_e,
         bias=bias,
         window_fn=window_fn,
-        pre_convolve=pre_convolve,
         pre_convolve=pre_convolve,
         use_q=use_q,
     )
@@ -210,6 +233,9 @@ def compute_spectra(
 
 
 def get_HR_factors(phonons, delta_R_tot, use_q=True):
+    """
+    delta_R_tot in SI
+    """
     return np.array([ph.huang_rhys(delta_R_tot, use_q=use_q) for ph in phonons])
 
 

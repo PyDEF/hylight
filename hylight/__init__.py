@@ -5,3 +5,18 @@ from . import loader
 from . import mode
 from . import mono_phonon
 from . import multi_phonons
+
+import logging
+
+
+def setup_logging():
+    class H(logging.Handler):
+        def emit(self, record):
+            print(self.format(record))
+
+    h = H()
+
+    logging.getLogger().addHandler(h)
+
+
+setup_logging()

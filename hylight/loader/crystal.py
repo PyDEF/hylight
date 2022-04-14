@@ -51,6 +51,8 @@ def load_phonons(path):
             else:
                 break
 
+        _masses_12 = np.sqrt(masses).reshape((-1, 1))
+
         for line in log:
             if "NORMAL MODES NORMALIZED" in line:
                 break
@@ -64,7 +66,7 @@ def load_phonons(path):
             next(log)
             ats = []
             for _ in masses:
-                # Drop the 13 firs characters that qualify the line
+                # Drop the 13 first characters that qualify the line
                 # Each line contains the infos for some number of modes
                 # Note: the str to float conversion is delayed to be done
                 # in batch in the next loop by numpy.
@@ -81,7 +83,17 @@ def load_phonons(path):
             # Yet, It works(TM).
             for f, disp in zip(freqs, zip(*ats)):
                 c += 1  # Crystal does not index its phonons so I use a counter
-                delta = np.array(disp, dtype=float)
+                delta = _masses_12 * np.array(disp, dtype=float)
+                # FIXME I am 95% sure the data found in the log file are the
+                # eigen displacement, thus I need to apply the sqrt of the mass
+                # matrix to make them orthogonal (Can be verified on a system
+                # with large mass differences like CaWO4). However, they are
+                # still not orthonormal and I cannot find a proper explication
+                # of what the amplitude is supposed to be. There is a vague
+                # "classical amplitude in bohr" mention in the CRYSTAL log
+                # file, but that is not very helpful in my opinion. In
+                # particular it does not specify how the normalization is
+                # applied, or what the amplitude depends on.
                 delta /= np.linalg.norm(delta)
 
                 # Note: imaginary freqs are logged as negative frequencies

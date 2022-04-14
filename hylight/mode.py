@@ -48,6 +48,7 @@ class Mode:
         """
 
         if use_q:
+            # Formula from Alkauskas et. al. New J. Phys., 2014, equations (5) and (6)
             delta_Q_i = np.sqrt(self.masses).dot(np.sum(self.delta * delta_R, axis=1))
             return 0.5 * self.energy / hbar_si ** 2 * delta_Q_i ** 2
         else:

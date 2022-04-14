@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 
 from .constants import pi, kb_eV
@@ -35,7 +37,7 @@ def compute_spectra(
         S = 0.5 * stokes_shift / e_phonon_g
         sig = sigma(T, S, e_phonon_g)
         khi_e_khi_g_squared = np.exp(-S)
-    elif True:
+    else:
         e_phonon_e = e_phonon_g * np.sqrt(fc_shift_e / fc_shift_g)
         S_abs = fc_shift_e / e_phonon_e
         S_em = fc_shift_g / e_phonon_g
@@ -48,11 +50,7 @@ def compute_spectra(
     n, r = 0, 1
 
     while r > 1e-8 and n < 100:
-        # FIXME Here I am not sure wether the right factor is e**3 or (e_zpl -
-        # n * e_phonon_g)**3. The answer depends on wether the factor should be
-        # applied before or after broadening of the diracs
         c = (
-            # (e_zpl - n * e_phonon_g) ** 3
             e ** 3
             * khi_e_khi_g_squared
             * gaussian(e_zpl - n * e_phonon_g - e, sig)
@@ -63,7 +61,7 @@ def compute_spectra(
         n += 1
         khi_e_khi_g_squared *= S / n
 
-    print(f"went up to {n = }")
+    logging.info(f"went up to {n = }")
 
     return (
         e,
