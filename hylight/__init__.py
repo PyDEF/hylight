@@ -16,7 +16,7 @@ def setup_logging():
 
     h = H()
 
-    logging.getLogger().addHandler(h)
+    logging.getLogger("hylight").addHandler(h)
 
 
 setup_logging()

@@ -5,6 +5,9 @@ import numpy as np
 from .constants import pi, kb_eV
 
 
+logger = logging.getLogger("hylight")
+
+
 def compute_spectra(
     e_zpl,
     T,
@@ -61,7 +64,7 @@ def compute_spectra(
         n += 1
         khi_e_khi_g_squared *= S / n
 
-    logging.info(f"went up to {n = }")
+    logger.info(f"Summed up to {n - 1} replicas.")
 
     return (
         e,

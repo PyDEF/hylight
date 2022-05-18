@@ -10,6 +10,8 @@ from pydef.core.basic_functions import gen_translat
 
 import logging
 
+logger = logging.getLogger("hylight")
+
 
 sigma_to_fwhm = 2 * np.sqrt(2 * np.log(2))
 
@@ -27,6 +29,7 @@ def spectra(
     bias=0,
     load_phonons=load_phonons,
     pre_convolve=None,
+    use_q=True,
 ):
     """
     :param path_vib: path to the vibration computation output file (by default an OUTCAR)
@@ -62,19 +65,22 @@ def spectra(
         resolution_e,
         bias=bias,
         pre_convolve=pre_convolve,
+        use_q=True,
     )
 
     return e, np.abs(I)
 
 
-def plot_spectral_function(outcar, poscar_es, poscar_gs, load_phonons=load_phonons):
+def plot_spectral_function(
+    outcar, poscar_es, poscar_gs, load_phonons=load_phonons, use_q=True
+):
     from matplotlib import pyplot as plt
 
     phonons, _, _ = load_phonons(outcar)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
 
-    f, fc, dirac_fc = fc_spectra(phonons, delta_R)
-    f, s, dirac_s = hr_spectra(phonons, delta_R)
+    f, fc, dirac_fc = fc_spectra(phonons, delta_R, use_q=use_q)
+    f, s, dirac_s = hr_spectra(phonons, delta_R, use_q=use_q)
 
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
     ax1.stackplot(f, s, color="grey")
@@ -115,23 +121,50 @@ def compute_spectra_soft(
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
     :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :param use_q: (optional, True) if True use the DeltaQ whane computing the HR factor, else use DeltaR
+    :param use_q: (optional, True) if True use the DeltaQ when computing the HR factor, else use DeltaR
     """
 
-    hrs = np.array([ph.huang_rhys(delta_R * 1e-10, use_q=use_q) for ph in phonons if ph.energy >= bias * eV_in_J])
-    fcs = np.array([ph.huang_rhys(delta_R * 1e-10, use_q=use_q) * ph.energy for ph in phonons if ph.energy >= bias * eV_in_J]) / eV_in_J
+    hrs = np.array(
+        [
+            ph.huang_rhys(delta_R * 1e-10, use_q=use_q)
+            for ph in phonons
+            if ph.energy >= bias * eV_in_J
+        ]
+    )
+    fcs = (
+        np.array(
+            [
+                ph.huang_rhys(delta_R * 1e-10, use_q=use_q) * ph.energy
+                for ph in phonons
+                if ph.energy >= bias * eV_in_J
+            ]
+        )
+        / eV_in_J
+    )
 
     S_abs = np.sum(hrs)
+
+    # scale S_em according to the quotient of the FC shifts
     S_em = np.sum(hrs) / np.sqrt(fc_shift_es / fc_shift_gs)
 
     e_phonon_eff = np.sum(fcs) / S_abs
 
+    # scale e_phonon_eff_e according to the quotient of the FC shifts
     e_phonon_eff_e = e_phonon_eff * np.sqrt(fc_shift_es / fc_shift_gs)
+
+    logger.info(
+        f"omega_gs = {e_phonon_eff * 1000} meV {e_phonon_eff * eV_in_J / cm1_in_J} cm-1"
+    )
+    logger.info(
+        f"omega_es = {e_phonon_eff_e * 1000} meV {e_phonon_eff_e * eV_in_J / cm1_in_J} cm-1"
+    )
+    logger.info(f"S_abs = {S_abs}")
+    logger.info(f"S_em = {S_em}")
 
     sig = sigma_soft(T, S_abs, S_em, e_phonon_eff, e_phonon_eff_e)
 
     fwhm = sig * sigma_to_fwhm
-    logging.info(f"FWHM {fwhm} meV")
+    logger.info(f"FWHM {fwhm} meV")
 
     return compute_spectra(
         phonons,
