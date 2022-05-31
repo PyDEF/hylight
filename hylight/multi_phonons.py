@@ -3,7 +3,7 @@ from scipy import fft
 from scipy.integrate import trapezoid as integrate
 
 from .loader import load_phonons, load_poscar_latt
-from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J
+from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm
 from .mono_phonon import sigma_soft
 
 from pydef.core.basic_functions import gen_translat
@@ -11,9 +11,6 @@ from pydef.core.basic_functions import gen_translat
 import logging
 
 logger = logging.getLogger("hylight")
-
-
-sigma_to_fwhm = 2 * np.sqrt(2 * np.log(2))
 
 
 def spectra(
@@ -72,15 +69,20 @@ def spectra(
 
 
 def plot_spectral_function(
-    outcar, poscar_es, poscar_gs, load_phonons=load_phonons, use_q=True
+    outcar, poscar_es, poscar_gs, load_phonons=load_phonons, use_q=True, use_cm1=False, disp=1
 ):
     from matplotlib import pyplot as plt
 
     phonons, _, _ = load_phonons(outcar)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
 
-    f, fc, dirac_fc = fc_spectra(phonons, delta_R, use_q=use_q)
-    f, s, dirac_s = hr_spectra(phonons, delta_R, use_q=use_q)
+    f, fc, dirac_fc = fc_spectra(phonons, delta_R, use_q=use_q, disp=disp)
+    f, s, dirac_s = hr_spectra(phonons, delta_R, use_q=use_q, disp=disp)
+    fc = s * f
+    dirac_fc = dirac_s * f
+
+    if use_cm1:
+        f *= 1e-3 * eV_in_J / cm1_in_J
 
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
     ax1.stackplot(f, s, color="grey")
@@ -89,8 +91,11 @@ def plot_spectral_function(
 
     ax2.stackplot(f, fc, color="grey")
     ax2.plot(f, dirac_fc, color="black", lw=1)
-    ax2.set_ylabel("FC shift (A. U.)")
-    ax2.set_xlabel("Phonon energy (meV)")
+    ax2.set_ylabel("FC shift (meV)")
+    if use_cm1:
+        ax2.set_xlabel("Phonon frequency (cm$^{-1}$)")
+    else:
+        ax2.set_xlabel("Phonon energy (meV)")
 
     return fig
 
@@ -164,7 +169,7 @@ def compute_spectra_soft(
     sig = sigma_soft(T, S_abs, S_em, e_phonon_eff, e_phonon_eff_e)
 
     fwhm = sig * sigma_to_fwhm
-    logger.info(f"FWHM {fwhm} meV")
+    logger.info(f"FWHM {fwhm * 1000} meV")
 
     return compute_spectra(
         phonons,
@@ -335,17 +340,19 @@ def _window(data, fn=np.hamming):
     return data * fn(n)
 
 
-def fc_spectra(phonons, delta_R, n_points=5000, use_q=True):
-    return _stick_smooth_spectra(
-        phonons, delta_R, lambda hr, e: hr * e, n_points, use_q
+def fc_spectra(phonons, delta_R, n_points=5000, use_q=True, disp=1):
+    f, s, dirac_s = _stick_smooth_spectra(
+        phonons, delta_R, lambda hr, e: hr * e, n_points, use_q, disp=disp
     )
 
-
-def hr_spectra(phonons, delta_R, n_points=5000, use_q=True):
-    return _stick_smooth_spectra(phonons, delta_R, lambda hr, _e: hr, n_points, use_q)
+    return f, f * s, f * dirac_s
 
 
-def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q):
+def hr_spectra(phonons, delta_R, n_points=5000, use_q=True, disp=1):
+    return _stick_smooth_spectra(phonons, delta_R, lambda hr, _e: hr, n_points, use_q, disp=disp)
+
+
+def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q, disp=1):
     """
     delta_R in A
     """
@@ -361,21 +368,14 @@ def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q):
     fc_spec = np.zeros(e_meV.shape)
     fc_sticks = np.zeros(e_meV.shape)
 
-    max_hr = -1
-
     hrs = get_HR_factors(phonons, delta_R * 1e-10, use_q=use_q)
-    S = np.sum(hrs)
-    max_hr = np.max(hrs)
 
-    for i, (e, hr) in enumerate(zip(ph_e_meV, hrs)):
+    for e, hr in zip(ph_e_meV, hrs):
         h = height(hr, e)
         g_thin = _gaussian(e_meV - e, w)
-        g_fat = _gaussian(e_meV - e, 1)
-        fc_sticks += h * g_thin
-        fc_spec += h * g_fat
-
-    fc_sticks *= max_hr / np.max(fc_sticks)
-    fc_spec *= S / integrate(fc_spec, e_meV)
+        g_fat = _gaussian(e_meV - e, disp)
+        fc_sticks += h * g_thin / np.max(g_thin)  # g_thin should be h high
+        fc_spec += h * g_fat  # g_fat has a g area
 
     return e_meV, fc_spec, fc_sticks
 

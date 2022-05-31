@@ -14,4 +14,7 @@ THz_in_meV = 4.135665538536
 cm1_in_J = 100 * h_c
 
 kb = 1.38064852e-23  # J.K-1 Boltzmann constant
+
 kb_eV = kb / eV_in_J  # eV.K-1
+
+sigma_to_fwhm = 2.3548200450309493  # 2 * sqrt(2 * log(2))

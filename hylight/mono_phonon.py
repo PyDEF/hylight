@@ -8,7 +8,7 @@ from .constants import pi, kb_eV
 logger = logging.getLogger("hylight")
 
 
-def compute_spectra(
+def spectra(
     e_zpl,
     T,
     fc_shift_g,
@@ -32,21 +32,42 @@ def compute_spectra(
     :param e_min: (optional, 0) energy lower bound for the spectra, in eV
     :param e_max: (optional, 5) energy higher bound for the spectra, in eV
     """
+
     e = np.linspace(e_min, e_max, n_points)
-    sp = np.zeros(e.shape)
 
     if hard_osc:
         stokes_shift = fc_shift_e + fc_shift_g
         S = 0.5 * stokes_shift / e_phonon_g
         sig = sigma(T, S, e_phonon_g)
-        khi_e_khi_g_squared = np.exp(-S)
     else:
         e_phonon_e = e_phonon_g * np.sqrt(fc_shift_e / fc_shift_g)
         S_abs = fc_shift_e / e_phonon_e
         S_em = fc_shift_g / e_phonon_g
-        sig = sigma_soft(T, S_abs, S_em, e_phonon_g, e_phonon_e)
         S = S_em
-        khi_e_khi_g_squared = np.exp(-S)
+        sig = sigma_soft(T, S_abs, S_em, e_phonon_g, e_phonon_e)
+
+    return compute_spectra(e, e_zpl, S, sig, e_phonon_e)
+
+
+def compute_spectra(
+    e,
+    e_zpl,
+    S,
+    sig,
+    e_phonon_g,
+):
+    """Compute a spectra from 1D model with experimental like inputs
+
+    :param e: a numpy array of energies to compute the spectra at
+    :param e_zpl: energy of the zero phonon line, in eV
+    :param S: the emission Huang-Rhys factor
+    :param sig: the lineshape standard deviation
+    :e_phonon_g: the ground state phonon energy
+    """
+
+    sp = np.zeros(e.shape)
+
+    khi_e_khi_g_squared = np.exp(-S)
 
     details = []
 
@@ -69,7 +90,7 @@ def compute_spectra(
     return (
         e,
         sp / np.max(sp),
-        [[c / np.max(sp) for c in details], 1 if hard_osc else e_phonon_e / e_phonon_g],
+        [[c / np.max(sp) for c in details]],
     )
 
 
