@@ -164,10 +164,12 @@ def compute_spectra_soft(
             if ph.energy >= bias * eV_in_J
         ]
     )
-    fcs = (
+
+
+    es = (
         np.array(
             [
-                ph.huang_rhys(delta_R * 1e-10, use_q=use_q) * ph.energy
+                ph.energy
                 for ph in phonons
                 if ph.energy >= bias * eV_in_J
             ]
@@ -175,15 +177,19 @@ def compute_spectra_soft(
         / eV_in_J
     )
 
-    S_abs = np.sum(hrs)
+    fcs = hrs * es
 
-    # scale S_em according to the quotient of the FC shifts
-    S_em = np.sum(hrs) / np.sqrt(fc_shift_es / fc_shift_gs)
 
-    e_phonon_eff = np.sum(fcs) / S_abs
+    alpha = np.sqrt(fc_shift_es / fc_shift_gs)
+
+    S_em = np.sum(hrs)
+    # scale S_abs according to the quotient of the FC shifts
+    S_abs = S_em * alpha
+
+    e_phonon_eff = np.sum(fcs * es) / np.sum(fcs)
 
     # scale e_phonon_eff_e according to the quotient of the FC shifts
-    e_phonon_eff_e = e_phonon_eff * np.sqrt(fc_shift_es / fc_shift_gs)
+    e_phonon_eff_e = e_phonon_eff * alpha
 
     logger.info(
         f"omega_gs = {e_phonon_eff * 1000} meV {e_phonon_eff * eV_in_J / cm1_in_J} cm-1"
