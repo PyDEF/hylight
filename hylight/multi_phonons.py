@@ -1,3 +1,4 @@
+from enum import Enum
 import numpy as np
 from scipy import fft
 from scipy.integrate import trapezoid as integrate
@@ -11,6 +12,12 @@ from pydef.core.basic_functions import gen_translat
 import logging
 
 logger = logging.getLogger("hylight")
+
+
+class LineShape(Enum):
+    GAUSSIAN = 0
+    LORENTZIAN = 1
+    NONE = 2
 
 
 def spectra(
@@ -27,6 +34,7 @@ def spectra(
     load_phonons=load_phonons,
     pre_convolve=None,
     use_q=True,
+    shape=LineShape.GAUSSIAN,
 ):
     """
     :param path_vib: path to the vibration computation output file (by default an OUTCAR)
@@ -63,13 +71,21 @@ def spectra(
         bias=bias,
         pre_convolve=pre_convolve,
         use_q=True,
+        shape=shape,
     )
 
     return e, np.abs(I)
 
 
 def plot_spectral_function(
-    outcar, poscar_es, poscar_gs, load_phonons=load_phonons, use_q=True, use_cm1=False, disp=1
+    outcar,
+    poscar_es,
+    poscar_gs,
+    load_phonons=load_phonons,
+    use_q=True,
+    use_cm1=False,
+    disp=1,
+    mpl_params=None,
 ):
     from matplotlib import pyplot as plt
 
@@ -84,13 +100,24 @@ def plot_spectral_function(
     if use_cm1:
         f *= 1e-3 * eV_in_J / cm1_in_J
 
+    s_stack = {"color": "grey"}
+    fc_stack = {"color": "grey", "lw": 1}
+    s_peaks = {"color": "black"}
+    fc_peaks = {"color": "black", "lw": 1}
+
+    if mpl_params:
+        s_stack.update(mpl_params.get("S_stack", {}))
+        fc_stack.update(mpl_params.get("FC_stack", {}))
+        s_peaks.update(mpl_params.get("S_peaks", {}))
+        fc_peaks.update(mpl_params.get("FC_peaks", {}))
+
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-    ax1.stackplot(f, s, color="grey")
-    ax1.plot(f, dirac_s, color="black", lw=1)
+    ax1.stackplot(f, s, **s_stack)
+    ax1.plot(f, dirac_s, **s_peaks)
     ax1.set_ylabel("$S(\\hbar\\omega)$ (A. U.)")
 
-    ax2.stackplot(f, fc, color="grey")
-    ax2.plot(f, dirac_fc, color="black", lw=1)
+    ax2.stackplot(f, fc, **fc_stack)
+    ax2.plot(f, dirac_fc, **fc_peaks)
     ax2.set_ylabel("FC shift (meV)")
     if use_cm1:
         ax2.set_xlabel("Phonon frequency (cm$^{-1}$)")
@@ -113,6 +140,7 @@ def compute_spectra_soft(
     window_fn=np.hamming,
     pre_convolve=None,
     use_q=True,
+    shape=LineShape.GAUSSIAN,
 ):
     """
     :param phonons: list of modes
@@ -168,8 +196,14 @@ def compute_spectra_soft(
 
     sig = sigma_soft(T, S_abs, S_em, e_phonon_eff, e_phonon_eff_e)
 
-    fwhm = sig * sigma_to_fwhm
-    logger.info(f"FWHM {fwhm * 1000} meV")
+    if shape == LineShape.GAUSSIAN:
+        fwhm = sig * sigma_to_fwhm
+        logger.info(f"FWHM {fwhm * 1000} meV")
+    elif shape == LineShape.LORENTZIAN:
+        fwhm = -sig * sigma_to_fwhm
+        logger.info(f"FWHM {-fwhm * 1000} meV")
+    else:
+        fwhm = None
 
     return compute_spectra(
         phonons,
@@ -250,15 +284,16 @@ def compute_spectra(
     g_t = exp_s_t * np.exp(1.0j * two_pi * t * zpl * eV_in_J / h_si)
 
     if sigma_si is None:
+        logger.info("Using no line shape.")
         line_shape = np.ones(t.shape, dtype=complex)
     elif sigma_si <= 0:
-        sigma_freq = sigma_si / h_si
-        line_shape = np.array(np.exp(pi * sigma_freq * np.abs(t)), dtype=complex)
+        logger.info("Using a Lorentzian line shape.")
+        sigma_freq = two_pi * sigma_si / h_si
+        line_shape = np.array(np.exp(sigma_freq * np.abs(t)), dtype=complex)
     else:
-        sigma_freq = sigma_si / h_si
-        line_shape = np.sqrt(2) * np.array(
-            _gaussian(t, 1 / (two_pi * sigma_freq)), dtype=complex
-        )
+        logger.info("Using a Gaussian line shape.")
+        sigma_freq = two_pi * sigma_si / h_si
+        line_shape = np.sqrt(2) * np.array(_gaussian(t, 1 / sigma_freq), dtype=complex)
 
     a_t = _window(g_t * line_shape, fn=window_fn)
 
@@ -349,7 +384,9 @@ def fc_spectra(phonons, delta_R, n_points=5000, use_q=True, disp=1):
 
 
 def hr_spectra(phonons, delta_R, n_points=5000, use_q=True, disp=1):
-    return _stick_smooth_spectra(phonons, delta_R, lambda hr, _e: hr, n_points, use_q, disp=disp)
+    return _stick_smooth_spectra(
+        phonons, delta_R, lambda hr, _e: hr, n_points, use_q, disp=disp
+    )
 
 
 def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q, disp=1):
