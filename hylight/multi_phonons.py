@@ -20,6 +20,45 @@ class LineShape(Enum):
     NONE = 2
 
 
+class OmegaEff(Enum):
+    # FC_MEAN should be used with WidthModel.ONE_D
+    # because it is associated with the idea that all the directions are
+    # softened equally in the excited state
+    FC_MEAN = 0
+    # HR_MEAN means Omega_eff = d_FC,tot / S_tot
+    HR_MEAN = 1
+    # I don't now if this one makes any sense
+    HR_RMS = 2
+    # FC_RMS should be used with WidthModel.HYBRID
+    # because it makes sense when we get only one Omega_eff for the excited
+    # state (but that should be logically be computed by other means)
+    FC_RMS = 3
+
+
+class _WidthModel(Enum):
+    ONE_D = 0
+    HYBRID = 1
+    FULL_ND = 2
+
+
+class WidthModel:
+    def __init__(self, wm):
+        self.wm = wm
+        self.omega = None
+
+    def __eq__(self, other):
+        return isinstance(other, WidthModel) and self.wm == other.wm
+
+    def __call__(self, omega=None):
+        new = WidthModel(self.wm)
+        new.omega = omega
+        return new
+
+
+WidthModel.ONE_D = WidthModel(_WidthModel.ONE_D)
+WidthModel.HYBRID = WidthModel(_WidthModel.HYBRID)
+WidthModel.FULL_ND = WidthModel(_WidthModel.FULL_ND)
+
 def spectra(
     outcar,
     poscar_gs,
@@ -35,6 +74,9 @@ def spectra(
     pre_convolve=None,
     use_q=True,
     shape=LineShape.GAUSSIAN,
+    omega_eff_type=OmegaEff.FC_MEAN,
+    result_store=None,
+    width_model=WidthModel.ONE_D,
 ):
     """
     :param path_vib: path to the vibration computation output file (by default an OUTCAR)
@@ -72,6 +114,9 @@ def spectra(
         pre_convolve=pre_convolve,
         use_q=True,
         shape=shape,
+        omega_eff_type=omega_eff_type,
+        result_store=result_store,
+        width_model=width_model,
     )
 
     return e, np.abs(I)
@@ -101,8 +146,8 @@ def plot_spectral_function(
         f *= 1e-3 * eV_in_J / cm1_in_J
 
     s_stack = {"color": "grey"}
-    fc_stack = {"color": "grey", "lw": 1}
-    s_peaks = {"color": "black"}
+    fc_stack = {"color": "grey"}
+    s_peaks = {"color": "black", "lw": 1}
     fc_peaks = {"color": "black", "lw": 1}
 
     if mpl_params:
@@ -111,20 +156,21 @@ def plot_spectral_function(
         s_peaks.update(mpl_params.get("S_peaks", {}))
         fc_peaks.update(mpl_params.get("FC_peaks", {}))
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-    ax1.stackplot(f, s, **s_stack)
-    ax1.plot(f, dirac_s, **s_peaks)
-    ax1.set_ylabel("$S(\\hbar\\omega)$ (A. U.)")
+    fig, (ax_fc, ax_s) = _, (_, ax_bottom) = plt.subplots(2, 1, sharex=True)
+    ax_s.stackplot(f, s, **s_stack)
+    ax_s.plot(f, dirac_s, **s_peaks)
+    ax_s.set_ylabel("$S(\\hbar\\omega)$ (A. U.)")
 
-    ax2.stackplot(f, fc, **fc_stack)
-    ax2.plot(f, dirac_fc, **fc_peaks)
-    ax2.set_ylabel("FC shift (meV)")
+    ax_fc.stackplot(f, fc, **fc_stack)
+    ax_fc.plot(f, dirac_fc, **fc_peaks)
+    ax_fc.set_ylabel("FC shift (meV)")
+
     if use_cm1:
-        ax2.set_xlabel("Phonon frequency (cm$^{-1}$)")
+        ax_bottom.set_xlabel("Wavenumber (cm$^{-1}$)")
     else:
-        ax2.set_xlabel("Phonon energy (meV)")
+        ax_bottom.set_xlabel("E (meV)")
 
-    return fig
+    return fig, (ax_fc, ax_s)
 
 
 def compute_spectra_soft(
@@ -141,6 +187,9 @@ def compute_spectra_soft(
     pre_convolve=None,
     use_q=True,
     shape=LineShape.GAUSSIAN,
+    omega_eff_type=OmegaEff.FC_MEAN,
+    result_store=None,
+    width_model=WidthModel.ONE_D,
 ):
     """
     :param phonons: list of modes
@@ -157,59 +206,82 @@ def compute_spectra_soft(
     :param use_q: (optional, True) if True use the DeltaQ when computing the HR factor, else use DeltaR
     """
 
-    hrs = np.array(
-        [
-            ph.huang_rhys(delta_R * 1e-10, use_q=use_q)
-            for ph in phonons
-            if ph.energy >= bias * eV_in_J
-        ]
-    )
+    if result_store is None:
+        result_store = {}
 
 
-    es = (
-        np.array(
-            [
-                ph.energy
-                for ph in phonons
-                if ph.energy >= bias * eV_in_J
-            ]
-        )
-        / eV_in_J
-    )
+    bias_si = bias * eV_in_J
 
+    hrs = get_HR_factors(phonons, delta_R * 1e-10, use_q=use_q, bias=bias_si)
+    es = get_energies(phonons, bias=bias_si) / eV_in_J
     fcs = hrs * es
 
-
-    alpha = np.sqrt(fc_shift_es / fc_shift_gs)
-
     S_em = np.sum(hrs)
-    # scale S_abs according to the quotient of the FC shifts
-    S_abs = S_em * alpha
+    dfcg_vib = np.sum(fcs)
 
-    e_phonon_eff = np.sum(fcs * es) / np.sum(fcs)
+    if omega_eff_type == OmegaEff.FC_MEAN:
+        e_phonon_eff = np.sum(fcs * es) / dfcg_vib
+    elif omega_eff_type == OmegaEff.HR_MEAN:
+        e_phonon_eff = dfcg_vib / S_em
+    elif omega_eff_type == OmegaEff.HR_RMS:
+        e_phonon_eff = np.sqrt(np.sum(fcs * es) / S_em)
+    elif omega_eff_type == OmegaEff.FC_RMS:
+        e_phonon_eff = np.sqrt(np.sum(fcs * es * es) / dfcg_vib)
 
-    # scale e_phonon_eff_e according to the quotient of the FC shifts
-    e_phonon_eff_e = e_phonon_eff * alpha
+    if width_model != WidthModel.HYBRID or width_model.omega is None:
+        alpha = np.sqrt(fc_shift_es / fc_shift_gs)
+        e_phonon_eff_e = e_phonon_eff * alpha
+        logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
+        result_store["d_fc^e,v"] = dfcg_vib * alpha**2
+        result_store["alpha"] = alpha
+
+    if width_model == WidthModel.ONE_D:
+        sig = sigma_soft(T, S_em, e_phonon_eff, e_phonon_eff_e)
+        sig0 = sigma_soft(0, S_em, e_phonon_eff, e_phonon_eff_e)
+    elif width_model == WidthModel.HYBRID:
+        if width_model.omega is not None:
+            print("using", width_model.omega, "instead of", e_phonon_eff_e)
+            e_phonon_eff_e = width_model.omega
+
+        sig = sigme_hybrid(T, hrs, es, e_phonon_eff_e)
+        sig0 = sigme_hybrid(0, hrs, es, e_phonon_eff_e)
+    else:
+        raise ValueError("Unexpected width model.")
 
     logger.info(
         f"omega_gs = {e_phonon_eff * 1000} meV {e_phonon_eff * eV_in_J / cm1_in_J} cm-1"
     )
+
+    result_store["omega_gs"] = e_phonon_eff
+
     logger.info(
         f"omega_es = {e_phonon_eff_e * 1000} meV {e_phonon_eff_e * eV_in_J / cm1_in_J} cm-1"
     )
-    logger.info(f"S_abs = {S_abs}")
-    logger.info(f"S_em = {S_em}")
 
-    sig = sigma_soft(T, S_abs, S_em, e_phonon_eff, e_phonon_eff_e)
+    result_store["omega_es"] = e_phonon_eff_e
+
+    logger.info(f"S_em = {S_em}")
+    logger.info(f"d_fc^g,v = {dfcg_vib}")
+
+    result_store["S_em"] = S_em
+
+    result_store["d_fc^g,v"] = dfcg_vib
 
     if shape == LineShape.GAUSSIAN:
         fwhm = sig * sigma_to_fwhm
+        fwhm0 = sig0 * sigma_to_fwhm
         logger.info(f"FWHM {fwhm * 1000} meV")
+        logger.info(f"FWHM 0K {fwhm0 * 1000} meV")
     elif shape == LineShape.LORENTZIAN:
         fwhm = -sig * sigma_to_fwhm
+        fwhm0 = -sig0 * sigma_to_fwhm
         logger.info(f"FWHM {-fwhm * 1000} meV")
+        logger.info(f"FWHM 0K {-fwhm0 * 1000} meV")
     else:
         fwhm = None
+
+    result_store["fwhm"] = fwhm
+    result_store["fwhm0"] = fwhm0
 
     return compute_spectra(
         phonons,
@@ -269,13 +341,13 @@ def compute_spectra(
     t = np.arange((-N) // 2 + 1, (N) // 2 + 1) * resolution_t
 
     # array of mode specific HR factors
-    hrs = get_HR_factors(phonons, delta_R * 1e-10, use_q=use_q)
+    hrs = get_HR_factors(phonons, delta_R * 1e-10, use_q=use_q, bias=bias_si)
     S = np.sum(hrs)
 
     # array of mode specific pulsations/radial frequencies
-    energies = get_energies(phonons)
+    energies = get_energies(phonons, bias=bias_si)
 
-    freqs = energies / h_si * np.array(energies >= bias_si, dtype=float)
+    freqs = energies / h_si
 
     s_t = _get_s_t_raw(t, freqs, hrs)
 
@@ -311,16 +383,22 @@ def compute_spectra(
     return e, I
 
 
-def get_HR_factors(phonons, delta_R_tot, use_q=True):
+def get_HR_factors(phonons, delta_R_tot, use_q=True, bias=0):
     """
     delta_R_tot in SI
     """
-    return np.array([ph.huang_rhys(delta_R_tot, use_q=use_q) for ph in phonons])
+    return np.array([ph.huang_rhys(delta_R_tot, use_q=use_q)
+                     for ph in phonons
+                     if ph.real
+                     if ph.energy >= bias])
 
 
-def get_energies(phonons):
+def get_energies(phonons, bias=0):
     """Return an array of mode energies in SI"""
-    return np.array([ph.energy for ph in phonons])
+    return np.array([ph.energy
+                     for ph in phonons
+                     if ph.real
+                     if ph.energy >= bias])
 
 
 def compute_delta_R(poscar_gs, poscar_es):
@@ -399,7 +477,7 @@ def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q, disp=1):
     """
     delta_R in A
     """
-    ph_e_meV = [p.energy * 1000 / eV_in_J for p in phonons]
+    ph_e_meV = get_energies(phonons) * 1000 / eV_in_J
 
     mi = min(ph_e_meV)
     ma = max(ph_e_meV)
@@ -426,3 +504,32 @@ def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q, disp=1):
 def rect(n):
     """A dummy windowing function that works like numpy.hamming, but as no effect on data."""
     return np.ones((n,))
+
+
+def sigme_hybrid(T, S, e_phonon, e_phonon_e):
+    return np.sqrt(np.sum([
+        sigma_soft(T, S_i, e_i, e_phonon_e)**2
+        for S_i, e_i in zip(S, e_phonon)
+    ]))
+
+
+def sigma_full_nd(T, delta_R, modes_gs, modes_es, use_q=False):
+    raise NotImplementedError("This is not yet implemented")
+    # WIP
+    # There is still something missing in my reasoning
+    # sig2 = np.array((len(modes_gs),))
+
+    # mat_es = np.array([
+    #     m.delta.reshape((-1,))
+    #     for m in modes_es
+    # ])
+    # omegas_es = np.array([m.energy for m in modes_es])
+
+    # for i, m in enumerate(modes_es):
+    #     # TODO Check units !!!!
+    #     S_i = m.huang_rhys(delta_R * 1e-10, use_q=use_q)
+    #     es_i = m.energy
+    #     es_at_i = mat_es.dot(m.delta.reshape((-1,))).dot(omegas_es)
+    #     sig2[i] = sigma_soft(T, S_i, e_i, es_at_i)**2
+
+    # return np.sqrt(np.sum(sig2))

@@ -41,10 +41,9 @@ def spectra(
         sig = sigma(T, S, e_phonon_g)
     else:
         e_phonon_e = e_phonon_g * np.sqrt(fc_shift_e / fc_shift_g)
-        S_abs = fc_shift_e / e_phonon_e
         S_em = fc_shift_g / e_phonon_g
         S = S_em
-        sig = sigma_soft(T, S_abs, S_em, e_phonon_g, e_phonon_e)
+        sig = sigma_soft(T, S_em, e_phonon_g, e_phonon_e)
 
     return compute_spectra(e, e_zpl, S, sig, e_phonon_e)
 
@@ -99,15 +98,23 @@ def gaussian(e, sigma):
 
 
 def sigma(T, S, e_phonon):
-    return e_phonon * np.sqrt(S) / np.sqrt(np.tanh(e_phonon / (kb_eV * T)))
+    if T == 0.0:
+        return e_phonon * np.sqrt(S)
+    else:
+        return e_phonon * np.sqrt(S / np.tanh(e_phonon / (kb_eV * T)))
 
 
-def sigma_soft(T, S_abs, S_em, e_phonon_g, e_phonon_e):
-    return (
-        e_phonon_g
-        * S_em
-        / np.sqrt(S_abs)
-        / np.sqrt(np.tanh(e_phonon_e / (2 * kb_eV * T)))
+def sigma_soft(T, S_em, e_phonon_g, e_phonon_e):
+    if T == 0.0:
+        coth = 1.0
+    else:
+        coth = 1.0 / np.tanh(e_phonon_e / (2 * kb_eV * T))
+
+    return np.sqrt(
+        S_em
+        * e_phonon_g**3
+        / e_phonon_e
+        * coth
     )
 
 

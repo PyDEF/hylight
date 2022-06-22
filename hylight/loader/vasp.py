@@ -8,8 +8,8 @@ from pydef.core.vasp import Poscar
 from ..mode import Mode
 
 
-head_re = re.compile(r"^(\d+) (f  |f/i)= *.* (\d+\.\d+) meV")
 mass_re = re.compile(r"^\s*POMASS\s+=\s+(\d+\.\d+)\s*;.*$")
+head_re = re.compile(r"^(\d+) (f  |f/i)= *.* (\d+\.\d+) meV")
 
 
 def load_phonons(path):

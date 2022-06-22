@@ -9,7 +9,7 @@ hbar = h_si / two_pi / eV_in_J  # ev.s.rad-1
 
 atomic_mass = 1.67e-27  # SI
 
-THz_in_meV = 4.135665538536
+THz_in_meV = 4.135667696923859
 
 cm1_in_J = 100 * h_c
 
