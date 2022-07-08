@@ -66,7 +66,8 @@ def load_phonons(path):
 
         for line in outcar:
             line = line.strip()
-            if "THz" in line and (m := head_re.fullmatch(line)):
+            m = head_re.fullmatch(line)
+            if "THz" in line and m:
                 n, im, ener = m.groups()
 
                 data = np.array(

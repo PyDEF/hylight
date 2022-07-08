@@ -4,7 +4,7 @@ from scipy import fft
 from scipy.integrate import trapezoid as integrate
 
 from .loader import load_phonons, load_poscar_latt
-from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm
+from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm, hbar_si
 from .mono_phonon import sigma_soft
 
 from pydef.core.basic_functions import gen_translat
@@ -240,7 +240,6 @@ def compute_spectra_soft(
         sig0 = sigma_soft(0, S_em, e_phonon_eff, e_phonon_eff_e)
     elif width_model == WidthModel.HYBRID:
         if width_model.omega is not None:
-            print("using", width_model.omega, "instead of", e_phonon_eff_e)
             e_phonon_eff_e = width_model.omega
 
         sig = sigme_hybrid(T, hrs, es, e_phonon_eff_e)
@@ -514,22 +513,40 @@ def sigme_hybrid(T, S, e_phonon, e_phonon_e):
 
 
 def sigma_full_nd(T, delta_R, modes_gs, modes_es, use_q=False):
+    """
+    WIP
+    There is still something missing in my reasoning
+    sig2 = np.array((len(modes_gs),))
+
+    mat_es = np.array([
+        m.delta.reshape((-1,))
+        for m in modes_es
+    ])
+    omegas_es = np.array([m.energy for m in modes_es])
+
+    for i, m in enumerate(modes_es):
+        # TODO Check units !!!!
+        S_i = m.huang_rhys(delta_R * 1e-10, use_q=use_q)
+        es_i = m.energy
+        es_at_i = mat_es.dot(m.delta.reshape((-1,))).dot(omegas_es)
+        sig2[i] = sigma_soft(T, S_i, e_i, es_at_i)**2
+
+    return np.sqrt(np.sum(sig2))
+    """
     raise NotImplementedError("This is not yet implemented")
-    # WIP
-    # There is still something missing in my reasoning
-    # sig2 = np.array((len(modes_gs),))
 
-    # mat_es = np.array([
-    #     m.delta.reshape((-1,))
-    #     for m in modes_es
-    # ])
-    # omegas_es = np.array([m.energy for m in modes_es])
 
-    # for i, m in enumerate(modes_es):
-    #     # TODO Check units !!!!
-    #     S_i = m.huang_rhys(delta_R * 1e-10, use_q=use_q)
-    #     es_i = m.energy
-    #     es_at_i = mat_es.dot(m.delta.reshape((-1,))).dot(omegas_es)
-    #     sig2[i] = sigma_soft(T, S_i, e_i, es_at_i)**2
+def freq_from_finite_diff(left, mid, right, mu, A=0.01):
+    """Compute a vibration energy from three energy points.
 
-    # return np.sqrt(np.sum(sig2))
+    :param left: energy (eV) of the left point
+    :param mid: energy (eV) of the middle point
+    :param right: energy (eV) of the right point
+    :param mu: effective mass associated with the displacement from the middle
+      point to the sides.
+    :param A: (optional, 0.01) amplitude (A) of the displacement between the
+      middle point and the sides.
+    """
+    curvature = (left + right - 2 * mid) * eV_in_J / (A * 1e-10)**2
+    e_vib = hbar_si * np.sqrt(2 * curvature / mu)
+    return e_vib / eV_in_J  # eV

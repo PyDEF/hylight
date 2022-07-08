@@ -30,7 +30,8 @@ def load_phonons(path):
 
         pos = []
         for line in log:
-            if l := line.strip():
+            l = line.strip()
+            if l:
                 pos.append(l.split()[3:])
             else:
                 break
@@ -44,7 +45,8 @@ def load_phonons(path):
         next(log)
 
         for line in log:
-            if l := line.strip():
+            l = line.strip()
+            if l:
                 fields = l.split()
                 masses.extend(map(float, fields[2::3]))
                 names.extend(map(normalize, fields[1::3]))
