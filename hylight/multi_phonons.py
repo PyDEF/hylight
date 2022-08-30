@@ -6,8 +6,7 @@ from scipy import fft
 from .loader import load_phonons, load_poscar_latt
 from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm, hbar_si
 from .mono_phonon import sigma_soft
-
-from pydef.core.basic_functions import gen_translat
+from .utils import gen_translat
 
 import logging
 

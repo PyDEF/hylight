@@ -2,11 +2,11 @@ from copy import deepcopy as copy
 
 import numpy as np
 
-from pydef.core.vasp import Poscar
-
 from ..constants import atomic_mass
-from .loader import load_phonons
 from ..multi_phonons import compute_delta_R
+
+from .loader import load_phonons
+from .common import Poscar
 
 
 def make_finite_diff_poscar(
@@ -29,16 +29,21 @@ def make_finite_diff_poscar(
     delta_R = compute_delta_R(poscar_gs, poscar_es)
     phonons, _, masses = load_phonons(outcar)
 
-    k = np.array([p.energy**2 for p in phonons])
-    d = np.array([p.project_coef2(delta_R) ** 0.5 for p in phonons])
+    m = np.array(masses).reshape((-1, 1))
+    delta_Q = np.sqrt(m) * delta_R
 
-    grad = k * d
+    k = np.array([p.energy**2 for p in phonons])
+    d = np.array([np.sum(p.delta * delta_Q) for p in phonons])
+
+    kd = k * d
+
+    grad = np.sum(
+        (np.array([p.delta for p in phonons]) * kd.reshape((-1, 1, 1))), axis=0
+    )
 
     g_dir = -grad / np.linalg.norm(grad)
 
-    delta = A * np.sum(
-        np.array([p.delta for p in phonons]) * g_dir.reshape((-1, 1, 1)), axis=0
-    )
+    delta = A * g_dir
 
     pes = Poscar.from_file(poscar_es)
     pes_left = copy(pes)
@@ -47,5 +52,5 @@ def make_finite_diff_poscar(
     pes_left.raw -= delta
     pes_right.raw += delta
 
-    mu = (np.linalg.norm(delta, axis=-1) ** 2 / A**2).dot(masses) * atomic_mass
+    mu = (np.linalg.norm(g_dir, axis=-1)**2).dot(masses) * atomic_mass
     return mu, pes_left, pes_right

@@ -3,7 +3,7 @@ from itertools import islice
 
 import numpy as np
 
-from pydef.core.vasp import Poscar
+from .common import Poscar
 
 from ..mode import Mode
 

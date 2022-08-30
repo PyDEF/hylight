@@ -53,7 +53,7 @@ class Mode:
         = 1/2 \frac{\omega}{\hbar} {\sum_i m_i^{1/2} \gamma_i {\Delta R}_i}^2
         """
 
-        delta_Q = np.sqrt(self.masses) * delta_R
+        delta_Q = np.sqrt(self.masses).reshape((-1, 1)) * delta_R
         delta_Q_i_2 = self.project_coef2(delta_Q)  # in SI
         return 0.5 * self.energy / hbar_si ** 2 * delta_Q_i_2
 
