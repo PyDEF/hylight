@@ -1,7 +1,7 @@
+import warnings
 from enum import Enum
 import numpy as np
 from scipy import fft
-from scipy.integrate import trapezoid as integrate
 
 from .loader import load_phonons, load_poscar_latt
 from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm, hbar_si
@@ -31,7 +31,7 @@ class OmegaEff(Enum):
     HR_RMS = 2
     # FC_RMS should be used with WidthModel.HYBRID
     # because it makes sense when we get only one Omega_eff for the excited
-    # state (but that should be logically be computed by other means)
+    # state (this single effective frequency should be computed beforehand)
     FC_RMS = 3
 
 
@@ -65,18 +65,18 @@ def spectra(
     poscar_es,
     zpl,
     T,
-    fc_shift_gs,
+    fc_shift_gs=None,
     fc_shift_es=None,
     e_max=None,
     resolution_e=1e-4,
     bias=0,
     load_phonons=load_phonons,
     pre_convolve=None,
-    use_q=True,
     shape=LineShape.GAUSSIAN,
     omega_eff_type=OmegaEff.FC_MEAN,
     result_store=None,
     width_model=WidthModel.ONE_D,
+    correct_zpe=False,
 ):
     """
     :param path_vib: path to the vibration computation output file (by default an OUTCAR)
@@ -112,11 +112,11 @@ def spectra(
         resolution_e,
         bias=bias,
         pre_convolve=pre_convolve,
-        use_q=True,
         shape=shape,
         omega_eff_type=omega_eff_type,
         result_store=result_store,
         width_model=width_model,
+        correct_zpe=correct_zpe,
     )
 
     return e, np.abs(I)
@@ -127,7 +127,6 @@ def plot_spectral_function(
     poscar_es,
     poscar_gs,
     load_phonons=load_phonons,
-    use_q=True,
     use_cm1=False,
     disp=1,
     mpl_params=None,
@@ -137,8 +136,8 @@ def plot_spectral_function(
     phonons, _, _ = load_phonons(outcar)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
 
-    f, fc, dirac_fc = fc_spectra(phonons, delta_R, use_q=use_q, disp=disp)
-    f, s, dirac_s = hr_spectra(phonons, delta_R, use_q=use_q, disp=disp)
+    f, fc, dirac_fc = fc_spectra(phonons, delta_R, disp=disp)
+    f, s, dirac_s = hr_spectra(phonons, delta_R, disp=disp)
     fc = s * f
     dirac_fc = dirac_s * f
 
@@ -185,11 +184,11 @@ def compute_spectra_soft(
     bias=0,
     window_fn=np.hamming,
     pre_convolve=None,
-    use_q=True,
     shape=LineShape.GAUSSIAN,
     omega_eff_type=OmegaEff.FC_MEAN,
     result_store=None,
     width_model=WidthModel.ONE_D,
+    correct_zpe=False,
 ):
     """
     :param phonons: list of modes
@@ -203,7 +202,6 @@ def compute_spectra_soft(
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
     :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :param use_q: (optional, True) if True use the DeltaQ when computing the HR factor, else use DeltaR
     """
 
     if result_store is None:
@@ -212,7 +210,7 @@ def compute_spectra_soft(
 
     bias_si = bias * eV_in_J
 
-    hrs = get_HR_factors(phonons, delta_R * 1e-10, use_q=use_q, bias=bias_si)
+    hrs = get_HR_factors(phonons, delta_R * 1e-10, bias=bias_si)
     es = get_energies(phonons, bias=bias_si) / eV_in_J
     fcs = hrs * es
 
@@ -228,9 +226,17 @@ def compute_spectra_soft(
     elif omega_eff_type == OmegaEff.FC_RMS:
         e_phonon_eff = np.sqrt(np.sum(fcs * es * es) / dfcg_vib)
 
-    if width_model != WidthModel.HYBRID or width_model.omega is None:
+    if width_model.omega is None:
+        assert fc_shift_gs is not None and fc_shift_gs > 0
+        assert fc_shift_es is not None
         alpha = np.sqrt(fc_shift_es / fc_shift_gs)
         e_phonon_eff_e = e_phonon_eff * alpha
+        logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
+        result_store["d_fc^e,v"] = dfcg_vib * alpha**2
+        result_store["alpha"] = alpha
+    else:
+        e_phonon_eff_e = width_model.omega
+        alpha = e_phonon_eff_e / e_phonon_eff
         logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
         result_store["d_fc^e,v"] = dfcg_vib * alpha**2
         result_store["alpha"] = alpha
@@ -246,6 +252,22 @@ def compute_spectra_soft(
         sig0 = sigme_hybrid(0, hrs, es, e_phonon_eff_e)
     else:
         raise ValueError("Unexpected width model.")
+
+    if correct_zpe:
+        zpe_gs = 0.5 * np.sum([p.energy for p in phonons]) / eV_in_J
+        if width_model == WidthModel.ONE_D:
+            gamma = e_phonon_eff_e / e_phonon_eff
+            zpe_es = zpe_gs * gamma
+        elif width_model == WidthModel.HYBRID:
+            zpe_es = 0.5 * e_phonon_eff_e * len(phonons)
+        else:
+            raise ValueError("Unexpected width model.")
+
+        delta_zpe = zpe_gs - zpe_es
+        result_store["delta_zpe"] = delta_zpe
+        if abs(delta_zpe) > 1.:
+            warnings.warn(f"Delta ZPE is {delta_zpe} eV, there is probably a big problem and the result may be garbage.")
+        zpl -= delta_zpe
 
     logger.info(
         f"omega_gs = {e_phonon_eff * 1000} meV {e_phonon_eff * eV_in_J / cm1_in_J} cm-1"
@@ -292,7 +314,6 @@ def compute_spectra_soft(
         bias=bias,
         window_fn=window_fn,
         pre_convolve=pre_convolve,
-        use_q=use_q,
     )
 
 
@@ -306,7 +327,6 @@ def compute_spectra(
     bias=0,
     window_fn=np.hamming,
     pre_convolve=None,
-    use_q=True,
 ):
     """
     :param phonons: list of modes
@@ -321,7 +341,6 @@ def compute_spectra(
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
     :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :param use_q: (optional, True) if True use the DeltaQ whane computing the HR factor, else use DeltaR
     """
 
     bias_si = bias * eV_in_J
@@ -340,7 +359,7 @@ def compute_spectra(
     t = np.arange((-N) // 2 + 1, (N) // 2 + 1) * resolution_t
 
     # array of mode specific HR factors
-    hrs = get_HR_factors(phonons, delta_R * 1e-10, use_q=use_q, bias=bias_si)
+    hrs = get_HR_factors(phonons, delta_R * 1e-10, bias=bias_si)
     S = np.sum(hrs)
 
     # array of mode specific pulsations/radial frequencies
@@ -382,11 +401,11 @@ def compute_spectra(
     return e, I
 
 
-def get_HR_factors(phonons, delta_R_tot, use_q=True, bias=0):
+def get_HR_factors(phonons, delta_R_tot, bias=0):
     """
     delta_R_tot in SI
     """
-    return np.array([ph.huang_rhys(delta_R_tot, use_q=use_q)
+    return np.array([ph.huang_rhys(delta_R_tot)
                      for ph in phonons
                      if ph.real
                      if ph.energy >= bias])
@@ -458,21 +477,21 @@ def _window(data, fn=np.hamming):
     return data * fn(n)
 
 
-def fc_spectra(phonons, delta_R, n_points=5000, use_q=True, disp=1):
+def fc_spectra(phonons, delta_R, n_points=5000, disp=1):
     f, s, dirac_s = _stick_smooth_spectra(
-        phonons, delta_R, lambda hr, e: hr * e, n_points, use_q, disp=disp
+        phonons, delta_R, lambda hr, e: hr * e, n_points, disp=disp
     )
 
     return f, f * s, f * dirac_s
 
 
-def hr_spectra(phonons, delta_R, n_points=5000, use_q=True, disp=1):
+def hr_spectra(phonons, delta_R, n_points=5000, disp=1):
     return _stick_smooth_spectra(
-        phonons, delta_R, lambda hr, _e: hr, n_points, use_q, disp=disp
+        phonons, delta_R, lambda hr, _e: hr, n_points, disp=disp
     )
 
 
-def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q, disp=1):
+def _stick_smooth_spectra(phonons, delta_R, height, n_points, disp=1):
     """
     delta_R in A
     """
@@ -488,7 +507,7 @@ def _stick_smooth_spectra(phonons, delta_R, height, n_points, use_q, disp=1):
     fc_spec = np.zeros(e_meV.shape)
     fc_sticks = np.zeros(e_meV.shape)
 
-    hrs = get_HR_factors(phonons, delta_R * 1e-10, use_q=use_q)
+    hrs = get_HR_factors(phonons, delta_R * 1e-10)
 
     for e, hr in zip(ph_e_meV, hrs):
         h = height(hr, e)
@@ -512,7 +531,7 @@ def sigme_hybrid(T, S, e_phonon, e_phonon_e):
     ]))
 
 
-def sigma_full_nd(T, delta_R, modes_gs, modes_es, use_q=False):
+def sigma_full_nd(T, delta_R, modes_gs, modes_es):
     """
     WIP
     There is still something missing in my reasoning
@@ -526,7 +545,7 @@ def sigma_full_nd(T, delta_R, modes_gs, modes_es, use_q=False):
 
     for i, m in enumerate(modes_es):
         # TODO Check units !!!!
-        S_i = m.huang_rhys(delta_R * 1e-10, use_q=use_q)
+        S_i = m.huang_rhys(delta_R * 1e-10)
         es_i = m.energy
         es_at_i = mat_es.dot(m.delta.reshape((-1,))).dot(omegas_es)
         sig2[i] = sigma_soft(T, S_i, e_i, es_at_i)**2
