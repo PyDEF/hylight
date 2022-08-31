@@ -20,7 +20,7 @@ class LineShape(Enum):
 
 
 class OmegaEff(Enum):
-    # FC_MEAN should be used with WidthModel.ONE_D
+    # FC_MEAN should be used with ExPES.ISO_SCALE
     # because it is associated with the idea that all the directions are
     # softened equally in the excited state
     FC_MEAN = 0
@@ -28,35 +28,40 @@ class OmegaEff(Enum):
     HR_MEAN = 1
     # I don't now if this one makes any sense
     HR_RMS = 2
-    # FC_RMS should be used with WidthModel.HYBRID
+    # FC_RMS should be used with ExPES.SINGLE_ES_FREQ
     # because it makes sense when we get only one Omega_eff for the excited
     # state (this single effective frequency should be computed beforehand)
     FC_RMS = 3
 
 
-class _WidthModel(Enum):
-    ONE_D = 0
-    HYBRID = 1
+class _ExPES(Enum):
+    ISO_SCALE = 0
+    SINGLE_ES_FREQ = 1
     FULL_ND = 2
 
 
-class WidthModel:
+class ExPES:
+    ISO_SCALE: "ExPES"
+    SINGLE_ES_FREQ: "ExPES"
+    FULL_ND: "ExPES"
+
     def __init__(self, wm):
         self.wm = wm
         self.omega = None
 
     def __eq__(self, other):
-        return isinstance(other, WidthModel) and self.wm == other.wm
+        return isinstance(other, ExPES) and self.wm == other.wm
 
     def __call__(self, omega=None):
-        new = WidthModel(self.wm)
+        new = ExPES(self.wm)
         new.omega = omega
         return new
 
 
-WidthModel.ONE_D = WidthModel(_WidthModel.ONE_D)
-WidthModel.HYBRID = WidthModel(_WidthModel.HYBRID)
-WidthModel.FULL_ND = WidthModel(_WidthModel.FULL_ND)
+ExPES.ISO_SCALE = ExPES(_ExPES.ISO_SCALE)
+ExPES.SINGLE_ES_FREQ = ExPES(_ExPES.SINGLE_ES_FREQ)
+ExPES.FULL_ND = ExPES(_ExPES.FULL_ND)
+
 
 def spectra(
     outcar,
@@ -74,7 +79,7 @@ def spectra(
     shape=LineShape.GAUSSIAN,
     omega_eff_type=OmegaEff.FC_MEAN,
     result_store=None,
-    width_model=WidthModel.ONE_D,
+    ex_pes=ExPES.ISO_SCALE,
     correct_zpe=False,
 ):
     """
@@ -114,7 +119,7 @@ def spectra(
         shape=shape,
         omega_eff_type=omega_eff_type,
         result_store=result_store,
-        width_model=width_model,
+        ex_pes=ex_pes,
         correct_zpe=correct_zpe,
     )
 
@@ -186,7 +191,7 @@ def compute_spectra_soft(
     shape=LineShape.GAUSSIAN,
     omega_eff_type=OmegaEff.FC_MEAN,
     result_store=None,
-    width_model=WidthModel.ONE_D,
+    ex_pes=ExPES.ISO_SCALE,
     correct_zpe=False,
 ):
     """
@@ -225,7 +230,7 @@ def compute_spectra_soft(
     elif omega_eff_type == OmegaEff.FC_RMS:
         e_phonon_eff = np.sqrt(np.sum(fcs * es * es) / dfcg_vib)
 
-    if width_model.omega is None:
+    if ex_pes.omega is None:
         assert fc_shift_gs is not None and fc_shift_gs > 0
         assert fc_shift_es is not None
         alpha = np.sqrt(fc_shift_es / fc_shift_gs)
@@ -234,18 +239,18 @@ def compute_spectra_soft(
         result_store["d_fc^e,v"] = dfcg_vib * alpha**2
         result_store["alpha"] = alpha
     else:
-        e_phonon_eff_e = width_model.omega
+        e_phonon_eff_e = ex_pes.omega
         alpha = e_phonon_eff_e / e_phonon_eff
         logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
         result_store["d_fc^e,v"] = dfcg_vib * alpha**2
         result_store["alpha"] = alpha
 
-    if width_model == WidthModel.ONE_D:
+    if ex_pes == ExPES.ISO_SCALE:
         sig = sigma_soft(T, S_em, e_phonon_eff, e_phonon_eff_e)
         sig0 = sigma_soft(0, S_em, e_phonon_eff, e_phonon_eff_e)
-    elif width_model == WidthModel.HYBRID:
-        if width_model.omega is not None:
-            e_phonon_eff_e = width_model.omega
+    elif ex_pes == ExPES.SINGLE_ES_FREQ:
+        if ex_pes.omega is not None:
+            e_phonon_eff_e = ex_pes.omega
 
         sig = sigme_hybrid(T, hrs, es, e_phonon_eff_e)
         sig0 = sigme_hybrid(0, hrs, es, e_phonon_eff_e)
@@ -254,10 +259,10 @@ def compute_spectra_soft(
 
     if correct_zpe:
         zpe_gs = 0.5 * np.sum([p.energy for p in phonons]) / eV_in_J
-        if width_model == WidthModel.ONE_D:
+        if ex_pes == ExPES.ISO_SCALE:
             gamma = e_phonon_eff_e / e_phonon_eff
             zpe_es = zpe_gs * gamma
-        elif width_model == WidthModel.HYBRID:
+        elif ex_pes == ExPES.SINGLE_ES_FREQ:
             zpe_es = 0.5 * e_phonon_eff_e * len(phonons)
         else:
             raise ValueError("Unexpected width model.")
