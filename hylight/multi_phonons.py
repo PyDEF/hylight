@@ -22,17 +22,24 @@ class LineShape(Enum):
 
 
 class OmegaEff(Enum):
-    # FC_MEAN should be used with ExPES.ISO_SCALE
-    # because it is associated with the idea that all the directions are
-    # softened equally in the excited state
+    """Mode of computation of a effective frequency.
+
+    FC_MEAN: Omega = <omega_i>_{d_{FC,i}}
+      should be used with ExPES.ISO_SCALE because it is associated with
+      the idea that all the directions are softened equally in the excited state.
+
+    HR_MEAN: Omega = d_{FC,tot} / S_{tot} = <omega_i>_{S_i}
+
+    HR_RMS: Omega = sqrt{<omega_i^2>_{S_i}}
+
+    FC_RMS: Omega = sqrt{<omega_i^2>_{d_{FC,i}}}
+      should be used with ExPES.SINGLE_ES_FREQ because it makes sense
+      when we get only one Omega_eff for the excited state (this single
+      effective frequency should be computed beforehand)
+    """
     FC_MEAN = 0
-    # HR_MEAN means Omega_eff = d_FC,tot / S_tot
     HR_MEAN = 1
-    # I don't know if this one makes any sense
     HR_RMS = 2
-    # FC_RMS should be used with ExPES.SINGLE_ES_FREQ
-    # because it makes sense when we get only one Omega_eff for the excited
-    # state (this single effective frequency should be computed beforehand)
     FC_RMS = 3
 
 
@@ -43,6 +50,15 @@ class _ExPES(Enum):
 
 
 class ExPES:
+    """Mode of approximation of the ES PES curvature.
+
+    ISO_SCALE: We suppose eigenvectors are the same, but the frequencies are
+      scaled by a constant factor.
+
+    SINGLE_ES_FREQ: We suppose all modes have the same frequency (that should be provided).
+
+    FULL_ND: (Not implemented) We know the frequency of each ES mode.
+    """
     ISO_SCALE: "ExPES"
     SINGLE_ES_FREQ: "ExPES"
     FULL_ND: "ExPES"
@@ -85,7 +101,7 @@ def spectra(
     correct_zpe=False,
 ):
     """
-    :param path_vib: path to the vibration computation output file (by default an mode_source)
+    :param mode_source: path to the vibration computation output file (by default a pickled file)
     :param path_struct_gs: path to the ground state relaxed structure file (by default a POSCAR)
     :param path_struct_es: path to the excited state relaxed structure file (by default a POSCAR)
     :param zpl: zero phonon line energy in eV
@@ -96,7 +112,7 @@ def spectra(
     :param resolution_e: energy resolution in eV
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :param load_phonons: a function that takes path_vib and produce a list of phonons. By default expect an mode_source.
+    :param load_phonons: a function that takes mode_source and produce a list of phonons. By default expect an mode_source.
     """
 
     if e_max is None:
@@ -130,13 +146,23 @@ def spectra(
 
 def plot_spectral_function(
     mode_source,
-    poscar_es,
     poscar_gs,
+    poscar_es,
     load_phonons=load_phonons,
     use_cm1=False,
     disp=1,
     mpl_params=None,
 ):
+    """Plot a two panel representation of the spectral function of the distorsion.
+
+    :param mode_source: path to the mode file (by default a pickle file)
+    :param poscar_gs: path to the file containing the ground state atomic positions.
+    :param poscar_es: path to the file containing the excited state atomic positions.
+    :param load_phonons: (optional, default to hylight.loader.load_phonons) a function to read mode_source.
+    :param use_cm1: (optional, default False) use cm1 as the unit for frequency instead of meV.
+    :param disp: (optional, default 1) standard deviation of the gaussians in background in meV.
+    :param mpl_params: (optional, default None) dictionary of kw parameters for pyplot.plot.
+    """
     from matplotlib import pyplot as plt
 
     phonons, _, _ = load_phonons(mode_source)
@@ -211,6 +237,11 @@ def compute_spectra_soft(
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
     :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
+    :param shape: (optional, default LineShape.GAUSSIAN) ZPL line shape.
+    :param omega_eff_type: (optional, default OmegaEff.FC_MEAN) mode of evaluation of effective frequency.
+    :param result_store: (optional, default None) a dictionary to store some intermediate results.
+    :param ex_pes: (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.
+    :param correct_zpe: (optional, default False) correct the ZPL to take the zero point energy into account. 
     """
 
     if result_store is None:
@@ -256,8 +287,8 @@ def compute_spectra_soft(
         if ex_pes.omega is not None:
             e_phonon_eff_e = ex_pes.omega
 
-        sig = sigme_hybrid(T, hrs, es, e_phonon_eff_e)
-        sig0 = sigme_hybrid(0, hrs, es, e_phonon_eff_e)
+        sig = sigma_hybrid(T, hrs, es, e_phonon_eff_e)
+        sig0 = sigma_hybrid(0, hrs, es, e_phonon_eff_e)
     else:
         raise ValueError("Unexpected width model.")
 
@@ -410,7 +441,12 @@ def compute_spectra(
 
 
 def compute_delta_R(poscar_gs, poscar_es):
-    """Return $\\Delta R$ in A."""
+    """Return $\\Delta R$ in A.
+
+    :param poscar_gs: path to ground state positions file.
+    :param poscar_es: path to excited state positions file.
+    :return: a np.array of (n, 3) shape where n is the number of atoms.
+    """
 
     pos1, lattice1 = load_poscar_latt(poscar_gs)
     pos2, lattice2 = load_poscar_latt(poscar_es)
@@ -514,7 +550,9 @@ def rect(n):
     return np.ones((n,))
 
 
-def sigme_hybrid(T, S, e_phonon, e_phonon_e):
+def sigma_hybrid(T, S, e_phonon, e_phonon_e):
+    """Compute the width of the ZPL for the ExPES.SINGLE_ES_FREQ mode.
+    """
     return np.sqrt(np.sum([
         sigma_soft(T, S_i, e_i, e_phonon_e)**2
         for S_i, e_i in zip(S, e_phonon)
@@ -523,7 +561,7 @@ def sigme_hybrid(T, S, e_phonon, e_phonon_e):
 
 def sigma_full_nd(T, delta_R, modes_gs, modes_es):
     """
-    WIP
+    WIP, Not implemented yet.
     There is still something missing in my reasoning
     sig2 = np.array((len(modes_gs),))
 

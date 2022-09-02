@@ -1,6 +1,6 @@
-""" WIP
+"""Module to load phonons frequencies and eigenvectors from phonopy output files.
 
-Module to load phonons frequencies and eigenvectors from phonopy output.
+It always uses PyYAML, but it can also need h5py to read hdf5 files.
 """
 import math
 from os.path import isfile, join

@@ -1,3 +1,5 @@
+"""A collection of useful physics constants.
+"""
 h_si = 6.62607015e-34  # SI (J.s)
 c_si = 2.99792e8  # SI (m.s-1)
 h_c = h_si * c_si  # SI (J.m)

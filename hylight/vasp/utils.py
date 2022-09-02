@@ -7,7 +7,7 @@ from ..multi_phonons import compute_delta_R
 from ..mode import get_energies
 from ..constants import eV_in_J
 
-from .loader import load_phonons
+from ..loader import load_phonons
 from .common import Poscar
 
 

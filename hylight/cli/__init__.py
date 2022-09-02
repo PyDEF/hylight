@@ -25,7 +25,9 @@ def vasp(opts):
     from ..vasp.loader import load_phonons
 
     with error_catch():
-        pickle_modes(opts.source, dest, load_phonons)
+        res = pickle_modes(opts.source, dest, load_phonons)
+    
+    summary(res, dest)
 
     return 0
 
@@ -80,7 +82,9 @@ def phonopy(opts):
             raise FileNotFoundError("No known file to extract modes from.")
 
     with error_catch():
-        pickle_modes(opts.source, dest, wrap)
+        res = pickle_modes(opts.source, dest, wrap)
+
+    summary(res, dest)
 
     return 0
 
@@ -98,6 +102,13 @@ def crystal(opts):
     from ..crystal.loader import load_phonons
 
     with error_catch():
-        pickle_modes(opts.source, dest, load_phonons)
+        res = pickle_modes(opts.source, dest, load_phonons)
+
+    summary(res, dest)
 
     return 0
+
+
+def summary(data, dest):
+    modes, _, _ = data
+    print(f"Wrote {len(modes)} modes in {dest}")
