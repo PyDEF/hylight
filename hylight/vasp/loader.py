@@ -9,11 +9,16 @@ from ..mode import Mode
 
 
 mass_re = re.compile(r"^\s*POMASS\s+=\s+(\d+\.\d+)\s*;.*$")
-head_re = re.compile(r"^(\d+) (f  |f/i)= *.* (\d+\.\d+) meV")
+head_re = re.compile(r"^([ 0-9]{4}) (f  |f/i)= *.* (\d+\.\d+) meV\s")
 
 
 def load_phonons(path):
     """Load phonons from a OUTCAR.
+
+    Remark: This function is a bit heavy because of text parsing. You may want
+    to use hyligh-pkl to parse one for all the file and later load that
+    preparsed file using pkl.load_phonons instead.
+
     :returns: (phonons, pops, masses)
       phonons: list of hylight.mode.Mode instances
       pops: population for each atom species
@@ -28,15 +33,15 @@ def load_phonons(path):
     n_modes = 0
     with open(path) as outcar:
         for line in outcar:
-            line = line.strip()
             if "VRHFIN" in line:
+                line = line.strip()
                 name = line.split("=")[1].strip().split(":")[0].strip()
                 if name == "r":
                     name = "Zr"
                 names.append(name)
 
             elif "ions per type" in line:
-                pops = list(map(int, line.split("=")[1].strip().split()))
+                pops = list(map(int, line.split("=")[1].split()))
                 break
         else:
             raise ValueError("Unexpected EOF")
@@ -47,8 +52,8 @@ def load_phonons(path):
         n_atoms = len(atoms)
 
         for line in outcar:
-            line = line.strip()
             if "POMASS" in line:
+                line = line.strip()
                 raw = line.split("=")[1]
 
                 # Unfortunately the format is really broken
@@ -65,20 +70,20 @@ def load_phonons(path):
             raise ValueError("Unexpected EOF")
 
         for line in outcar:
-            line = line.strip()
             m = head_re.fullmatch(line)
             if "THz" in line and m:
+                line = line.strip()
                 n, im, ener = m.groups()
 
                 data = np.array(
-                    [line.strip().split() for line in islice(outcar, 1, n_atoms + 1)],
+                    [line.split() for line in islice(outcar, 1, n_atoms + 1)],
                     dtype=float,
                 )
                 ref = data[:, 0:3]
                 delta = data[:, 3:6]
 
                 phonons.append(
-                    Mode(atoms, n, im.strip() == "f", float(ener), ref, delta, masses)
+                    Mode(atoms, n, im == "f  ", float(ener), ref, delta, masses)
                 )
 
                 n_modes += 1

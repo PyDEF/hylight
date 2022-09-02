@@ -3,7 +3,9 @@ from enum import Enum
 import numpy as np
 from scipy import fft
 
-from .loader import load_phonons, load_poscar_latt
+from .mode import get_energies, get_HR_factors
+from .loader import load_phonons
+from .vasp.loader import load_poscar_latt
 from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm, hbar_si
 from .mono_phonon import sigma_soft
 from .utils import gen_translat
@@ -26,7 +28,7 @@ class OmegaEff(Enum):
     FC_MEAN = 0
     # HR_MEAN means Omega_eff = d_FC,tot / S_tot
     HR_MEAN = 1
-    # I don't now if this one makes any sense
+    # I don't know if this one makes any sense
     HR_RMS = 2
     # FC_RMS should be used with ExPES.SINGLE_ES_FREQ
     # because it makes sense when we get only one Omega_eff for the excited
@@ -64,7 +66,7 @@ ExPES.FULL_ND = ExPES(_ExPES.FULL_ND)
 
 
 def spectra(
-    outcar,
+    mode_source,
     poscar_gs,
     poscar_es,
     zpl,
@@ -83,7 +85,7 @@ def spectra(
     correct_zpe=False,
 ):
     """
-    :param path_vib: path to the vibration computation output file (by default an OUTCAR)
+    :param path_vib: path to the vibration computation output file (by default an mode_source)
     :param path_struct_gs: path to the ground state relaxed structure file (by default a POSCAR)
     :param path_struct_es: path to the excited state relaxed structure file (by default a POSCAR)
     :param zpl: zero phonon line energy in eV
@@ -94,12 +96,12 @@ def spectra(
     :param resolution_e: energy resolution in eV
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :param load_phonons: a function that takes path_vib and produce a list of phonons. By default expect an OUTCAR.
+    :param load_phonons: a function that takes path_vib and produce a list of phonons. By default expect an mode_source.
     """
 
     if e_max is None:
         e_max = zpl * 2.5
-    phonons, _, _ = load_phonons(outcar)
+    phonons, _, _ = load_phonons(mode_source)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
 
     if fc_shift_es is None:
@@ -127,7 +129,7 @@ def spectra(
 
 
 def plot_spectral_function(
-    outcar,
+    mode_source,
     poscar_es,
     poscar_gs,
     load_phonons=load_phonons,
@@ -137,8 +139,11 @@ def plot_spectral_function(
 ):
     from matplotlib import pyplot as plt
 
-    phonons, _, _ = load_phonons(outcar)
+    phonons, _, _ = load_phonons(mode_source)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
+
+    if all(not p.real for p in phonons):
+        raise ValueError("No real mode extracted.")
 
     f, fc, dirac_fc = fc_spectra(phonons, delta_R, disp=disp)
     f, s, dirac_s = hr_spectra(phonons, delta_R, disp=disp)
@@ -211,7 +216,6 @@ def compute_spectra_soft(
     if result_store is None:
         result_store = {}
 
-
     bias_si = bias * eV_in_J
 
     hrs = get_HR_factors(phonons, delta_R * 1e-10, bias=bias_si)
@@ -258,12 +262,12 @@ def compute_spectra_soft(
         raise ValueError("Unexpected width model.")
 
     if correct_zpe:
-        zpe_gs = 0.5 * np.sum([p.energy for p in phonons]) / eV_in_J
+        zpe_gs = 0.5 * np.sum(es)
         if ex_pes == ExPES.ISO_SCALE:
             gamma = e_phonon_eff_e / e_phonon_eff
             zpe_es = zpe_gs * gamma
         elif ex_pes == ExPES.SINGLE_ES_FREQ:
-            zpe_es = 0.5 * e_phonon_eff_e * len(phonons)
+            zpe_es = 0.5 * e_phonon_eff_e * len(es)
         else:
             raise ValueError("Unexpected width model.")
 
@@ -403,24 +407,6 @@ def compute_spectra(
     I = e**3 * A
 
     return e, I
-
-
-def get_HR_factors(phonons, delta_R_tot, bias=0):
-    """
-    delta_R_tot in SI
-    """
-    return np.array([ph.huang_rhys(delta_R_tot)
-                     for ph in phonons
-                     if ph.real
-                     if ph.energy >= bias])
-
-
-def get_energies(phonons, bias=0):
-    """Return an array of mode energies in SI"""
-    return np.array([ph.energy
-                     for ph in phonons
-                     if ph.real
-                     if ph.energy >= bias])
 
 
 def compute_delta_R(poscar_gs, poscar_es):
