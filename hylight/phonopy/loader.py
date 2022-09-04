@@ -2,7 +2,8 @@
 
 It always uses PyYAML, but it can also need h5py to read hdf5 files.
 """
-import math
+from __future__ import annotations
+
 from os.path import isfile, join
 from itertools import groupby
 import gzip
@@ -15,21 +16,13 @@ from ..mode import Mode
 
 import yaml
 
-try:
+try:  # Use CLoader if possible, it is much faster
     from yaml import CLoader as Loader
 except ImportError:
     from yaml import Loader
 
 
-try:
-    l = list[int]
-except TypeError:
-    from typing import List, Dict
-else:
-    List = list
-    Dict = dict
-
-try:
+try:  # numpy.typing is a feature of Numpy 1.20
     from numpy.typing import NDArray
 except ImportError:
     from typing import Generic, TypeVar
@@ -40,7 +33,7 @@ except ImportError:
         pass
 
 
-def load_phonons(dir_):
+def load_phonons(dir_: str) -> tuple[list[Mode], list[int], list[float]]:
     if isfile(join(dir_, "qpoints.hdf5")):
         return load_phonons_qpointsh5(
             join(dir_, "qpoints.hdf5"), join(dir_, "phonopy.yaml")
@@ -71,12 +64,14 @@ def load_phonons(dir_):
         raise FileNotFoundError("No known file to extract modes from.")
 
 
-def load_phonons_bandsh5(bandh5, phyaml, op=open):
+def load_phonons_bandsh5(
+    bandh5: str, phyaml: str, op=open
+) -> tuple[list[Mode], list[int], list[float]]:
     struct = get_struct(phyaml)
     return _load_phonons_bandsh5(struct, bandh5, op)
 
 
-def load_phonons_bandyaml(bandy):
+def load_phonons_bandyaml(bandy: str) -> tuple[list[Mode], list[int], list[float]]:
     with open(bandy) as f:
         raw = yaml.load(f, Loader)
 
@@ -84,17 +79,21 @@ def load_phonons_bandyaml(bandy):
     return _load_phonons_bandyaml(struct, raw)
 
 
-def load_phonons_qpointsh5(qph5, phyaml, op=open):
+def load_phonons_qpointsh5(
+    qph5: str, phyaml: str, op=open
+) -> tuple[list[Mode], list[int], list[float]]:
     struct = get_struct(phyaml)
     return _load_phonons_qpointsh5(struct, qph5, op)
 
 
-def load_phonons_qpointsyaml(qpyaml, phyaml):
+def load_phonons_qpointsyaml(
+    qpyaml: str, phyaml: str
+) -> tuple[list[Mode], list[int], list[float]]:
     struct = get_struct(phyaml)
     return _load_phonons_qpointsyaml(struct, qpyaml)
 
 
-def get_struct(phyaml):
+def get_struct(phyaml: str) -> Struct:
     if not isfile(phyaml):
         raise FileNotFoundError("Missing file phonopy.yaml")
 
@@ -104,7 +103,9 @@ def get_struct(phyaml):
     return Struct.from_yaml_cell(raw["supercell"])
 
 
-def _load_phonons_bandsh5(struct, path, op):
+def _load_phonons_bandsh5(
+    struct: Struct, path: str, op
+) -> tuple[list[Mode], list[int], list[float]]:
     import h5py
 
     with h5py.File(op(path, mode="rb")) as f:
@@ -126,7 +127,9 @@ def _load_phonons_bandsh5(struct, path, op):
         return _load_phonons_h5(struct, qp, ev, fr)
 
 
-def _load_phonons_qpointsh5(struct, path, op):
+def _load_phonons_qpointsh5(
+    struct: Struct, path: str, op
+) -> tuple[list[Mode], list[int], list[float]]:
     import h5py
 
     with h5py.File(op(path, mode="rb")) as f:
@@ -145,7 +148,9 @@ def _load_phonons_qpointsh5(struct, path, op):
         return _load_phonons_h5(struct, qp, ev, fr)
 
 
-def _load_phonons_h5(struct, qp, ev, fr):
+def _load_phonons_h5(
+    struct: Struct, qp: dict, ev: list[NDArray], fr: list[float]
+) -> tuple[list[Mode], list[int], list[float]]:
     n = len(struct.atoms) * 3
 
     phonons = []
@@ -167,14 +172,18 @@ def _load_phonons_h5(struct, qp, ev, fr):
     return phonons, struct.pops, struct.masses
 
 
-def _load_phonons_bandyaml(struct, raw):
+def _load_phonons_bandyaml(
+    struct: Struct, raw: dict
+) -> tuple[list[Mode], list[int], list[float]]:
     raw_ph = raw["phonon"][0]
     # TODO actually find the Gamma point
     point = raw_ph["band"]
     return _load_phonons_yaml(struct, point)
 
 
-def _load_phonons_qpointsyaml(struct, path):
+def _load_phonons_qpointsyaml(
+    struct: Struct, path: str
+) -> tuple[list[Mode], list[int], list[float]]:
     with open(path) as f:
         raw = yaml.load(f, Loader)
 
@@ -188,7 +197,7 @@ def _load_phonons_qpointsyaml(struct, path):
     return _load_phonons_yaml(struct, point)
 
 
-def _load_phonons_yaml(struct, point):
+def _load_phonons_yaml(struct, point) -> tuple[list[Mode], list[int], list[float]]:
     n = len(struct.atoms)
     phonons = []
     for i, ph in enumerate(point):
@@ -216,14 +225,14 @@ def _load_phonons_yaml(struct, point):
 
 @dataclass
 class Struct:
-    pops: Dict[str, int]
+    pops: list[int]
     lattice: NDArray[float]
-    masses: List[float]
-    atoms: List[str]
+    masses: list[float]
+    atoms: list[str]
     ref: NDArray[float]
 
     @classmethod
-    def from_yaml_cell(cls, cell):
+    def from_yaml_cell(cls, cell: dict) -> "Struct":
         lattice = np.array(cell["lattice"])
         masses = [p["mass"] for p in cell["points"]]
         atoms = [p["symbol"] for p in cell["points"]]

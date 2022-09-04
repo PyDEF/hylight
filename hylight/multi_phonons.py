@@ -353,6 +353,7 @@ def compute_spectra_soft(
         bias=bias,
         window_fn=window_fn,
         pre_convolve=pre_convolve,
+        shape=shape,
     )
 
 
@@ -366,8 +367,10 @@ def compute_spectra(
     bias=0,
     window_fn=np.hamming,
     pre_convolve=None,
+    shape=LineShape.GAUSSIAN,
 ):
-    """
+    """Compute a luminescence spectra with the time-dependant formulation with an arbitrary linewidth.
+
     :param phonons: list of modes
     :param delta_R: displacement in A
     :param zpl: zero phonon line energy in eV

@@ -3,12 +3,6 @@ import numpy as np
 from enum import Enum, auto
 
 
-class CoordMode(Enum):
-    Hybrid = True
-    UseR = False
-    ComputeQ = auto()
-
-
 class Mode:
     """The representation of a vibrational mode."""
 
