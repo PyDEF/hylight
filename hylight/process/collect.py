@@ -1,10 +1,10 @@
 import re
-from itertools import islice, dropwhile
+from itertools import islice, dropwhile, repeat
 from multiprocessing import Pool
 import numpy as np
 from ..utils import gen_translat
 from ..mode import Mode
-from ..constants import hbar_si, eV_in_J
+from ..constants import hbar_si, eV_in_J, atomic_mass
 
 
 def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, nproc=1):
@@ -16,19 +16,18 @@ def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, npro
     :param amplitude: amplitude of the displacement, only use if basis_source is not None.
     :param nproc: number of parallel processes used to load the files.
     """
-    lattice, atoms, ref, pops, masses = get_ref_info(ref_output)
+    lattice, atoms, _, pops, masses = get_ref_info(ref_output)
 
     n_atoms = len(atoms)
     n = 3 * n_atoms
 
-    assert ref.shape == (n_atoms, 3)
     assert len(masses) == n_atoms
 
-    rf = get_forces(n_atoms, ref_output)
+    rf, ref = get_forces_and_pos(n_atoms, ref_output)
 
-    ref_pos = ref.reshape((-1,))
+    assert ref.shape == (n_atoms, 3)
 
-
+    # basis is the transition matrix from canonic to vibration from the right
     if basis_source is not None:
         basis = np.load(basis_source)
 
@@ -39,36 +38,35 @@ def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, npro
 
     h = np.ndarray((n, n))
 
-    if basis_source is not None:
-        def worker(p):
-            i, output = p
-            return (i, get_forces(n_atoms, output).reshape((-1,)), None)
-    else:
-        # take the oportunity to get the positions to later compute the displacement directions
-        def worker(p):
-            i, output = p
-            forces, pos = get_forces_and_pos(n_atoms, output)
-            delta = compute_delta(lattice, ref, pos)
-            return (i, forces.reshape((-1,)), delta.reshape((-1,)))
+    data = enumerate(
+        zip(
+            outputs,
+            repeat(n_atoms),
+            repeat(lattice),
+            repeat(ref),
+        )
+    )
 
     if nproc > 1:
-        # use all available process, as the columns are completely independant 
+        # use all available process, as the columns are completely independant
         with Pool(processes=nproc) as pool:
-            for i, line, delta in pool.imap_unordered(worker, enumerate(outputs), max(1, len(outputs) // nproc)):
-                h[i, :] = line
+            for i, force, delta in pool.imap_unordered(
+                extract_infos, data, max(1, len(outputs) // nproc)
+            ):
+                h[i, :] = -force
                 if basis_source is None:
                     basis[i, :] = delta
     else:
-        for i, line, delta in map(worker, enumerate(outputs)):
-            h[i, :] = line
+        for i, force, delta in map(extract_infos, data):
+            h[i, :] = -force
             if basis_source is None:
                 basis[i, :] = delta
 
-    h[:, :] -= rf.reshape((-1, 1))
+    h[:, :] += rf.reshape((1, -1))
 
     if basis_source is None:
         # Compute actual displacement and renormalize
-        amplitudes = np.linalg.norm(basis, axis=-1).reshape((1, -1))
+        amplitudes = np.linalg.norm(basis, axis=-1).reshape((-1, 1))
         basis /= amplitudes
         h /= amplitudes
     else:
@@ -76,19 +74,19 @@ def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, npro
 
     bt = basis.transpose()
 
-    assert np.all(bt @ basis - np.eye(n) < 1e-15), "basis is not orthogonal"
+    # Rotate the matrix to get it into the right basis
+    h = basis @ h
 
-    # FIXME check that this make sense
-    h = h @ basis
+    # force the symetry to account for numerical imprecision
+    h = 0.5 * (h + h.transpose())
+    h *= eV_in_J * 1e20
 
-    assert h.shape == (n, n)
+    assert np.all(basis @ bt - np.eye(n) < 1e-15), "basis is not orthogonal"
 
-    # FIXME check that bt and basis are in the right order
-    sqrt_m = bt @ np.sqrt(np.diag([m for m in masses for _ in range(3)])) @ basis
-    assert sqrt_m.shape == (n, n)
+    # Rotate the mass matrix too
+    m = basis @ np.sqrt(np.diag([1. / (m * atomic_mass) for m in masses for _ in range(3)])) @ bt
 
-    dynmat = sqrt_m.transpose() @ h @ sqrt_m
-    assert dynmat.shape == (n, n)
+    dynmat = m.transpose() @ h @ m
 
     vals, vecs = np.linalg.eig(dynmat)
     assert vecs.shape == (n, n)
@@ -115,6 +113,13 @@ def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, npro
     )
 
 
+def extract_infos(args):
+    i, (output, n_atoms, lattice, ref) = args
+    forces, pos = get_forces_and_pos(n_atoms, output)
+    delta = compute_delta(lattice, ref, pos)
+    return (i, forces.reshape((-1,)), delta.reshape((-1,)))
+
+
 def get_forces(n, path):
     """Extract n forces from an OUTCAR."""
     return _get_forces_and_pos(n, path)[:, 3:6]
@@ -122,8 +127,8 @@ def get_forces(n, path):
 
 def get_forces_and_pos(n, path):
     """Extract n forces and atomic positions from an OUTCAR."""
-    data = _get_forces_and_pos(n, path)
-    return data[:, 3:6], data[:, 0:3]
+    e, data = _get_forces_and_pos(n, path)
+    return e, data[:, 3:6], data[:, 0:3]
 
 
 def _get_forces_and_pos(n, path):
@@ -178,9 +183,9 @@ def get_ref_info(path):
         n_atoms = len(atoms)
 
         outcar = drop_while_err(
-                lambda line: "POMASS" not in line,
-                outcar,
-                ValueError("Unexpected EOF while looking for masses.")
+            lambda line: "POMASS" not in line,
+            outcar,
+            ValueError("Unexpected EOF while looking for masses."),
         )
 
         line = next(outcar)
@@ -199,9 +204,10 @@ def get_ref_info(path):
             masses.extend([float(mass)] * p)
 
         outcar = drop_while_err(
-            lambda line: line != "      direct lattice vectors                 reciprocal lattice vectors\n",
+            lambda line: line
+            != "      direct lattice vectors                 reciprocal lattice vectors\n",
             outcar,
-            ValueError("Unexpected EOF while looking for lattice parameters.")
+            ValueError("Unexpected EOF while looking for lattice parameters."),
         )
         next(outcar)
 
@@ -212,9 +218,10 @@ def get_ref_info(path):
         lattice = data[:, 0:3]
 
         outcar = drop_while_err(
-            lambda line: line !=  " position of ions in cartesian coordinates  (Angst):\n",
+            lambda line: line
+            != " position of ions in cartesian coordinates  (Angst):\n",
             outcar,
-            ValueError("Unexpected EOF while looking for positions.")
+            ValueError("Unexpected EOF while looking for positions."),
         )
         next(outcar)
 
