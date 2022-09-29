@@ -6,7 +6,7 @@ from scipy import fft
 from .mode import get_energies, get_HR_factors
 from .loader import load_phonons
 from .vasp.loader import load_poscar_latt
-from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm, hbar_si
+from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm, hbar_si, atomic_mass
 from .mono_phonon import sigma_soft
 from .utils import gen_translat
 
@@ -36,11 +36,15 @@ class OmegaEff(Enum):
       should be used with ExPES.SINGLE_ES_FREQ because it makes sense
       when we get only one Omega_eff for the excited state (this single
       effective frequency should be computed beforehand)
+
+    ONED_FREQ: Omega = (DeltaQ^T D DeltaQ) / DeltaQ^2
+        Correspond to the actual curvature in the direction of the displacement.
     """
     FC_MEAN = 0
     HR_MEAN = 1
     HR_RMS = 2
     FC_RMS = 3
+    ONED_FREQ = 4
 
 
 class _ExPES(Enum):
@@ -251,19 +255,11 @@ def compute_spectra_soft(
 
     hrs = get_HR_factors(phonons, delta_R * 1e-10, bias=bias_si)
     es = get_energies(phonons, bias=bias_si) / eV_in_J
-    fcs = hrs * es
 
     S_em = np.sum(hrs)
-    dfcg_vib = np.sum(fcs)
+    dfcg_vib = np.sum(hrs * es)
 
-    if omega_eff_type == OmegaEff.FC_MEAN:
-        e_phonon_eff = np.sum(fcs * es) / dfcg_vib
-    elif omega_eff_type == OmegaEff.HR_MEAN:
-        e_phonon_eff = dfcg_vib / S_em
-    elif omega_eff_type == OmegaEff.HR_RMS:
-        e_phonon_eff = np.sqrt(np.sum(fcs * es) / S_em)
-    elif omega_eff_type == OmegaEff.FC_RMS:
-        e_phonon_eff = np.sqrt(np.sum(fcs * es * es) / dfcg_vib)
+    e_phonon_eff = effective_phonon_energy(omega_eff_type, delta_R, hrs, es, phonons[0].masses / atomic_mass)
 
     if ex_pes.omega is None:
         assert fc_shift_gs is not None and fc_shift_gs > 0
@@ -600,3 +596,33 @@ def freq_from_finite_diff(left, mid, right, mu, A=0.01):
     curvature = (left + right - 2 * mid) * eV_in_J / (A * 1e-10)**2
     e_vib = hbar_si * np.sqrt(2 * curvature / mu)
     return e_vib / eV_in_J  # eV
+
+
+def effective_phonon_energy(omega_eff_type, delta_R, hrs, es, masses):
+    """Compute an effective phonon energy in eV following the strategy of omega_eff_type.
+
+    :param delta_R: The displacement between GS and ES in A
+    :param hrs: The array of Huang-Rhyes factor for each mode.
+    :param es: The array of phonon energy in eV.
+    :param masses: The array of atomic masses in atomic mass unit.
+    :return: The effective energy in eV.
+    """
+    fcs = hrs * es * eV_in_J
+
+    S_em = np.sum(hrs)
+    dfcg_vib = np.sum(fcs)
+
+    if omega_eff_type == OmegaEff.FC_MEAN:
+        return np.sum(fcs * es) / dfcg_vib / eV_in_J
+    elif omega_eff_type == OmegaEff.HR_MEAN:
+        return dfcg_vib / S_em / eV_in_J
+    elif omega_eff_type == OmegaEff.HR_RMS:
+        return np.sqrt(np.sum(fcs * es) / S_em) / eV_in_J
+    elif omega_eff_type == OmegaEff.FC_RMS:
+        return np.sqrt(np.sum(fcs * es * es) / dfcg_vib) / eV_in_J
+    elif omega_eff_type == OmegaEff.ONED_FREQ:
+        delta_Q = ((masses * atomic_mass).reshape((-1, 1))**0.5 * delta_R * 1e-10).reshape((-1,))
+        delta_Q_2 = delta_Q.dot(delta_Q)
+        return (hbar_si * np.sqrt(np.sum(fcs) / delta_Q_2)) / eV_in_J
+
+    raise ValueError(f"Unknown effective frequency strategy.")

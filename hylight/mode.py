@@ -26,9 +26,6 @@ class Mode:
 
         self.masses = np.array(masses) * atomic_mass
 
-        # effective mass in kg
-        self.mass = (np.linalg.norm(self.delta, axis=1) ** 2).dot(self.masses)
-
     def project(self, delta_R):
         """Project delta_R onto the mode"""
         delta_R_dot_mode = np.sum(delta_R * self.delta)
