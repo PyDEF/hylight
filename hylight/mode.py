@@ -34,7 +34,7 @@ class Mode:
     def project_coef2(self, delta_R):
         """Square lenght of the projection of delta_R onto the mode."""
         delta_R_dot_mode = np.sum(delta_R * self.delta)
-        return delta_R_dot_mode ** 2
+        return delta_R_dot_mode**2
 
     def huang_rhys(self, delta_R):
         r"""Compute the Huang-Rhyes factor
@@ -46,7 +46,7 @@ class Mode:
 
         delta_Q = np.sqrt(self.masses).reshape((-1, 1)) * delta_R
         delta_Q_i_2 = self.project_coef2(delta_Q)  # in SI
-        return 0.5 * self.energy / hbar_si ** 2 * delta_Q_i_2
+        return 0.5 * self.energy / hbar_si**2 * delta_Q_i_2
 
     def to_traj(self, duration, amplitude, framerate=25):
         """Produce a ase trajectory for animation purpose.
@@ -66,20 +66,33 @@ class Mode:
 
         return traj
 
+    def to_jmol(self, **opts):
+        from .jmol import export
+        return export(self, **opts)
+
+def rot_c_to_v(phonons):
+    """Rotation matrix from Cartesian basis to Vibrational basis (right side)."""
+    return np.array([m.delta.reshape((-1,)) for m in phonons])
+
+
+def dynamic_matrix(phonons):
+    dynamic_matrix_diag = np.diag(
+        [(1 if m.real else -1) * (m.energy / hbar_si) ** 2 for m in phonons]
+    )
+    Lt = rot_c_to_v(phonons)
+
+    return Lt.transpose() @ dynamic_matrix_diag @ Lt
+
 
 def get_HR_factors(phonons, delta_R_tot, bias=0):
     """
     delta_R_tot in SI
     """
-    return np.array([ph.huang_rhys(delta_R_tot)
-                     for ph in phonons
-                     if ph.real
-                     if ph.energy >= bias])
+    return np.array(
+        [ph.huang_rhys(delta_R_tot) for ph in phonons if ph.real if ph.energy >= bias]
+    )
 
 
 def get_energies(phonons, bias=0):
     """Return an array of mode energies in SI"""
-    return np.array([ph.energy
-                     for ph in phonons
-                     if ph.real
-                     if ph.energy >= bias])
+    return np.array([ph.energy for ph in phonons if ph.real if ph.energy >= bias])
