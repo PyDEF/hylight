@@ -7,14 +7,21 @@ from ..mode import Mode
 from ..constants import hbar_si, eV_in_J, atomic_mass
 
 
-def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, nproc=1):
+def process_phonons(
+    outputs, ref_output, basis_source=None, amplitude=0.01, nproc=1, symm=True
+):
     """Process a set of OUTCAR files to compute some phonons using Force based finite differences.
 
     :param outputs: list of OUTCAR paths corresponding to the finite displacements.
     :param ref_output: path to non displaced OUTCAR.
-    :param basis_source: read a displacement basis from a path. If None, the basis is built from the displacements.
-    :param amplitude: amplitude of the displacement, only use if basis_source is not None.
+    :param basis_source: read a displacement basis from a path. The file is a npy file from numpy's save.
+      If None, the basis is built from the displacements.
+      If not None, the order of outputs *must* match the order of the displacements in the array.
+    :param amplitude: amplitude of the displacement, only used if basis_source *is not* None.
     :param nproc: number of parallel processes used to load the files.
+    :param symm: If True, use symmetric differences. OUTCARs *must* be ordered
+      as [+delta_1, -delta_1, +delta_2, -delta_2, ...].
+    :returns: the same tuple as the load_phonons functions.
     """
     lattice, atoms, _, pops, masses = get_ref_info(ref_output)
 
@@ -34,9 +41,9 @@ def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, npro
         if basis.shape != (n, n):
             raise ValueError("Basis shape and output shape are incompatible.")
     else:
-        basis = np.ndarray((n, n))
+        basis = np.zeros((n, n))
 
-    h = np.ndarray((n, n))
+    h = np.zeros((n, n))
 
     data = enumerate(
         zip(
@@ -44,6 +51,7 @@ def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, npro
             repeat(n_atoms),
             repeat(lattice),
             repeat(ref),
+            repeat(symm),
         )
     )
 
@@ -51,24 +59,27 @@ def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, npro
         # use all available process, as the columns are completely independant
         with Pool(processes=nproc) as pool:
             for i, force, delta in pool.imap_unordered(
-                extract_infos, data, max(1, len(outputs) // nproc)
+                _extract_infos, data, max(1, len(outputs) // nproc)
             ):
-                h[i, :] = -force
+                h[i, :] -= force
                 if basis_source is None:
-                    basis[i, :] = delta
+                    basis[i, :] += delta
     else:
-        for i, force, delta in map(extract_infos, data):
-            h[i, :] = -force
+        for i, force, delta in map(_extract_infos, data):
+            h[i, :] -= force
             if basis_source is None:
-                basis[i, :] = delta
+                basis[i, :] += delta
 
-    h[:, :] += rf.reshape((1, -1))
+    if not symm:
+        h[:, :] += rf.reshape((1, -1))
 
     if basis_source is None:
         # Compute actual displacement and renormalize
         amplitudes = np.linalg.norm(basis, axis=-1).reshape((-1, 1))
         basis /= amplitudes
         h /= amplitudes
+    elif symm:
+        h /= 2 * amplitude
     else:
         h /= amplitude
 
@@ -84,40 +95,55 @@ def process_phonons(outputs, ref_output, basis_source=None, amplitude=0.01, npro
     assert np.all(basis @ bt - np.eye(n) < 1e-15), "basis is not orthogonal"
 
     # Rotate the mass matrix too
-    m = basis @ np.sqrt(np.diag([1. / (m * atomic_mass) for m in masses for _ in range(3)])) @ bt
+    m = (
+        basis
+        @ np.sqrt(np.diag([1.0 / (m * atomic_mass) for m in masses for _ in range(3)]))
+        @ bt
+    )
 
+    # dynamical matrix
     dynmat = m.transpose() @ h @ m
 
+    # eigenvalues and eigenvectors, aka square of angular frequencies and normal modes
     vals, vecs = np.linalg.eig(dynmat)
     assert vecs.shape == (n, n)
 
+    # modulus of mode energies in J
     energies = hbar_si * np.sqrt(np.abs(vals)) / eV_in_J * 1e3
 
+    # eigenvectors reprsented in canonical basis
     vx = (bt @ vecs).reshape((n, n_atoms, 3))
 
     return (
         [
             Mode(
                 atoms,
-                n,
-                e2 >= 0,
+                i,
+                e2 >= 0,  # e2 < 0 => imaginary frequency
                 e,
                 ref,
                 v.reshape((-1, 3)),
                 masses,
             )
-            for e2, e, v in zip(vals, energies, vx)
+            for i, (e2, e, v) in enumerate(zip(vals, energies, vx))
         ],
         pops,
         masses,
     )
 
 
-def extract_infos(args):
-    i, (output, n_atoms, lattice, ref) = args
+def _extract_infos(args):
+    i, (output, n_atoms, lattice, ref, symm) = args
     forces, pos = get_forces_and_pos(n_atoms, output)
     delta = compute_delta(lattice, ref, pos)
-    return (i, forces.reshape((-1,)), delta.reshape((-1,)))
+    if symm:
+        return (
+            i // 2,
+            (1 - 2 * (i % 2)) * forces.reshape((-1,)),
+            (1 - 2 * (i % 2)) * delta.reshape((-1,)),
+        )
+    else:
+        return (i, forces.reshape((-1,)), delta.reshape((-1,)))
 
 
 def get_forces(n, path):
@@ -127,19 +153,21 @@ def get_forces(n, path):
 
 def get_forces_and_pos(n, path):
     """Extract n forces and atomic positions from an OUTCAR."""
-    e, data = _get_forces_and_pos(n, path)
-    return e, data[:, 3:6], data[:, 0:3]
+    data = _get_forces_and_pos(n, path)
+    return data[:, 3:6], data[:, 0:3]
 
 
 def _get_forces_and_pos(n, path):
     with open(path) as outcar:
 
+        # advance to the force block
         for line in outcar:
             if "TOTAL-FORCE (eV/Angst)" in line:
                 break
         else:
             raise ValueError("Unexpected EOF")
 
+        # read the block and let numpy parse the numbers
         data = np.array(
             [line.split() for line in islice(outcar, 1, n + 1)],
             dtype=float,
@@ -151,6 +179,7 @@ def _get_forces_and_pos(n, path):
 def get_ref_info(path):
     """Load system infos from a OUTCAR.
 
+    This is an ad hoc parser, so it may fail if the OUTCAR changes a lot.
     :returns: (atoms, ref, pops, masses)
       atoms: list of species names
       pos: positions of atoms
@@ -163,6 +192,7 @@ def get_ref_info(path):
     atoms = []
     n_atoms = None
     with open(path) as outcar:
+        # Extract the populations informations
         for line in outcar:
             if "VRHFIN" in line:
                 line = line.strip()
@@ -177,12 +207,13 @@ def get_ref_info(path):
         else:
             raise ValueError("Unexpected EOF while looking for populations.")
 
+        # build the atom list
         for p, n in zip(pops, names):
             atoms.extend([n] * p)
 
         n_atoms = len(atoms)
 
-        outcar = drop_while_err(
+        outcar = dropwhile_err(
             lambda line: "POMASS" not in line,
             outcar,
             ValueError("Unexpected EOF while looking for masses."),
@@ -203,7 +234,7 @@ def get_ref_info(path):
         for p, mass in zip(pops, m.groups()):
             masses.extend([float(mass)] * p)
 
-        outcar = drop_while_err(
+        outcar = dropwhile_err(
             lambda line: line
             != "      direct lattice vectors                 reciprocal lattice vectors\n",
             outcar,
@@ -217,7 +248,7 @@ def get_ref_info(path):
         )
         lattice = data[:, 0:3]
 
-        outcar = drop_while_err(
+        outcar = dropwhile_err(
             lambda line: line
             != " position of ions in cartesian coordinates  (Angst):\n",
             outcar,
@@ -235,6 +266,7 @@ def get_ref_info(path):
 
 
 def compute_delta(lattice, ref, disp):
+    "Compute the displacement between ref and disp, accounting for periodic conditions."
     dp = disp - ref
     d = np.array([dp - t for t in gen_translat(lattice)])  # shape (27, n, 3)
 
@@ -243,23 +275,11 @@ def compute_delta(lattice, ref, disp):
     best_translat = np.argmin(norms, axis=0)  # shape = (n,)
 
     n = d.shape[1]
-    res = np.ndarray((n, 3))
-
-    for i, k in enumerate(best_translat):
-        res[i, :] = d[k, i, :]
-
-    return res
+    return d[best_translat, list(range(n)), :]
 
 
-def skip_until(file, ref, descr):
-    for line in outcar:
-        if line == ref:
-            return
-
-    raise ValueError("Unexpected EOF while looking for {descr}.")
-
-
-def drop_while_err(pred, it, else_err):
+def dropwhile_err(pred, it, else_err):
+    "itertools.dropwhile wrapper that raise else_err if it reach the end of the file."
     rest = dropwhile(pred, it)
 
     try:

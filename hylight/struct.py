@@ -56,5 +56,5 @@ class Struct:
                 k: a.copy()
                 for k, a in self.species.items()
             },
-            species_names=self.species_names,
+            species_names=self._species_names,
         )

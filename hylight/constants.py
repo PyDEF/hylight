@@ -1,28 +1,30 @@
 """A collection of useful physics constants.
 """
-h_si = 6.62607015e-34  # SI (J.s)
-c_si = 2.99792e8  # SI (m.s-1)
-h_c = h_si * c_si  # SI (J.m)
-eV_in_J = 1.602176634e-19
-two_pi = 6.283185307179586
-pi = 3.141592653589793
-hbar_si = h_si / two_pi  # J.s.rad-1
-hbar = h_si / two_pi / eV_in_J  # ev.s.rad-1
+from __future__ import annotations
 
-atomic_mass = 1.67e-27  # SI
+h_si: float = 6.62607015e-34  # SI (J.s)
+c_si: float = 2.99792e8  # SI (m.s-1)
+h_c: float = h_si * c_si  # SI (J.m)
+eV_in_J: float = 1.602176634e-19
+two_pi: float = 6.283185307179586
+pi: float = 3.141592653589793
+hbar_si: float = h_si / two_pi  # J.s.rad-1
+hbar: float = h_si / two_pi / eV_in_J  # ev.s.rad-1
 
-THz_in_meV = 4.135667696923859
+atomic_mass: float = 1.67e-27  # SI
 
-cm1_in_J = 100 * h_c
+THz_in_meV: float = 4.135667696923859
 
-kb = 1.38064852e-23  # J.K-1 Boltzmann constant
+cm1_in_J: float = 100 * h_c
 
-kb_eV = kb / eV_in_J  # eV.K-1
+kb: float = 1.38064852e-23  # J.K-1 Boltzmann constant
 
-sigma_to_fwhm = 2.3548200450309493  # 2 * sqrt(2 * log(2))
+kb_eV: float = kb / eV_in_J  # eV.K-1
+
+sigma_to_fwhm: float = 2.3548200450309493  # 2 * sqrt(2 * log(2))
 
 
-electronegativity = {
+electronegativity: dict[str, float] = {
     # Pauling electronegativity, or 10.0 for species where no data is available
     "H": 2.20,
     "He": 10.0,
