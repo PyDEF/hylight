@@ -3,10 +3,19 @@ from enum import Enum
 import numpy as np
 from scipy import fft
 
-from .mode import get_energies, get_HR_factors
+from .mode import get_energies, get_HR_factors, rot_c_to_v
 from .loader import load_phonons
 from .vasp.loader import load_poscar_latt
-from .constants import two_pi, eV_in_J, h_si, pi, cm1_in_J, sigma_to_fwhm, hbar_si, atomic_mass
+from .constants import (
+    two_pi,
+    eV_in_J,
+    h_si,
+    pi,
+    cm1_in_J,
+    sigma_to_fwhm,
+    hbar_si,
+    atomic_mass,
+)
 from .mono_phonon import sigma_soft
 from .utils import gen_translat
 
@@ -40,6 +49,7 @@ class OmegaEff(Enum):
     ONED_FREQ: Omega = (DeltaQ^T D DeltaQ) / DeltaQ^2
         Correspond to the actual curvature in the direction of the displacement.
     """
+
     FC_MEAN = 0
     HR_MEAN = 1
     HR_RMS = 2
@@ -63,6 +73,7 @@ class ExPES:
 
     FULL_ND: (Not implemented) We know the frequency of each ES mode.
     """
+
     ISO_SCALE: "ExPES"
     SINGLE_ES_FREQ: "ExPES"
     FULL_ND: "ExPES"
@@ -245,7 +256,7 @@ def compute_spectra_soft(
     :param omega_eff_type: (optional, default OmegaEff.FC_MEAN) mode of evaluation of effective frequency.
     :param result_store: (optional, default None) a dictionary to store some intermediate results.
     :param ex_pes: (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.
-    :param correct_zpe: (optional, default False) correct the ZPL to take the zero point energy into account. 
+    :param correct_zpe: (optional, default False) correct the ZPL to take the zero point energy into account.
     """
 
     if result_store is None:
@@ -259,7 +270,9 @@ def compute_spectra_soft(
     S_em = np.sum(hrs)
     dfcg_vib = np.sum(hrs * es)
 
-    e_phonon_eff = effective_phonon_energy(omega_eff_type, delta_R, hrs, es, phonons[0].masses / atomic_mass)
+    e_phonon_eff = effective_phonon_energy(
+        omega_eff_type, delta_R, hrs, es, phonons[0].masses / atomic_mass
+    )
 
     if ex_pes.omega is None:
         assert fc_shift_gs is not None and fc_shift_gs > 0
@@ -300,8 +313,10 @@ def compute_spectra_soft(
 
         delta_zpe = zpe_gs - zpe_es
         result_store["delta_zpe"] = delta_zpe
-        if abs(delta_zpe) > 1.:
-            warnings.warn(f"Delta ZPE is {delta_zpe} eV, there is probably a big problem and the result may be garbage.")
+        if abs(delta_zpe) > 1.0:
+            warnings.warn(
+                f"Delta ZPE is {delta_zpe} eV, there is probably a big problem and the result may be garbage."
+            )
         zpl -= delta_zpe
 
     logger.info(
@@ -550,36 +565,42 @@ def rect(n):
 
 
 def sigma_hybrid(T, S, e_phonon, e_phonon_e):
-    """Compute the width of the ZPL for the ExPES.SINGLE_ES_FREQ mode.
+    """Compute the width of the ZPL for the ExPES.SINGLE_ES_FREQ mode."""
+    return np.sqrt(
+        np.sum(
+            [sigma_soft(T, S_i, e_i, e_phonon_e) ** 2 for S_i, e_i in zip(S, e_phonon)]
+        )
+    )
+
+
+def duschinsky(phonons_a, phonons_b):
+    """Dushinsky matrix from $S_{a \\gets b}$.
     """
-    return np.sqrt(np.sum([
-        sigma_soft(T, S_i, e_i, e_phonon_e)**2
-        for S_i, e_i in zip(S, e_phonon)
-    ]))
+    return rot_c_to_v(phonons_a) @ rot_c_to_v(phonons_b).transpose()
 
 
-def sigma_full_nd(T, delta_R, modes_gs, modes_es):
-    """
-    WIP, Not implemented yet.
-    There is still something missing in my reasoning
-    sig2 = np.array((len(modes_gs),))
+def sigma_full_nd(T, delta_R, modes_gs, modes_es, bias=0):
+    """Compute the width of the ZPL for the ExPES.FULL_ND mode."""
+    Dush_gs_to_es = duschinsky(modes_es, modes_gs)
 
-    mat_es = np.array([
-        m.delta.reshape((-1,))
-        for m in modes_es
-    ])
-    omegas_es = np.array([m.energy for m in modes_es])
+    D_es = dynamic_matrix(modes_es)
 
-    for i, m in enumerate(modes_es):
-        # TODO Check units !!!!
-        S_i = m.huang_rhys(delta_R * 1e-10)
-        es_i = m.energy
-        es_at_i = mat_es.dot(m.delta.reshape((-1,))).dot(omegas_es)
-        sig2[i] = sigma_soft(T, S_i, e_i, es_at_i)**2
+    # Extract the \gamma_i^T @ D_es @ \gamma_i
+    e_e = np.sqrt(np.diagonal(Dush_gs_to_es.transpose() @ D_es @ Dush_gs_to_es)) / eV_in_J
+    if not np.all(e_e.imag * np.array([m.real for m in modes_gs]) < 1e-8):
+        raise ValueError(
+            "Some of the ground state eigenvectors correspond to negative curvature in excited state."
+        )
 
-    return np.sqrt(np.sum(sig2))
-    """
-    raise NotImplementedError("This is not yet implemented")
+    e_g = np.array([m.energy for mode in modes_gs]) / eV_in_J
+
+    return np.sqrt(
+        [
+            sigma_soft(T, S_i, e_g_i, e_e_i) ** 2
+            for S_i, m, e_g_i, e_e_i in zip(S, modes_gs, e_g, e_e)
+            if m.real and m.energy >= bias
+        ]
+    )
 
 
 def freq_from_finite_diff(left, mid, right, mu, A=0.01):
@@ -593,7 +614,7 @@ def freq_from_finite_diff(left, mid, right, mu, A=0.01):
     :param A: (optional, 0.01) amplitude (A) of the displacement between the
       middle point and the sides.
     """
-    curvature = (left + right - 2 * mid) * eV_in_J / (A * 1e-10)**2
+    curvature = (left + right - 2 * mid) * eV_in_J / (A * 1e-10) ** 2
     e_vib = hbar_si * np.sqrt(2 * curvature / mu)
     return e_vib / eV_in_J  # eV
 
@@ -601,27 +622,33 @@ def freq_from_finite_diff(left, mid, right, mu, A=0.01):
 def effective_phonon_energy(omega_eff_type, delta_R, hrs, es, masses):
     """Compute an effective phonon energy in eV following the strategy of omega_eff_type.
 
-    :param delta_R: The displacement between GS and ES in A
+    :param omega_eff_type: The mode of evaluation of the effective phonon energy.
+    :param delta_R: The displacement between GS and ES in A. Can be None if omega_eff_type is not ONED_FREQ
     :param hrs: The array of Huang-Rhyes factor for each mode.
     :param es: The array of phonon energy in eV.
     :param masses: The array of atomic masses in atomic mass unit.
     :return: The effective energy in eV.
     """
-    fcs = hrs * es * eV_in_J
+
+    _es = es * eV_in_J
+    fcs = hrs * _es
 
     S_em = np.sum(hrs)
     dfcg_vib = np.sum(fcs)
 
     if omega_eff_type == OmegaEff.FC_MEAN:
-        return np.sum(fcs * es) / dfcg_vib / eV_in_J
+        return np.sum(fcs * _es) / dfcg_vib / eV_in_J
     elif omega_eff_type == OmegaEff.HR_MEAN:
         return dfcg_vib / S_em / eV_in_J
     elif omega_eff_type == OmegaEff.HR_RMS:
-        return np.sqrt(np.sum(fcs * es) / S_em) / eV_in_J
+        return np.sqrt(np.sum(fcs * _es) / S_em) / eV_in_J
     elif omega_eff_type == OmegaEff.FC_RMS:
-        return np.sqrt(np.sum(fcs * es * es) / dfcg_vib) / eV_in_J
+        return np.sqrt(np.sum(fcs * _es * _es) / dfcg_vib) / eV_in_J
     elif omega_eff_type == OmegaEff.ONED_FREQ:
-        delta_Q = ((masses * atomic_mass).reshape((-1, 1))**0.5 * delta_R * 1e-10).reshape((-1,))
+        assert delta_R is not None
+        delta_Q = (
+            (masses * atomic_mass).reshape((-1, 1)) ** 0.5 * delta_R * 1e-10
+        ).reshape((-1,))
         delta_Q_2 = delta_Q.dot(delta_Q)
         return (hbar_si * np.sqrt(np.sum(fcs) / delta_Q_2)) / eV_in_J
 

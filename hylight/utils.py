@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.interpolate import interp1d
 
 
 def make_cell(val):
@@ -11,6 +12,7 @@ def make_cell(val):
         if val is not nothing:
             var = val
         return var
+
     return cell
 
 
@@ -27,3 +29,44 @@ def gen_translat(lattice: np.ndarray):
         for j in (-1, 0, 1):
             for k in (-1, 0, 1):
                 yield np.array([i, j, k]).dot(lattice)
+
+
+def measure_fwhm(x, y):
+    """Measure the full width at half maximum of a given spectra.
+
+    Warning: It may fail if there are more than one band that reach half
+    maximum in the array. In this case you may want to use select_interval to
+    make a window around a single band.
+    :param x: the energy array
+    :param y: the intensity array
+    :return: FWHM in the same unit as x.
+    """
+    mx = np.max(y)
+
+    x_ = x[y > (mx / 2)]
+    return np.max(x_) - np.min(x_)
+
+
+def select_interval(x, y, emin, emax, normalize=False, npoints=None):
+    """Extract an interval of a spectra and return the windows x and y arrays.
+
+    :param x: x array
+    :param y: y array
+    :param emin: lower bound for the window
+    :param emax: higher bound for the window
+    :param normalize: (optional, False) if true, the result y array is normalized
+    :param npoints: (optional, None) if an integer, the result arrays will be
+    interpolated to contains exactly npoints linearly distributed between emin
+    and emax.
+    :return: (windowed_x, windowed_y)
+    """
+    slice_ = (x > emin) * (x < emax)
+    xs, ys = x[slice_], y[slice_] / (np.max(y[slice_]) if normalize else 1.0)
+
+    if npoints is not None:
+        emin = max(np.min(xs), emin)
+        emax = min(np.max(xs), emax)
+        xint = np.linspace(emin, emax, npoints)
+        return xint, interp1d(xs, ys)(xint)
+
+    return xs, ys
