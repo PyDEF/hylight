@@ -80,10 +80,10 @@ def load_phonons(path):
                     dtype=float,
                 )
                 ref = data[:, 0:3]
-                delta = data[:, 3:6]
+                eigenv = data[:, 3:6]
 
                 phonons.append(
-                    Mode(atoms, n, im == "f  ", float(ener), ref, delta, masses)
+                    Mode(atoms, n, im == "f  ", float(ener), ref, eigenv, masses)
                 )
 
                 n_modes += 1

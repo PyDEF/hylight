@@ -6,7 +6,7 @@ from enum import Enum, auto
 class Mode:
     """The representation of a vibrational mode."""
 
-    def __init__(self, atoms, n, real, energy, ref, delta, masses):
+    def __init__(self, atoms, n, real, energy, ref, eigenvector, masses):
         """Build the mode from OUTCAR data.
 
         :param atoms: list of atoms
@@ -22,19 +22,22 @@ class Mode:
         self.real = real  # False if imaginary coordinates
         self.energy = energy * 1e-3 * eV_in_J  # energy from meV to SI
         self.ref = ref  # equilibrium position in A
-        self.delta = delta  # vibrational mode eigenvector (norm of 1)
+        self.delta = (
+            np.array(masses).reshape((-1, 1)) ** (-0.5) * eigenvector
+        )  # vibrational mode eigendisplacement
+        self.eigenvector = eigenvector  # vibrational mode eigenvector (norm of 1)
 
         self.masses = np.array(masses) * atomic_mass
 
-    def project(self, delta_R):
-        """Project delta_R onto the mode"""
-        delta_R_dot_mode = np.sum(delta_R * self.delta)
-        return delta_R_dot_mode * self.delta
+    def project(self, delta_Q):
+        """Project delta_Q onto the eigenvector"""
+        delta_R_dot_mode = np.sum(delta_Q * self.eigenvector)
+        return delta_R_dot_mode * self.eigenvector
 
-    def project_coef2(self, delta_R):
-        """Square lenght of the projection of delta_R onto the mode."""
-        delta_R_dot_mode = np.sum(delta_R * self.delta)
-        return delta_R_dot_mode**2
+    def project_coef2(self, delta_Q):
+        """Square lenght of the projection of delta_Q onto the eigenvector."""
+        delta_Q_dot_mode = np.sum(delta_Q * self.eigenvector)
+        return delta_Q_dot_mode**2
 
     def huang_rhys(self, delta_R):
         r"""Compute the Huang-Rhyes factor
@@ -68,7 +71,9 @@ class Mode:
 
     def to_jmol(self, **opts):
         from .jmol import export
+
         return export(self, **opts)
+
 
 def rot_c_to_v(phonons):
     """Rotation matrix from Cartesian basis to Vibrational basis (right side)."""

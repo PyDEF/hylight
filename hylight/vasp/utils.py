@@ -37,14 +37,14 @@ def make_finite_diff_poscar(
     delta_Q = np.sqrt(m) * delta_R
 
     k = get_energies(phonons, bias=bias_si)**2
-    d = np.array([np.sum(p.delta * delta_Q)
+    d = np.array([np.sum(p.eigenvector * delta_Q)
                   for p in phonons
                   if p.energy >= bias_si])
 
     kd = k * d
 
-    grad = np.sum(
-        (np.array([p.delta for p in phonons]) * kd.reshape((-1, 1, 1))), axis=0
+    grad = m**(-0.5) * np.sum(
+        (np.array([p.eigenvector for p in phonons]) * kd.reshape((-1, 1, 1))), axis=0
     )
 
     g_dir = -grad / np.linalg.norm(grad)

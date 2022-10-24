@@ -4,7 +4,7 @@ import os
 import numpy as np
 
 from .mode import Mode
-from .constants import atomic_mass
+from .constants import atomic_mass, eV_in_J
 
 
 def archive_modes(modes, dest, compress=False):
@@ -37,9 +37,9 @@ def archive_modes(modes, dest, compress=False):
     for i, m in enumerate(ph):
         # store in meV
         energies[i] = (1 if m.real else -1) * m.energy * 1e3 / eV_in_J
-        eigenvectors[i, :, :] = m.delta
+        eigenvectors[i, :, :] = m.eigenvector
 
-    with open(source, mode="wb") as f:
+    with open(dest, mode="wb") as f:
         save(
             f,
             atoms=np.array([s.encode("ascii") for s in ph[0].atoms]),
@@ -48,8 +48,6 @@ def archive_modes(modes, dest, compress=False):
             eigenvectors=eigenvectors,
             energies=energies,
         )
-
-    return (phonons, *pops_and_masses(phonons))
 
 
 def load_phonons(source):
