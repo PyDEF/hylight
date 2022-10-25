@@ -24,15 +24,15 @@ def archive_modes(modes, dest, compress=False):
         raise ValueError("There are no modes to be stored.")
 
     n = len(ph)
-    m = len(ph.ref)
+    m = len(ph[0].ref)
 
     if compress:
         save = np.savez_compressed
     else:
         save = np.savez
 
-    eigenvectors = np.array((n, m, 3))
-    energies = np.array((n,))
+    eigenvectors = np.ndarray((n, m, 3))
+    energies = np.ndarray((n,))
 
     for i, m in enumerate(ph):
         # store in meV
@@ -55,7 +55,7 @@ def load_phonons(source):
 
     _, ext = os.path.splitext(source)
 
-    if ext == "npz":
+    if ext == ".npz":
         return load_phonons_npz(source)
     else:
         return load_phonons_pickle(source)
@@ -68,11 +68,13 @@ def load_phonons_npz(source):
         # The [:] is used to force the read and convert to a numpy array.
         masses = f["masses"]
         ref = f["ref"]
-        vecs = f["eigenvector"]
+        vecs = f["eigenvectors"]
         enes = f["energies"]
 
+        phonons = []
+
         for i, (v, e) in enumerate(zip(vecs, enes)):
-            phonons.append(Mode(atoms, i, e >= 0, abs(f), ref, v[:], masses))
+            phonons.append(Mode(atoms, i, e >= 0, abs(e), ref, v[:], masses))
 
     return (phonons, *pops_and_masses(phonons))
 
@@ -98,5 +100,6 @@ def pops_and_masses(modes):
 
     masses = modes[0].masses / atomic_mass
     pops = {sp: modes[0].atoms.count(sp) for sp in set(modes[0].atoms)}
+
 
     return pops, masses

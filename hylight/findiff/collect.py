@@ -1,8 +1,9 @@
+from warnings import warn
 import re
 from itertools import islice, dropwhile, repeat
 from multiprocessing import Pool
 import numpy as np
-from ..utils import gen_translat
+from ..utils import periodic_diff
 from ..mode import Mode
 from ..constants import hbar_si, eV_in_J, atomic_mass
 
@@ -14,14 +15,20 @@ def process_phonons(
 
     :param outputs: list of OUTCAR paths corresponding to the finite displacements.
     :param ref_output: path to non displaced OUTCAR.
-    :param basis_source: read a displacement basis from a path. The file is a npy file from numpy's save.
-      If None, the basis is built from the displacements.
-      If not None, the order of outputs *must* match the order of the displacements in the array.
+    :param basis_source: read a displacement basis from a path. The file is a
+      npy file from numpy's save. If None, the basis is built from the
+      displacements. If not None, the order of outputs *must* match the order
+      of the displacements in the array.
     :param amplitude: amplitude of the displacement, only used if basis_source *is not* None.
     :param nproc: number of parallel processes used to load the files.
     :param symm: If True, use symmetric differences. OUTCARs *must* be ordered
       as [+delta_1, -delta_1, +delta_2, -delta_2, ...].
     :returns: the same tuple as the load_phonons functions.
+
+    Remark: When using non canonical basis (displacements are not along a
+    single degree of freedom of a single atom at a time) it may be important to
+    provide the basis excplicity because it will avoid important rounding
+    errors found in the OUTCAR.
     """
     lattice, atoms, _, pops, masses = get_ref_info(ref_output)
 
@@ -34,14 +41,14 @@ def process_phonons(
 
     assert ref.shape == (n_atoms, 3)
 
-    # basis is the transition matrix from canonic to vibration from the right
+    # canon2user is the transition matrix from canonical basis to vibrational basis from the right
     if basis_source is not None:
-        basis = np.load(basis_source)
+        canon2user = np.load(basis_source)
 
-        if basis.shape != (n, n):
+        if canon2user.shape != (n, n):
             raise ValueError("Basis shape and output shape are incompatible.")
     else:
-        basis = np.zeros((n, n))
+        canon2user = np.zeros((n, n))
 
     h = np.zeros((n, n))
 
@@ -63,56 +70,66 @@ def process_phonons(
             ):
                 h[i, :] -= force
                 if basis_source is None:
-                    basis[i, :] += delta
+                    canon2user[i, :] += delta
     else:
         for i, force, delta in map(_extract_infos, data):
             h[i, :] -= force
             if basis_source is None:
-                basis[i, :] += delta
+                canon2user[i, :] += delta
 
     if not symm:
         h[:, :] += rf.reshape((1, -1))
 
     if basis_source is None:
         # Compute actual displacement and renormalize
-        amplitudes = np.linalg.norm(basis, axis=-1).reshape((-1, 1))
-        basis /= amplitudes
+        amplitudes = np.linalg.norm(canon2user, axis=-1).reshape((-1, 1))
+        canon2user /= amplitudes
         h /= amplitudes
     elif symm:
         h /= 2 * amplitude
     else:
         h /= amplitude
 
-    bt = basis.transpose()
+    user2canon = canon2user.transpose()
+    ortho = np.abs(canon2user @ user2canon - np.eye(n))
 
-    # Rotate the matrix to get it into the right basis
-    h = basis @ h
+    if np.any(ortho > 1e-7):
+        raise ValueError(
+            f"Basis is very far from orthonormal: max error {np.max(ortho)}."
+            + (
+                ""
+                if basis_source
+                else "\nThe non orthonormality may be due to rounding errors"
+                " in the atomic positions as written in VASP's outputs."
+                " Try to provide the real basis with basis_source."
+            )
+        )
+    elif np.any(ortho > 1e-12):
+        warn(f"Basis does not seem orthonormal: max error {np.max(ortho)}.")
+
+    # Rotate the matrix back to cannonical basis
+    h = user2canon @ h
 
     # force the symetry to account for numerical imprecision
     h = 0.5 * (h + h.transpose())
     h *= eV_in_J * 1e20
 
-    assert np.all(basis @ bt - np.eye(n) < 1e-15), "basis is not orthogonal"
-
     # Rotate the mass matrix too
-    m = (
-        basis
-        @ np.sqrt(np.diag([1.0 / (m * atomic_mass) for m in masses for _ in range(3)]))
-        @ bt
-    )
+    m12 = np.sqrt(np.diag([1.0 / (m * atomic_mass) for m in masses for _ in range(3)]))
 
     # dynamical matrix
-    dynmat = m.transpose() @ h @ m
+    dynmat = m12.transpose() @ h @ m12
 
     # eigenvalues and eigenvectors, aka square of angular frequencies and normal modes
-    vals, vecs = np.linalg.eig(dynmat)
+    vals, vecs = np.linalg.eigh(dynmat)
+    vecs = vecs.transpose()
     assert vecs.shape == (n, n)
 
     # modulus of mode energies in J
     energies = hbar_si * np.sqrt(np.abs(vals)) / eV_in_J * 1e3
 
     # eigenvectors reprsented in canonical basis
-    vx = (bt @ vecs).reshape((n, n_atoms, 3))
+    vx = vecs.reshape((n, n_atoms, 3))
 
     return (
         [
@@ -129,13 +146,15 @@ def process_phonons(
         ],
         pops,
         masses,
+        # rotate the dynmat back in the canonical basis
+        dynmat,
     )
 
 
 def _extract_infos(args):
     i, (output, n_atoms, lattice, ref, symm) = args
     forces, pos = get_forces_and_pos(n_atoms, output)
-    delta = compute_delta(lattice, ref, pos)
+    delta = periodic_diff(lattice, ref, pos)
     if symm:
         return (
             i // 2,
@@ -158,22 +177,55 @@ def get_forces_and_pos(n, path):
 
 
 def _get_forces_and_pos(n, path):
-    with open(path) as outcar:
+    "Ad hoc parser for OUTCAR and vasprun.xml."
 
-        # advance to the force block
-        for line in outcar:
-            if "TOTAL-FORCE (eV/Angst)" in line:
-                break
-        else:
-            raise ValueError("Unexpected EOF")
+    if path.endswith(".xml"):
+        with open(path) as f:
+            f = dropwhile_err(
+                lambda line: "<calculation>" not in line,
+                f,
+                ValueError("Unexpected EOF while looking for calculation."),
+            )
 
-        # read the block and let numpy parse the numbers
-        data = np.array(
-            [line.split() for line in islice(outcar, 1, n + 1)],
-            dtype=float,
-        )
+            f = dropwhile_err(
+                lambda line: '<varray name="positions"' not in line,
+                f,
+                ValueError("Unexpected EOF while looking for positions."),
+            )
 
-    return data
+            positions = np.array(
+                [line.split()[1:4] for line in islice(f, 1, n + 1)],
+                dtype=float,
+            )
+
+            f = dropwhile_err(
+                lambda line: '<varray name="forces"' not in line,
+                f,
+                ValueError("Unexpected EOF while looking for forces."),
+            )
+
+            forces = np.array(
+                [line.split()[1:4] for line in islice(f, 1, n + 1)],
+                dtype=float,
+            )
+
+        return np.hstack([positions, forces])
+
+    else:  # OUTCAR
+        with open(path) as outcar:
+
+            # advance to the force block
+            for line in outcar:
+                if "TOTAL-FORCE (eV/Angst)" in line:
+                    break
+            else:
+                raise ValueError("Unexpected EOF")
+
+            # read the block and let numpy parse the numbers
+            return np.array(
+                [line.split() for line in islice(outcar, 1, n + 1)],
+                dtype=float,
+            )
 
 
 def get_ref_info(path):
@@ -186,6 +238,8 @@ def get_ref_info(path):
       pops: population for each atom species
       masses: list of SI masses
     """
+    if path.endswith(".xml"):
+        raise ValueError("vasprun.xml is not supported for the reference file.")
     pops = []
     masses = []
     names = []
@@ -263,19 +317,6 @@ def get_ref_info(path):
         pos = data[:, 0:3]
 
     return lattice, atoms, pos, pops, masses
-
-
-def compute_delta(lattice, ref, disp):
-    "Compute the displacement between ref and disp, accounting for periodic conditions."
-    dp = disp - ref
-    d = np.array([dp - t for t in gen_translat(lattice)])  # shape (27, n, 3)
-
-    # norms is an array of length of delta
-    norms = np.linalg.norm(d, axis=2)  # shape = (27, n)
-    best_translat = np.argmin(norms, axis=0)  # shape = (n,)
-
-    n = d.shape[1]
-    return d[best_translat, list(range(n)), :]
 
 
 def dropwhile_err(pred, it, else_err):

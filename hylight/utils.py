@@ -70,3 +70,17 @@ def select_interval(x, y, emin, emax, normalize=False, npoints=None):
         return xint, interp1d(xs, ys)(xint)
 
     return xs, ys
+
+
+def periodic_diff(lattice, ref, disp):
+    "Compute the displacement between ref and disp, accounting for periodic conditions."
+    dp = (disp - ref).reshape((1, -1, 3))
+    t = np.array(list(gen_translat(lattice))).reshape((27, 1, 3))
+    d = dp - t
+
+    # norms is an array of length of delta
+    norms = np.linalg.norm(d, axis=2)  # shape = (27, n)
+    best_translat = np.argmin(norms, axis=0)  # shape = (n,)
+
+    n = d.shape[1]
+    return d[best_translat, list(range(n)), :]

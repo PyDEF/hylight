@@ -22,12 +22,10 @@ class Mode:
         self.real = real  # False if imaginary coordinates
         self.energy = energy * 1e-3 * eV_in_J  # energy from meV to SI
         self.ref = ref  # equilibrium position in A
-        self.delta = (
-            np.array(masses).reshape((-1, 1)) ** (-0.5) * eigenvector
-        )  # vibrational mode eigendisplacement
         self.eigenvector = eigenvector  # vibrational mode eigenvector (norm of 1)
-
         self.masses = np.array(masses) * atomic_mass
+        # vibrational mode eigendisplacement
+        self.delta = np.sqrt(self.masses.reshape((-1, 1))) * eigenvector
 
     def project(self, delta_Q):
         """Project delta_Q onto the eigenvector"""
@@ -77,16 +75,16 @@ class Mode:
 
 def rot_c_to_v(phonons):
     """Rotation matrix from Cartesian basis to Vibrational basis (right side)."""
-    return np.array([m.delta.reshape((-1,)) for m in phonons])
+    return np.array([m.eigenvector.reshape((-1,)) for m in phonons])
 
 
-def dynamic_matrix(phonons):
-    dynamic_matrix_diag = np.diag(
+def dynamical_matrix(phonons):
+    dynamical_matrix_diag = np.diag(
         [(1 if m.real else -1) * (m.energy / hbar_si) ** 2 for m in phonons]
     )
     Lt = rot_c_to_v(phonons)
 
-    return Lt.transpose() @ dynamic_matrix_diag @ Lt
+    return Lt.transpose() @ dynamical_matrix_diag @ Lt
 
 
 def get_HR_factors(phonons, delta_R_tot, bias=0):

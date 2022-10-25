@@ -1,8 +1,10 @@
 import os.path as op
 import gzip
+from itertools import cycle
 
 from .script_utils import MultiCmd, positional, optional, error_catch
-from ..pkl import archive_modes
+from ..pkl import archive_modes, load_phonons
+from ..constants import eV_in_J, cm1_in_J
 
 
 pkl = MultiCmd(
@@ -62,7 +64,7 @@ def hy(opts):
 @pkl.subcmd(
     positional("SOURCE", help="path to a phonopy output file."),
     positional("DEST", help="path of the destionation file.", default=None),
-    positional("PHONOPY", help="path to the phonopy output file.", default=None),
+    positional("PHONOPY_YAML", help="path to the phonopy.yaml file.", default=None),
 )
 def phonopy(opts):
     """Convert a Phonopy output file into a Hylight archive.
@@ -143,6 +145,67 @@ def crystal(opts):
     summary(modes, dest)
 
     return 0
+
+
+@pkl.subcmd(
+    positional("SOURCE", help="path to the mode archive."),
+)
+def show(opts):
+    """Produce a set of figures to vizualize the modes."""
+    from hylight.multi_phonons import dynmatshow
+    from hylight.mode import dynamical_matrix
+    from matplotlib.pyplot import show
+
+    phonons, _, _ = load_phonons(opts.source)
+
+    blocks = []
+
+    colors = cycle([
+        "red",
+        "blue",
+        "orange",
+        "purple",
+        "green",
+        "pink",
+        "yellow",
+    ])
+
+    prev = None
+    acc = 0
+    for at in phonons[0].atoms:
+        if not prev:
+            prev = at
+            acc = 1
+        elif at != prev:
+            if acc:
+                blocks.append(
+                    (prev, acc, next(colors)),
+                )
+                acc = 1
+                prev = at
+        else:
+            acc += 1
+
+    if acc:
+        blocks.append(
+            (prev, acc, next(colors)),
+        )
+        acc = 1
+        prev = at
+
+    dynmat = dynamical_matrix(phonons)
+    fig, ax = dynmatshow(dynmat, blocks=blocks)
+
+    n = len(phonons)
+    m = sum(not m.real for m in phonons)
+    e_re = max(m.energy for m in phonons if m.real)
+    e_im = max(m.energy for m in phonons if not m.real)
+
+    print(f"There are {n} modes, among which {m} are unstable.")
+    print(f"Maximum real frequency is {e_re / eV_in_J * 1e3:0.03f} meV / {e_re / cm1_in_J:0.03f} cm1.")
+    print(f"Maximum imaginary frequency is {e_im / eV_in_J * 1e3:0.03f} meV / {e_im / cm1_in_J:0.03f} cm1.")
+
+    show()
 
 
 def summary(data, dest):

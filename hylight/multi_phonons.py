@@ -3,7 +3,7 @@ from enum import Enum
 import numpy as np
 from scipy import fft
 
-from .mode import get_energies, get_HR_factors, rot_c_to_v
+from .mode import get_energies, get_HR_factors, rot_c_to_v, dynamical_matrix
 from .loader import load_phonons
 from .vasp.loader import load_poscar_latt
 from .constants import (
@@ -17,7 +17,7 @@ from .constants import (
     atomic_mass,
 )
 from .mono_phonon import sigma_soft
-from .utils import gen_translat
+from .utils import periodic_diff
 
 import logging
 
@@ -271,12 +271,18 @@ def compute_spectra_soft(
     dfcg_vib = np.sum(hrs * es)
 
     e_phonon_eff = effective_phonon_energy(
-        omega_eff_type, delta_R, hrs, es, phonons[0].masses / atomic_mass
+        omega_eff_type, hrs, es, phonons[0].masses / atomic_mass, delta_R
     )
 
     if ex_pes.omega is None:
-        assert fc_shift_gs is not None and fc_shift_gs > 0
-        assert fc_shift_es is not None
+        if fc_shift_gs is None or fc_shift_gs > 0:
+            raise ValueError(
+                "fc_shift_gs must not be omited unless an effective frequency for the excited state is provided for."
+            )
+        if fc_shift_es is not None:
+            raise ValueError(
+                "fc_shift_es must not be omited unless an effective frequency for the excited state is provided for."
+            )
         alpha = np.sqrt(fc_shift_es / fc_shift_gs)
         e_phonon_eff_e = e_phonon_eff * alpha
         logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
@@ -468,22 +474,7 @@ def compute_delta_R(poscar_gs, poscar_es):
     if np.linalg.norm(lattice1 - lattice2) > 1e-5:
         raise ValueError("Lattice parameters are not matching.")
 
-    dp = pos1 - pos2
-    d = np.array([dp - t for t in gen_translat(lattice1)])  # shape (27, n, 3)
-
-    # norms is an array of distances between a point in p1 a translated point of p2
-    norms = np.linalg.norm(d, axis=2)  # shape = (27, n)
-    # permut[i] is the index of the translated point of p2 that
-    # is closer to p1[i]
-    best_translat = np.argmin(norms, axis=0)  # shape = (n,)
-
-    n = d.shape[1]
-    res = np.ndarray((n, 3))
-
-    for i, k in enumerate(best_translat):
-        res[i, :] = d[k, i, :]
-
-    return res
+    return periodic_diff(lattice1, pos1, pos2)
 
 
 def _get_s_t_raw(t, freqs, hrs):
@@ -574,8 +565,7 @@ def sigma_hybrid(T, S, e_phonon, e_phonon_e):
 
 
 def duschinsky(phonons_a, phonons_b):
-    """Dushinsky matrix from $S_{a \\gets b}$.
-    """
+    """Dushinsky matrix from $S_{a \\gets b}$."""
     return rot_c_to_v(phonons_a) @ rot_c_to_v(phonons_b).transpose()
 
 
@@ -583,20 +573,23 @@ def sigma_full_nd(T, delta_R, modes_gs, modes_es, bias=0):
     """Compute the width of the ZPL for the ExPES.FULL_ND mode."""
     Dush_gs_to_es = duschinsky(modes_es, modes_gs)
 
-    D_es = dynamic_matrix(modes_es)
+    D_es = dynamical_matrix(modes_es)
 
     # Extract the \gamma_i^T @ D_es @ \gamma_i
-    e_e = np.sqrt(np.diagonal(Dush_gs_to_es.transpose() @ D_es @ Dush_gs_to_es)) / eV_in_J
+    e_e = (
+        np.sqrt(np.diagonal(Dush_gs_to_es.transpose() @ D_es @ Dush_gs_to_es)) / eV_in_J
+    )
     if not np.all(e_e.imag * np.array([m.real for m in modes_gs]) < 1e-8):
         raise ValueError(
             "Some of the ground state eigenvectors correspond to negative curvature in excited state."
         )
 
-    e_g = np.array([m.energy for mode in modes_gs]) / eV_in_J
+    e_g = np.array([mode.energy for mode in modes_gs]) / eV_in_J
+    S = get_HR_factors(modes_gs, delta_R, bias=bias)
 
-    return np.sqrt(
+    return np.array(
         [
-            sigma_soft(T, S_i, e_g_i, e_e_i) ** 2
+            sigma_soft(T, S_i, e_g_i, e_e_i)
             for S_i, m, e_g_i, e_e_i in zip(S, modes_gs, e_g, e_e)
             if m.real and m.energy >= bias
         ]
@@ -619,14 +612,15 @@ def freq_from_finite_diff(left, mid, right, mu, A=0.01):
     return e_vib / eV_in_J  # eV
 
 
-def effective_phonon_energy(omega_eff_type, delta_R, hrs, es, masses):
+def effective_phonon_energy(omega_eff_type, hrs, es, masses, delta_R=None):
     """Compute an effective phonon energy in eV following the strategy of omega_eff_type.
 
     :param omega_eff_type: The mode of evaluation of the effective phonon energy.
-    :param delta_R: The displacement between GS and ES in A. Can be None if omega_eff_type is not ONED_FREQ
     :param hrs: The array of Huang-Rhyes factor for each mode.
     :param es: The array of phonon energy in eV.
     :param masses: The array of atomic masses in atomic mass unit.
+    :param delta_R: (optional, None) The displacement between GS and ES in A.
+      It is only required if omega_eff_type is ONED_FREQ.
     :return: The effective energy in eV.
     """
 
@@ -645,11 +639,53 @@ def effective_phonon_energy(omega_eff_type, delta_R, hrs, es, masses):
     elif omega_eff_type == OmegaEff.FC_RMS:
         return np.sqrt(np.sum(fcs * _es * _es) / dfcg_vib) / eV_in_J
     elif omega_eff_type == OmegaEff.ONED_FREQ:
-        assert delta_R is not None
+        if delta_R is None:
+            raise ValueError("delta_R is required when using the ONED_FREQ model.")
+
         delta_Q = (
             (masses * atomic_mass).reshape((-1, 1)) ** 0.5 * delta_R * 1e-10
         ).reshape((-1,))
         delta_Q_2 = delta_Q.dot(delta_Q)
         return (hbar_si * np.sqrt(np.sum(fcs) / delta_Q_2)) / eV_in_J
 
-    raise ValueError(f"Unknown effective frequency strategy.")
+    raise ValueError("Unknown effective frequency strategy.")
+
+
+def dynmatshow(dynmat, blocks=None):
+    from matplotlib.patches import Patch
+    from matplotlib.colors import LinearSegmentedColormap
+    import matplotlib.pyplot as plt
+
+    if blocks:
+        atmat = np.zeros(dynmat.shape)
+
+        colors = ["white"]
+        legends = []
+
+        off = 0
+        for i, (at, n, col) in enumerate(blocks):
+
+            atmat[off : off + 3 * n, off : off + 3 * n] = i + 1
+
+            off += 3 * n
+            colors.append(col)
+            legends.append(Patch(facecolor=col, label=at))
+
+        atcmap = LinearSegmentedColormap.from_list("atcmap", colors, 256)
+        blacks = LinearSegmentedColormap.from_list("blacks", ["none", "black"], 256)
+    else:
+        blacks = "Greys"
+
+    if blocks:
+        plt.imshow(atmat, vmin=0, vmax=len(blocks), cmap=atcmap)
+        plt.legend(handles=legends)
+
+    y = np.abs(dynmat) * atomic_mass / eV_in_J * 1e-20
+
+    ax = plt.imshow(y, cmap=blacks)
+    fig = plt.gcf()
+    cb = fig.colorbar(ax)
+
+    cb.ax.set_ylabel("(eV . A$^{-2}$ . m$_p^{-1}$)")
+
+    return fig, ax
