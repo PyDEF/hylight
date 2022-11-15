@@ -102,9 +102,13 @@ License:
     POSSIBILITY OF SUCH DAMAGE.
 """
 import sys
+import os
 from argparse import ArgumentParser
 from contextlib import contextmanager
 from functools import wraps
+
+
+_debug = os.environ.get("DEBUG", False) == "1"
 
 
 def _default_post(ret):
@@ -232,10 +236,13 @@ def error_catch():
     Context manager to provide cleaner errors when building a script around a
     function that can raise.
     """
-    try:
+    if _debug:
         yield
-    except Exception as e:
-        error(str(e))
+    else:
+        try:
+            yield
+        except Exception as e:
+            error(str(e))
 
 
 def flag(*names, **kwargs):

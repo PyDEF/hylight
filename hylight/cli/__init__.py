@@ -1,3 +1,4 @@
+import os
 import os.path as op
 import gzip
 from itertools import cycle
@@ -29,9 +30,13 @@ def vasp(opts):
 
     with error_catch():
         modes = load_phonons(opts.source)
+
+    summary(modes, opts.source)
+
+    with error_catch():
         archive_modes(modes, dest)
 
-    summary(modes, dest)
+    print(f"Wrote {dest}.")
 
     return 0
 
@@ -54,9 +59,13 @@ def hy(opts):
 
     with error_catch():
         modes = load_phonons(opts.source)
+
+    summary(modes, opts.source)
+
+    with error_catch():
         archive_modes(modes, opts.dest)
 
-    summary(modes, opts.dest)
+    print(f"Wrote {opts.dest}")
 
     return 0
 
@@ -118,9 +127,13 @@ def phonopy(opts):
 
     with error_catch():
         modes = load_phonons(opts.source)
+
+    summary(modes, opts.source)
+
+    with error_catch():
         archive_modes(modes, dest)
 
-    summary(modes, dest)
+    print(f"Wrote {dest}")
 
     return 0
 
@@ -140,12 +153,82 @@ def crystal(opts):
 
     with error_catch():
         modes = load_phonons(opts.source)
+
+    summary(modes, opts.source)
+
+    with error_catch():
         archive_modes(modes, dest)
 
-    summary(modes, dest)
+    print(f"Wrote {dest}.")
 
     return 0
 
+
+@pkl.subcmd(
+    positional("SOURCE", help="path of the npz file."),
+    positional("SELECTION", type=int, help="index of the mode to export."),
+    optional("--dest", "-o", default=None, help="path of the destionation file."),
+    optional("--bond", "-b", action="append", help="specification of a bond (ex: Ti,O,2.1 for a Ti-O bond up to 2.1 A)"),
+    optional("--color", "-c", action="append", help="specify an atom color (ex: Al,#000090)"),
+    optional("--ref", "-r", default=None, help="A reference POSCAR"),
+)
+def jmol(opts):
+    """Extract a mode from a npz file and produce a JMol file."""
+    from ..jmol import export
+
+    with error_catch():
+        modes, _, _ = load_phonons(opts.source)
+        m = modes[opts.selection - 1]
+
+    mode_summary(m)
+
+    if opts.dest is not None:
+        dest = opts.dest
+    else:
+        dest = os.path.splitext(opts.source)[0] + f"_{opts.selection}.jmol"
+
+    x_opts = parse_opts(opts)
+
+    with error_catch():
+        export(dest, m, **x_opts)
+
+
+def mode_summary(mode):
+    print("Index:", mode.n)
+    print("Real:", "yes" if mode.real else "no")
+    print("Energy (meV):", round(mode.energy * 1000 / eV_in_J, 2))
+
+
+def parse_opts(opts):
+    x_opts = {}
+
+    if opts.bond:
+        x_opts["bonds"] = [
+            (sp1, sp2, 0., float(dmax))
+            for sp1, sp2, dmax in (
+                s.split(',')
+                for s in opts.bond
+            )
+        ]
+
+    if opts.color:
+        x_opts["atom_colors"] = [
+            (sp, color)
+            for sp, color in (
+                s.split(',')
+                for s in opts.color
+            )
+        ]
+
+    if opts.ref:
+        from ..vasp.common import Poscar
+
+        if opts.ref:
+            p = Poscar.from_file(opts.ref)
+
+            x_opts["unitcell"] = p.cell_parameters
+
+    return x_opts
 
 @pkl.subcmd(
     positional("SOURCE", help="path to the mode archive."),
@@ -208,6 +291,6 @@ def show(opts):
     show()
 
 
-def summary(data, dest):
+def summary(data, src):
     modes, _, _ = data
-    print(f"Wrote {len(modes)} modes in {dest}")
+    print(f"Loaded {len(modes)} modes from {src}.")
