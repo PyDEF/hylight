@@ -22,11 +22,13 @@ def load_phonons(path):
 
     with open(path) as log:
         for line in log:
-            if "CARTESIAN COORDINATES" in line:
+            if "CARTESIAN COORDINATES - PRIMITIVE CELL" in line:
                 break
-        next(log)
-        next(log)
-        next(log)
+
+        # *******************************************************************************
+        # *      ATOM          X(ANGSTROM)         Y(ANGSTROM)         Z(ANGSTROM)
+        # *******************************************************************************
+        next(log); next(log); next(log)
 
         pos = []
         for line in log:
@@ -79,15 +81,15 @@ def load_phonons(path):
                 ats.append(zip(xs, ys, zs))
 
             # This loop actually has a small number of iteration corresponding
-            # to how many columns the data is formatted in
-            # However ats has as many items as there are atoms in the system
-            # I am not sure that approach is efficient
-            # Yet, It works(TM).
+            # to how many columns the data is formatted in. On the other hand
+            # `ats` has as many items as there are atoms in the system.
+            # I am pretty sure it is fairly inneficient.
+            # But, It works(TM).
             for f, disp in zip(freqs, zip(*ats)):
                 c += 1  # Crystal does not index its phonons so I use a counter
-                delta = _masses_12 * np.array(disp, dtype=float)
-                # FIXME I am 95% sure the data found in the log file are the
-                # eigen displacement, thus I need to apply the sqrt of the mass
+                eigenvec = _masses_12 * np.array(disp, dtype=float)
+                # FIXME The data found in the log file are the
+                # eigendisplacement, thus I need to apply the sqrt of the mass
                 # matrix to make them orthogonal (Can be verified on a system
                 # with large mass differences like CaWO4). However, they are
                 # still not orthonormal and I cannot find a proper explication
@@ -96,16 +98,16 @@ def load_phonons(path):
                 # file, but that is not very helpful in my opinion. In
                 # particular it does not specify how the normalization is
                 # applied, or what the amplitude depends on.
-                delta /= np.linalg.norm(delta)
+                eigenvec /= np.linalg.norm(eigenvec)
 
                 # Note: imaginary freqs are logged as negative frequencies
                 # Note 2: Mode currently expect the following units:
                 # - frequency: meV
                 # - positions: A
-                # - delta: normalized to 1
+                # - eigenvec: normalized to 1
                 # - masses: atomic masses
                 phonons.append(Mode(
-                    names, c, f >= 0, abs(f) * cm1_in_meV, pos, delta, masses
+                    names, c, f >= 0, abs(f) * cm1_in_meV, pos, eigenvec, masses
                 ))
             next(log)
             head = next(log)
