@@ -3,25 +3,27 @@ import io
 
 import numpy as np
 
+from .. import __version__
+from ..constants import atomic_mass
 from .data import manifest, state
 
 
 def write_xyz(f, mode):
-    """Write the coordinates and displacements of mode in JMol xyz format.
+    """Write the coordinates and displacements of a mode in the JMol xyz format.
 
     :param f: a file-like object to write to.
     :param mode: the mode to dump.
     """
-    arr = np.hstack([mode.ref, mode.delta])
+    arr = np.hstack([mode.ref, mode.delta / np.sqrt(atomic_mass)])
 
     print(len(arr), file=f)
     print(f"Mode {mode.n}", file=f)
-    for sp, line in zip(mode.atoms, arr):
-        print(f"{sp:2}", *(f"  {x:-12.05e}" for x in line), file=f)
+    for sp, row in zip(mode.atoms, arr):
+        print(f"{sp:2}", *(f"  {x:-12.05e}" for x in row), file=f)
 
 
 def write_jmol_options(f, opts):
-    """Write options in the form of JMol script.
+    """Write options in the form of a JMol script.
 
     :param f: a file like object.
     :param opts: a set of options (see export).
@@ -37,7 +39,7 @@ def write_jmol_options(f, opts):
         )
     if "bonds" in opts:
         for sp1, sp2, dmin, dmax in opts["bonds"]:
-            print(f"connect {dmin:0.02} {dmax:0.02} (_{sp1}) (_{sp2})", file=f)
+            print(f"connect {float(dmin):0.02} {float(dmax):0.02} (_{sp1}) (_{sp2})", file=f)
 
     if "atom_colors" in opts:
         for sp, color in opts["atom_colors"]:
@@ -77,6 +79,6 @@ def export(dest, mode, compression=ZIP_DEFLATED, **opts):
 
         with io.StringIO() as f:
             print("// System configuration", file=f)
-            print("// Generated with Hylight", file=f)
+            print(f"// Generated with Hylight {__version__}", file=f)
             write_jmol_options(f, opts)
             ar.writestr("system.spt", f.getvalue().encode("utf8"))
