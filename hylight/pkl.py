@@ -26,6 +26,12 @@ def archive_modes(modes, dest, compress=False):
     n = len(ph)
     m = len(ph[0].ref)
 
+    if not all(len(mode.ref) == m for mode in ph):
+        raise ValueError("Some of the modes have differently shaped position.")
+
+    if not all(len(mode.eigenvector) == m for mode in ph):
+        raise ValueError("Some of the modes have differently shaped eigenvector.")
+
     if compress:
         save = np.savez_compressed
     else:
