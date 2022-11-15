@@ -183,7 +183,7 @@ def plot_spectral_function(
     phonons, _, _ = load_phonons(mode_source)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
 
-    if all(not p.real for p in phonons):
+    if not any(p.real for p in phonons):
         raise ValueError("No real mode extracted.")
 
     f, fc, dirac_fc = fc_spectra(phonons, delta_R, disp=disp)
@@ -214,10 +214,14 @@ def plot_spectral_function(
     ax_fc.plot(f, dirac_fc, **fc_peaks)
     ax_fc.set_ylabel("FC shift (meV)")
 
+    plt.subplots_adjust(hspace=0)
+
     if use_cm1:
         ax_bottom.set_xlabel("Wavenumber (cm$^{-1}$)")
     else:
         ax_bottom.set_xlabel("E (meV)")
+
+    fig.set_size_inches((10, 9))
 
     return fig, (ax_fc, ax_s)
 
@@ -275,11 +279,11 @@ def compute_spectra_soft(
     )
 
     if ex_pes.omega is None:
-        if fc_shift_gs is None or fc_shift_gs > 0:
+        if fc_shift_gs is None or fc_shift_gs < 0:
             raise ValueError(
                 "fc_shift_gs must not be omited unless an effective frequency for the excited state is provided for."
             )
-        if fc_shift_es is not None:
+        if fc_shift_es is None:
             raise ValueError(
                 "fc_shift_es must not be omited unless an effective frequency for the excited state is provided for."
             )
@@ -362,6 +366,108 @@ def compute_spectra_soft(
 
     return compute_spectra(
         phonons,
+        delta_R,
+        zpl,
+        fwhm,
+        e_max,
+        resolution_e,
+        bias=bias,
+        window_fn=window_fn,
+        pre_convolve=pre_convolve,
+        shape=shape,
+    )
+
+
+def compute_spectra_width_ah(
+    phonons_gs,
+    phonons_es,
+    delta_R,
+    zpl,
+    T,
+    e_max,
+    resolution_e,
+    bias=0,
+    window_fn=np.hamming,
+    pre_convolve=None,
+    shape=LineShape.GAUSSIAN,
+    result_store=None,
+    correct_zpe=False,
+):
+    """Luminescence spectra with a line width that takes the ES PES curvature into account.
+
+    Uses the full Dushinsky matrix for the computation of the line width, but
+    assume the Dushinsky matrix to be the identity in the computation of the FC
+    integrals (thus ignoring mode mixing).
+    :param phonons: list of modes
+    :param delta_R: displacement in A
+    :param zpl: zero phonon line energy in eV
+    :param T: temperature in K
+    :param fc_shift_gs: Ground state/absorption Franck-Condon shift in eV
+    :param fc_shift_es: Exceited state/emmission Franck-Condon shift in eV
+    :param e_max: max energy in eV (should be at least > 2*zpl)
+    :param resolution_e: energy resolution in eV
+    :param bias: (optional, 0) ignore low energy vibrations under bias in eV
+    :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
+    :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
+    :param shape: (optional, default LineShape.GAUSSIAN) ZPL line shape.
+    :param omega_eff_type: (optional, default OmegaEff.FC_MEAN) mode of evaluation of effective frequency.
+    :param result_store: (optional, default None) a dictionary to store some intermediate results.
+    :param ex_pes: (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.
+    :param correct_zpe: (optional, default False) correct the ZPL to take the zero point energy into account.
+    """
+
+    if result_store is None:
+        result_store = {}
+
+    bias_si = bias * eV_in_J
+
+    hrs = get_HR_factors(phonons_gs, delta_R * 1e-10, bias=bias_si)
+    es = get_energies(phonons_gs, bias=bias_si) / eV_in_J
+
+    S_em = np.sum(hrs)
+    dfcg_vib = np.sum(hrs * es)
+
+    sig = np.sqrt(np.sum(sigma_full_nd(T, delta_R, phonons_gs, phonons_es, bias=bias)**2))
+    sig0 = np.sqrt(np.sum(sigma_full_nd(0, delta_R, phonons_gs, phonons_es, bias=bias)**2))
+
+    if correct_zpe:
+        es_es = get_energies(phonons_gs, bias=bias_si) / eV_in_J
+        zpe_gs = 0.5 * np.sum(es)
+        zpe_es = 0.5 * np.sum(es_es)
+
+        delta_zpe = zpe_gs - zpe_es
+        result_store["delta_zpe"] = delta_zpe
+        if abs(delta_zpe) > 1.0:
+            warnings.warn(
+                f"Delta ZPE is {delta_zpe} eV, there is probably a big problem and the result may be garbage."
+            )
+        zpl -= delta_zpe
+
+    logger.info(f"S_em = {S_em}")
+    logger.info(f"d_fc^g,v = {dfcg_vib}")
+
+    result_store["S_em"] = S_em
+
+    result_store["d_fc^g,v"] = dfcg_vib
+
+    if shape == LineShape.GAUSSIAN:
+        fwhm = sig * sigma_to_fwhm
+        fwhm0 = sig0 * sigma_to_fwhm
+        logger.info(f"FWHM {fwhm * 1000} meV")
+        logger.info(f"FWHM 0K {fwhm0 * 1000} meV")
+    elif shape == LineShape.LORENTZIAN:
+        fwhm = -sig * sigma_to_fwhm
+        fwhm0 = -sig0 * sigma_to_fwhm
+        logger.info(f"FWHM {-fwhm * 1000} meV")
+        logger.info(f"FWHM 0K {-fwhm0 * 1000} meV")
+    else:
+        fwhm = None
+
+    result_store["fwhm"] = fwhm
+    result_store["fwhm0"] = fwhm0
+
+    return compute_spectra(
+        phonons_gs,
         delta_R,
         zpl,
         fwhm,
@@ -565,27 +671,37 @@ def sigma_hybrid(T, S, e_phonon, e_phonon_e):
 
 
 def duschinsky(phonons_a, phonons_b):
-    """Dushinsky matrix from $S_{a \\gets b}$."""
+    """Dushinsky matrix from b to a $S_{a \\gets b}$."""
     return rot_c_to_v(phonons_a) @ rot_c_to_v(phonons_b).transpose()
 
 
 def sigma_full_nd(T, delta_R, modes_gs, modes_es, bias=0):
-    """Compute the width of the ZPL for the ExPES.FULL_ND mode."""
+    """Compute the width of the ZPL for the ExPES.FULL_ND mode.
+
+    :param T: temperature in K.
+    :param delta_R: distorsion in A.
+    :param modes_gs: list of Modes of the ground state.
+    :param modes_es: list of Modes of the excited state.
+    :returns: np.array with only the width for the modes that are real in ground state.
+    """
     Dush_gs_to_es = duschinsky(modes_es, modes_gs)
 
-    D_es = dynamical_matrix(modes_es)
+    D_es = np.diag(
+        [(1 if m.real else -1) * (m.energy / hbar_si) ** 2 for m in modes_es]
+    )
 
     # Extract the \gamma_i^T @ D_es @ \gamma_i
-    e_e = (
-        np.sqrt(np.diagonal(Dush_gs_to_es.transpose() @ D_es @ Dush_gs_to_es)) / eV_in_J
-    )
-    if not np.all(e_e.imag * np.array([m.real for m in modes_gs]) < 1e-8):
+    f2 = np.diagonal(Dush_gs_to_es.transpose() @ D_es @ Dush_gs_to_es)
+    e_e = np.sqrt(np.where(f2 >= 0, f2, 0)) * hbar_si / eV_in_J
+    e_e_im = np.sqrt(np.where(f2 < 0, -f2, 0)) * hbar_si / eV_in_J
+
+    if not np.all(e_e_im * np.array([m.real for m in modes_gs]) < 1e-8):
         raise ValueError(
             "Some of the ground state eigenvectors correspond to negative curvature in excited state."
         )
 
     e_g = np.array([mode.energy for mode in modes_gs]) / eV_in_J
-    S = get_HR_factors(modes_gs, delta_R, bias=bias)
+    S = get_HR_factors(modes_gs, delta_R * 1e-10, bias=bias)
 
     return np.array(
         [
