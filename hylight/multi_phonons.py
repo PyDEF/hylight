@@ -798,10 +798,15 @@ def dynmatshow(dynmat, blocks=None):
 
     y = np.abs(dynmat) * atomic_mass / eV_in_J * 1e-20
 
-    ax = plt.imshow(y, cmap=blacks)
+    im = plt.imshow(y, cmap=blacks)
+    ax = plt.gca()
+
+    ax.set_xlabel("atom+direction index")
+    ax.set_ylabel("atom+direction index")
+
     fig = plt.gcf()
-    cb = fig.colorbar(ax)
+    cb = fig.colorbar(im)
 
-    cb.ax.set_ylabel("(eV . A$^{-2}$ . m$_p^{-1}$)")
+    cb.ax.set_ylabel("Dynamical matrix (eV . A$^{-2}$ . m$_p^{-1}$)")
 
-    return fig, ax
+    return fig, im

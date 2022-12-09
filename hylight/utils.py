@@ -84,3 +84,10 @@ def periodic_diff(lattice, ref, disp):
 
     n = d.shape[1]
     return d[best_translat, list(range(n)), :]
+
+
+def gaussian(e, sigma, standard=True):
+    if standard:
+        return np.exp(-(e ** 2) / (2 * sigma ** 2)) / (sigma * np.sqrt(2 * np.pi))
+    else:
+        return np.exp(-(e ** 2) / (2 * sigma ** 2))

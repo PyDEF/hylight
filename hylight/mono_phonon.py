@@ -3,6 +3,7 @@ import logging
 import numpy as np
 
 from .constants import pi, kb_eV
+from .utils import gaussian
 
 
 logger = logging.getLogger("hylight")
@@ -91,10 +92,6 @@ def compute_spectra(
         sp / np.max(sp),
         [[c / np.max(sp) for c in details]],
     )
-
-
-def gaussian(e, sigma):
-    return np.exp(-(e ** 2) / (2 * sigma ** 2)) / (sigma * np.sqrt(2 * pi))
 
 
 def sigma(T, S, e_phonon):

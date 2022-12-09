@@ -8,17 +8,16 @@ from ..constants import atomic_mass
 from .data import manifest, state
 
 
-def write_xyz(f, mode):
-    """Write the coordinates and displacements of a mode in the JMol xyz format.
+def write_xyz(f, atoms, ref, delta):
+    """Write the coordinates and displacements of in the JMol xyz format.
 
     :param f: a file-like object to write to.
-    :param mode: the mode to dump.
+    :param atoms: the list of atom names
+    :param ref: an array of atomic positions
+    :param delta: an array of displacements
     """
-    arr = np.hstack([mode.ref, mode.delta / np.sqrt(atomic_mass)])
-
-    print(len(arr), file=f)
-    print(f"Mode {mode.n}", file=f)
-    for sp, row in zip(mode.atoms, arr):
+    arr = np.hstack([ref, delta])
+    for sp, row in zip(atoms, arr):
         print(f"{sp:2}", *(f"  {x:-12.05e}" for x in row), file=f)
 
 
@@ -74,7 +73,28 @@ def export(dest, mode, compression=ZIP_DEFLATED, **opts):
         ar.writestr("state.spt", state.encode("utf8"))
 
         with io.StringIO() as f:
-            write_xyz(f, mode)
+            print(len(mode.atoms), file=f)
+            print(f"Mode {mode.n}", file=f)
+            write_xyz(f, mode.atoms, mode.ref, mode.delta / np.sqrt(atomic_mass))
+            ar.writestr("system.xyz", f.getvalue().encode("utf8"))
+
+        with io.StringIO() as f:
+            print("// System configuration", file=f)
+            print(f"// Generated with Hylight {__version__}", file=f)
+            write_jmol_options(f, opts)
+            ar.writestr("system.spt", f.getvalue().encode("utf8"))
+
+
+def export_disp(dest, struct, disp, compression=ZIP_DEFLATED, **opts):
+    "TODO"
+    with ZipFile(dest, mode="w", compression=compression) as ar:
+        ar.writestr("JmolManifest.txt", manifest.encode("utf8"))
+        ar.writestr("state.spt", state.encode("utf8"))
+
+        with io.StringIO() as f:
+            print(len(struct.atoms), file=f)
+            print(struct.system_name, file=f)
+            write_xyz(f, struct.atoms, struct.raw, disp)
             ar.writestr("system.xyz", f.getvalue().encode("utf8"))
 
         with io.StringIO() as f:

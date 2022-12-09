@@ -24,6 +24,15 @@ class Struct:
             self._species_names = list(species_names)
 
     @property
+    def atoms(self):
+        atoms = []
+
+        for sp in self._species_names:
+            atoms.extend([sp] * len(self.species[sp]))
+
+        return atoms
+
+    @property
     def raw(self):
         return np.vstack([self.species[n] for n in self._species_names])
 
