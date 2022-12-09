@@ -88,6 +88,6 @@ def periodic_diff(lattice, ref, disp):
 
 def gaussian(e, sigma, standard=True):
     if standard:
-        return np.exp(-(e ** 2) / (2 * sigma ** 2)) / (sigma * np.sqrt(2 * np.pi))
+        return np.exp(-(e**2) / (2 * sigma**2)) / (sigma * np.sqrt(2 * np.pi))
     else:
-        return np.exp(-(e ** 2) / (2 * sigma ** 2))
+        return np.exp(-(e**2) / (2 * sigma**2))

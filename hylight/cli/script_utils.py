@@ -9,6 +9,7 @@ parameters already parsed.
 
 Here is a usage example of the module:
 .. code-block:: python
+
     # my_package/cli.py
     from .script_utils import MultiCmd, script, positional, flag
 
@@ -58,6 +59,7 @@ both valid callable entrypoint to set in your setup.py/setup.cfg.
 Here is a short example of a corresponding setup.cfg:
 
 .. code-block:: cfg
+
     [metadata]
     name = my_package
     author = Your name
@@ -157,6 +159,7 @@ class MultiCmd:
 
         See script.
         """
+
         def decorator(f):
             parser = self.sub_parsers.add_parser(f.__name__, help=f.__doc__)
 
@@ -203,8 +206,7 @@ def script(*args, name=None, doc=None):
     """
 
     def decorator(f):
-        parser = ArgumentParser(prog=name or f.__name__,
-                                description=doc or f.__doc__)
+        parser = ArgumentParser(prog=name or f.__name__, description=doc or f.__doc__)
 
         for param in args:
             param(parser)
@@ -253,6 +255,7 @@ def flag(*names, **kwargs):
     The first name provided is the name of Namespace attribute (dash removed).
     The value is always False by default and True if the user provided the flag.
     """
+
     def add(parser):
         parser.add_argument(
             *names,

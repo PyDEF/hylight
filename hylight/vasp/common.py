@@ -62,10 +62,7 @@ class Poscar(Struct):
           if False, write in fractional representation
         """
         with open(path, "w+") as out:
-            species = [
-                (n, self.species[n])
-                for n in self._species_names
-            ]
+            species = [(n, self.species[n]) for n in self._species_names]
 
             out.write(f"{self.system_name}\n")
             out.write("1.0\n")

@@ -1,6 +1,5 @@
-from .constants import eV_in_J, atomic_mass, h_si, hbar_si, two_pi
+from .constants import eV_in_J, atomic_mass, hbar_si, two_pi
 import numpy as np
-from enum import Enum, auto
 
 
 class Mode:

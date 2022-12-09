@@ -28,11 +28,13 @@ def load_phonons(path):
         # *******************************************************************************
         # *      ATOM          X(ANGSTROM)         Y(ANGSTROM)         Z(ANGSTROM)
         # *******************************************************************************
-        next(log); next(log); next(log)
+        next(log)
+        next(log)
+        next(log)  # noqa: E702
 
         pos = []
         for line in log:
-            l = line.strip()
+            l = line.strip()  # noqa: E741
             if l:
                 pos.append(l.split()[3:])
             else:
@@ -47,7 +49,7 @@ def load_phonons(path):
         next(log)
 
         for line in log:
-            l = line.strip()
+            l = line.strip()  # noqa: E741
             if l:
                 fields = l.split()
                 masses.extend(map(float, fields[2::3]))
@@ -106,9 +108,9 @@ def load_phonons(path):
                 # - positions: A
                 # - eigenvec: normalized to 1
                 # - masses: atomic masses
-                phonons.append(Mode(
-                    names, c, f >= 0, abs(f) * cm1_in_meV, pos, eigenvec, masses
-                ))
+                phonons.append(
+                    Mode(names, c, f >= 0, abs(f) * cm1_in_meV, pos, eigenvec, masses)
+                )
             next(log)
             head = next(log)
 

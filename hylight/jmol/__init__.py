@@ -38,7 +38,10 @@ def write_jmol_options(f, opts):
         )
     if "bonds" in opts:
         for sp1, sp2, dmin, dmax in opts["bonds"]:
-            print(f"connect {float(dmin):0.02} {float(dmax):0.02} (_{sp1}) (_{sp2})", file=f)
+            print(
+                f"connect {float(dmin):0.02} {float(dmax):0.02} (_{sp1}) (_{sp2})",
+                file=f,
+            )
 
     if "atom_colors" in opts:
         for sp, color in opts["atom_colors"]:

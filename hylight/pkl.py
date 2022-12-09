@@ -107,5 +107,4 @@ def pops_and_masses(modes):
     masses = modes[0].masses / atomic_mass
     pops = {sp: modes[0].atoms.count(sp) for sp in set(modes[0].atoms)}
 
-
     return pops, masses

@@ -11,7 +11,7 @@ from .script_utils import (
 
 from ..vasp.common import Poscar
 from ..utils import periodic_diff
-from ..constants import masses, atomic_mass, eV_in_J
+from ..constants import masses
 import numpy as np
 
 cmd = MultiCmd(description=__doc__)
@@ -49,8 +49,18 @@ def dist(opts):
         help="Create a JMol file from the distorsion (if --dest is not used, name it after the POSCAR_REF).",
     ),
     optional("--dest", "-o", help="Path to the output file."),
-    optional("--bond", "-b", action="append", help="(JMol) specification of a bond (ex: Ti,O,2.1 for a Ti-O bond up to 2.1 A)"),
-    optional("--color", "-c", action="append", help="(JMol) specify an atom color (ex: Al,#000090)"),
+    optional(
+        "--bond",
+        "-b",
+        action="append",
+        help="(JMol) specification of a bond (ex: Ti,O,2.1 for a Ti-O bond up to 2.1 A)",
+    ),
+    optional(
+        "--color",
+        "-c",
+        action="append",
+        help="(JMol) specify an atom color (ex: Al,#000090)",
+    ),
 )
 def diff(opts):
     """Compute the displacement between two structures."""
@@ -100,3 +110,5 @@ def spec(poscar, sp):
             return f"{n}{i + 1}"
         else:
             i -= len(poscar.species[n])
+
+    raise ValueError(f"sp is out of bounds: i >= {len(poscar.raw)}")

@@ -61,9 +61,6 @@ class Struct:
     def copy(self):
         return self.__class__(
             self.cell_parameters.copy(),
-            {
-                k: a.copy()
-                for k, a in self.species.items()
-            },
+            {k: a.copy() for k, a in self.species.items()},
             species_names=self._species_names,
         )

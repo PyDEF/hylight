@@ -12,7 +12,12 @@ from .common import Poscar
 
 
 def make_finite_diff_poscar(
-    outcar, poscar_gs, poscar_es, A=0.01, load_phonons=load_phonons, bias=0,
+    outcar,
+    poscar_gs,
+    poscar_es,
+    A=0.01,
+    load_phonons=load_phonons,
+    bias=0,
 ):
     """Compute positions for evaluation of the curvature of the ES PES.
 
@@ -36,14 +41,14 @@ def make_finite_diff_poscar(
     m = np.array(masses).reshape((-1, 1))
     delta_Q = np.sqrt(m) * delta_R
 
-    k = get_energies(phonons, bias=bias_si)**2
-    d = np.array([np.sum(p.eigenvector * delta_Q)
-                  for p in phonons
-                  if p.energy >= bias_si])
+    k = get_energies(phonons, bias=bias_si) ** 2
+    d = np.array(
+        [np.sum(p.eigenvector * delta_Q) for p in phonons if p.energy >= bias_si]
+    )
 
     kd = k * d
 
-    grad = m**(-0.5) * np.sum(
+    grad = m ** (-0.5) * np.sum(
         (np.array([p.eigenvector for p in phonons]) * kd.reshape((-1, 1, 1))), axis=0
     )
 
@@ -58,5 +63,5 @@ def make_finite_diff_poscar(
     pes_left.raw -= delta
     pes_right.raw += delta
 
-    mu = (np.linalg.norm(g_dir, axis=-1)**2).dot(masses) * atomic_mass
+    mu = (np.linalg.norm(g_dir, axis=-1) ** 2).dot(masses) * atomic_mass
     return mu, pes_left, pes_right

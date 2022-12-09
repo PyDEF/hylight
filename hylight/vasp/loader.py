@@ -63,8 +63,8 @@ def load_phonons(path):
                 assert m, "OUTCAR is not formatted as expected."
 
                 masses = []
-                for p, m in zip(pops, m.groups()):
-                    masses.extend([float(m)] * p)
+                for p, mass in zip(pops, m.groups()):
+                    masses.extend([float(mass)] * p)
                 break
         else:
             raise ValueError("Unexpected EOF")

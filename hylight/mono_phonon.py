@@ -2,7 +2,7 @@ import logging
 
 import numpy as np
 
-from .constants import pi, kb_eV
+from .constants import kb_eV
 from .utils import gaussian
 
 
@@ -74,11 +74,7 @@ def compute_spectra(
     n, r = 0, 1
 
     while r > 1e-8 and n < 100:
-        c = (
-            e ** 3
-            * khi_e_khi_g_squared
-            * gaussian(e_zpl - n * e_phonon_g - e, sig)
-        )
+        c = e**3 * khi_e_khi_g_squared * gaussian(e_zpl - n * e_phonon_g - e, sig)
         details.append(c)
         sp += c
         r = np.max(c) / np.max(sp)
@@ -107,12 +103,7 @@ def sigma_soft(T, S_em, e_phonon_g, e_phonon_e):
     else:
         coth = 1.0 / np.tanh(e_phonon_e / (2 * kb_eV * T))
 
-    return np.sqrt(
-        S_em
-        * e_phonon_g**3
-        / e_phonon_e
-        * coth
-    )
+    return np.sqrt(S_em * e_phonon_g**3 / e_phonon_e * coth)
 
 
 def huang_rhys(stokes_shift, e_phonon):

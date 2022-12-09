@@ -168,8 +168,15 @@ def crystal(opts):
     positional("SOURCE", help="path of the npz file."),
     positional("SELECTION", type=int, help="index of the mode to export."),
     optional("--dest", "-o", default=None, help="path of the destionation file."),
-    optional("--bond", "-b", action="append", help="specification of a bond (ex: Ti,O,2.1 for a Ti-O bond up to 2.1 A)"),
-    optional("--color", "-c", action="append", help="specify an atom color (ex: Al,#000090)"),
+    optional(
+        "--bond",
+        "-b",
+        action="append",
+        help="specification of a bond (ex: Ti,O,2.1 for a Ti-O bond up to 2.1 A)",
+    ),
+    optional(
+        "--color", "-c", action="append", help="specify an atom color (ex: Al,#000090)"
+    ),
     optional("--ref", "-r", default=None, help="A reference POSCAR"),
 )
 def jmol(opts):
@@ -204,20 +211,13 @@ def parse_opts(opts):
 
     if opts.bond:
         x_opts["bonds"] = [
-            (sp1, sp2, 0., float(dmax))
-            for sp1, sp2, dmax in (
-                s.split(',')
-                for s in opts.bond
-            )
+            (sp1, sp2, 0.0, float(dmax))
+            for sp1, sp2, dmax in (s.split(",") for s in opts.bond)
         ]
 
     if opts.color:
         x_opts["atom_colors"] = [
-            (sp, color)
-            for sp, color in (
-                s.split(',')
-                for s in opts.color
-            )
+            (sp, color) for sp, color in (s.split(",") for s in opts.color)
         ]
 
     if opts.ref:
@@ -229,6 +229,7 @@ def parse_opts(opts):
             x_opts["unitcell"] = p.cell_parameters
 
     return x_opts
+
 
 @cmd.subcmd(
     positional("SOURCE", help="path to the mode archive."),
@@ -243,15 +244,17 @@ def show(opts):
 
     blocks = []
 
-    colors = cycle([
-        "red",
-        "blue",
-        "orange",
-        "purple",
-        "green",
-        "pink",
-        "yellow",
-    ])
+    colors = cycle(
+        [
+            "red",
+            "blue",
+            "orange",
+            "purple",
+            "green",
+            "pink",
+            "yellow",
+        ]
+    )
 
     prev = None
     acc = 0
@@ -285,8 +288,12 @@ def show(opts):
     e_im = max(m.energy for m in phonons if not m.real)
 
     print(f"There are {n} modes, among which {m} are unstable.")
-    print(f"Maximum real frequency is {e_re / eV_in_J * 1e3:0.03f} meV / {e_re / cm1_in_J:0.03f} cm1.")
-    print(f"Maximum imaginary frequency is {e_im / eV_in_J * 1e3:0.03f} meV / {e_im / cm1_in_J:0.03f} cm1.")
+    print(
+        f"Maximum real frequency is {e_re / eV_in_J * 1e3:0.03f} meV / {e_re / cm1_in_J:0.03f} cm1."
+    )
+    print(
+        f"Maximum imaginary frequency is {e_im / eV_in_J * 1e3:0.03f} meV / {e_im / cm1_in_J:0.03f} cm1."
+    )
 
     show()
 
@@ -294,4 +301,3 @@ def show(opts):
 def summary(data, src):
     modes, _, _ = data
     print(f"Loaded {len(modes)} modes from {src}.")
-

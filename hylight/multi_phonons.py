@@ -3,14 +3,13 @@ from enum import Enum
 import numpy as np
 from scipy import fft
 
-from .mode import get_energies, get_HR_factors, rot_c_to_v, dynamical_matrix
+from .mode import get_energies, get_HR_factors, rot_c_to_v
 from .loader import load_phonons
 from .vasp.loader import load_poscar_latt
 from .constants import (
     two_pi,
     eV_in_J,
     h_si,
-    pi,
     cm1_in_J,
     sigma_to_fwhm,
     hbar_si,
@@ -138,7 +137,7 @@ def spectra(
     if fc_shift_es is None:
         fc_shift_es = fc_shift_gs
 
-    e, I = compute_spectra_soft(
+    e, I = compute_spectra_soft(  # noqa: E741
         phonons,
         delta_R,
         zpl,
@@ -427,8 +426,12 @@ def compute_spectra_width_ah(
     S_em = np.sum(hrs)
     dfcg_vib = np.sum(hrs * es)
 
-    sig = np.sqrt(np.sum(sigma_full_nd(T, delta_R, phonons_gs, phonons_es, bias=bias)**2))
-    sig0 = np.sqrt(np.sum(sigma_full_nd(0, delta_R, phonons_gs, phonons_es, bias=bias)**2))
+    sig = np.sqrt(
+        np.sum(sigma_full_nd(T, delta_R, phonons_gs, phonons_es, bias=bias) ** 2)
+    )
+    sig0 = np.sqrt(
+        np.sum(sigma_full_nd(0, delta_R, phonons_gs, phonons_es, bias=bias) ** 2)
+    )
 
     if correct_zpe:
         es_es = get_energies(phonons_gs, bias=bias_si) / eV_in_J
@@ -561,7 +564,7 @@ def compute_spectra(
     e = np.arange(0, N) * resolution_e
     A = fft.fft(a_t)
 
-    I = e**3 * A
+    I = e**3 * A  # noqa: E741
 
     return e, I
 
