@@ -98,6 +98,13 @@ def sigma(T, S, e_phonon):
 
 
 def sigma_soft(T, S_em, e_phonon_g, e_phonon_e):
+    """Temperature dependant standard deviation of a line dependant.
+
+    :param T: temperature in K
+    :param S_em: emmission Huang-Rhys factor
+    :param e_phonon_g: energy of the GS PES vibration (eV)
+    :param e_phonon_e: energy of the ES PES vibration (eV)
+    """
     if T == 0.0:
         coth = 1.0
     else:
@@ -107,19 +114,6 @@ def sigma_soft(T, S_em, e_phonon_g, e_phonon_e):
 
 
 def huang_rhys(stokes_shift, e_phonon):
+    """Huang-Rhys factor from the Stokes shift and the phonon energy.
+    """
     return 0.5 * stokes_shift / e_phonon
-
-
-def best_max(x, y, f=0.95):
-    guess = np.max(y)
-
-    sx = 0
-    sy = 0
-    c = 0
-
-    for vx, vy in zip(x, y):
-        if vy > f * guess:
-            sy += vy
-            sx += vx
-            c += 1
-    return sx / c, sy / c

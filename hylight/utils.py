@@ -3,7 +3,19 @@ from scipy.interpolate import interp1d
 
 
 def make_cell(val):
+    """An helper function to create a mutable cell/box.
 
+    :param val: initial value
+    :returns: a function c
+
+    Example:
+        >>> c = make_cell(42)
+        >>> c()
+        42
+        >>> c(23)
+        >>> c()
+        23
+    """
     nothing = object()
     var = val
 
@@ -17,6 +29,8 @@ def make_cell(val):
 
 
 class InputError(ValueError):
+    "An exception raised when the input files are not as expected."
+
     pass
 
 
@@ -37,6 +51,7 @@ def measure_fwhm(x, y):
     Warning: It may fail if there are more than one band that reach half
     maximum in the array. In this case you may want to use select_interval to
     make a window around a single band.
+
     :param x: the energy array
     :param y: the intensity array
     :return: FWHM in the same unit as x.
@@ -56,8 +71,8 @@ def select_interval(x, y, emin, emax, normalize=False, npoints=None):
     :param emax: higher bound for the window
     :param normalize: (optional, False) if true, the result y array is normalized
     :param npoints: (optional, None) if an integer, the result arrays will be
-    interpolated to contains exactly npoints linearly distributed between emin
-    and emax.
+        interpolated to contains exactly npoints linearly distributed between emin
+        and emax.
     :return: (windowed_x, windowed_y)
     """
     slice_ = (x > emin) * (x < emax)
@@ -87,6 +102,14 @@ def periodic_diff(lattice, ref, disp):
 
 
 def gaussian(e, sigma, standard=True):
+    """A Gaussian function.
+
+    :param e: mean
+    :param sigma: standard deviation
+    :param standard: (optional, True)
+        if True the curve is normalized to have an area of 1
+        if False the curve is normalized to have a maximum of 1
+    """
     if standard:
         return np.exp(-(e**2) / (2 * sigma**2)) / (sigma * np.sqrt(2 * np.pi))
     else:

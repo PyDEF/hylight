@@ -232,11 +232,12 @@ def get_ref_info(path):
     """Load system infos from a OUTCAR.
 
     This is an ad hoc parser, so it may fail if the OUTCAR changes a lot.
+
     :returns: (atoms, ref, pops, masses)
-      atoms: list of species names
-      pos: positions of atoms
-      pops: population for each atom species
-      masses: list of SI masses
+        atoms: list of species names
+        pos: positions of atoms
+        pops: population for each atom species
+        masses: list of SI masses
     """
     if path.endswith(".xml"):
         raise ValueError("vasprun.xml is not supported for the reference file.")

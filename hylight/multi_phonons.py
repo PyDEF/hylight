@@ -16,7 +16,7 @@ from .constants import (
     atomic_mass,
 )
 from .mono_phonon import sigma_soft
-from .utils import periodic_diff
+from .utils import periodic_diff, gaussian
 
 import logging
 
@@ -24,28 +24,29 @@ logger = logging.getLogger("hylight")
 
 
 class LineShape(Enum):
+    "Line shape type."
     GAUSSIAN = 0
     LORENTZIAN = 1
     NONE = 2
 
 
 class OmegaEff(Enum):
-    """Mode of computation of a effective frequency.
+    r"""Mode of computation of a effective frequency.
 
-    FC_MEAN: Omega = <omega_i>_{d_{FC,i}}
-      should be used with ExPES.ISO_SCALE because it is associated with
-      the idea that all the directions are softened equally in the excited state.
+    :py:attr:`FC_MEAN`: $\\Omega = <\\omega_i>_{d_{FC,i}}$
+        should be used with :py:attr:`ExPES.ISO_SCALE` because it is associated with
+        the idea that all the directions are softened equally in the excited state.
 
-    HR_MEAN: Omega = d_{FC,tot} / S_{tot} = <omega_i>_{S_i}
+    :py:attr:`HR_MEAN`: $\\Omega = d_{FC,tot} / S_{tot} = <\\omega_i>_{S_i}$
 
-    HR_RMS: Omega = sqrt{<omega_i^2>_{S_i}}
+    :py:attr:`HR_RMS`: $\\Omega = \\sqrt{<\\omega_i^2>_{S_i}}$
 
-    FC_RMS: Omega = sqrt{<omega_i^2>_{d_{FC,i}}}
-      should be used with ExPES.SINGLE_ES_FREQ because it makes sense
-      when we get only one Omega_eff for the excited state (this single
-      effective frequency should be computed beforehand)
+    :py:attr:`FC_RMS`: $\\Omega = \\sqrt{<\\omega_i^2>_{d_{FC,i}}}$
+        should be used with :py:attr:`ExPES.SINGLE_ES_FREQ` because it makes sense
+        when we get only one Omega_eff for the excited state (this single
+        effective frequency should be computed beforehand)
 
-    ONED_FREQ: Omega = (DeltaQ^T D DeltaQ) / DeltaQ^2
+    :py:attr:`ONED_FREQ`: $\\Omega = (\\Delta Q^T D \\Delta Q) / {\\Delta Q}^2$
         Correspond to the actual curvature in the direction of the displacement.
     """
 
@@ -65,12 +66,12 @@ class _ExPES(Enum):
 class ExPES:
     """Mode of approximation of the ES PES curvature.
 
-    ISO_SCALE: We suppose eigenvectors are the same, but the frequencies are
+    :py:attr:`ISO_SCALE`: We suppose eigenvectors are the same, but the frequencies are
       scaled by a constant factor.
 
-    SINGLE_ES_FREQ: We suppose all modes have the same frequency (that should be provided).
+    :py:attr:`SINGLE_ES_FREQ`: We suppose all modes have the same frequency (that should be provided).
 
-    FULL_ND: (Not implemented) We know the frequency of each ES mode.
+    :py:attr:`FULL_ND`: (Not implemented) We know the frequency of each ES mode.
     """
 
     ISO_SCALE: "ExPES"
@@ -114,7 +115,8 @@ def spectra(
     ex_pes=ExPES.ISO_SCALE,
     correct_zpe=False,
 ):
-    """
+    """Compute a complete spectra without free parameters.
+
     :param mode_source: path to the vibration computation output file (by default a pickled file)
     :param path_struct_gs: path to the ground state relaxed structure file (by default a POSCAR)
     :param path_struct_es: path to the excited state relaxed structure file (by default a POSCAR)
@@ -127,6 +129,7 @@ def spectra(
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
     :param load_phonons: a function that takes mode_source and produce a list of phonons. By default expect an mode_source.
+    :returns: (energy_array, intensity_array)
     """
 
     if e_max is None:
@@ -176,6 +179,7 @@ def plot_spectral_function(
     :param use_cm1: (optional, default False) use cm1 as the unit for frequency instead of meV.
     :param disp: (optional, default 1) standard deviation of the gaussians in background in meV.
     :param mpl_params: (optional, default None) dictionary of kw parameters for pyplot.plot.
+    :returns: (figure, (ax_FC, ax_S))
     """
     from matplotlib import pyplot as plt
 
@@ -243,7 +247,8 @@ def compute_spectra_soft(
     ex_pes=ExPES.ISO_SCALE,
     correct_zpe=False,
 ):
-    """
+    """Compute a spectra without free parameters.
+
     :param phonons: list of modes
     :param delta_R: displacement in A
     :param zpl: zero phonon line energy in eV
@@ -260,6 +265,7 @@ def compute_spectra_soft(
     :param result_store: (optional, default None) a dictionary to store some intermediate results.
     :param ex_pes: (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.
     :param correct_zpe: (optional, default False) correct the ZPL to take the zero point energy into account.
+    :returns: (energy_array, intensity_array)
     """
 
     if result_store is None:
@@ -397,6 +403,7 @@ def compute_spectra_width_ah(
     Uses the full Dushinsky matrix for the computation of the line width, but
     assume the Dushinsky matrix to be the identity in the computation of the FC
     integrals (thus ignoring mode mixing).
+
     :param phonons: list of modes
     :param delta_R: displacement in A
     :param zpl: zero phonon line energy in eV
@@ -413,6 +420,7 @@ def compute_spectra_width_ah(
     :param result_store: (optional, default None) a dictionary to store some intermediate results.
     :param ex_pes: (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.
     :param correct_zpe: (optional, default False) correct the ZPL to take the zero point energy into account.
+    :returns: (energy_array, intensity_array)
     """
 
     if result_store is None:
@@ -509,6 +517,7 @@ def compute_spectra(
     :param bias: (optional, 0) ignore low energy vibrations under bias in eV
     :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
+    :returns: (energy_array, intensity_array)
     """
 
     bias_si = bias * eV_in_J
@@ -539,7 +548,7 @@ def compute_spectra(
 
     if pre_convolve is not None:
         sigma_freq = pre_convolve * eV_in_J / h_si / sigma_to_fwhm
-        g = _gaussian(t, 1 / (two_pi * sigma_freq))
+        g = gaussian(t, 1 / (two_pi * sigma_freq))
         if np.max(g) > 0:
             s_t *= g / np.max(g)
 
@@ -557,7 +566,7 @@ def compute_spectra(
     else:
         logger.info("Using a Gaussian line shape.")
         sigma_freq = two_pi * sigma_si / h_si
-        line_shape = np.sqrt(2) * np.array(_gaussian(t, 1 / sigma_freq), dtype=complex)
+        line_shape = np.sqrt(2) * np.array(gaussian(t, 1 / sigma_freq), dtype=complex)
 
     a_t = _window(g_t * line_shape, fn=window_fn)
 
@@ -605,12 +614,9 @@ def _get_s_t_raw(t, freqs, hrs):
         return np.sum(s_i_t, axis=1)
 
 
-def _gaussian(e, sigma):
-    return np.exp(-(e**2) / (2 * sigma**2)) / (sigma * np.sqrt(two_pi))
-
-
 def _window(data, fn=np.hamming):
     """Apply a windowing function to the data.
+
     Use hylight.multi_phonons.rect for as a dummy window.
     """
     n = len(data)
@@ -633,7 +639,12 @@ def hr_spectra(phonons, delta_R, n_points=5000, disp=1):
 
 def _stick_smooth_spectra(phonons, delta_R, height, n_points, disp=1):
     """
-    delta_R in A
+
+    :param phonons: list of phonons
+    :param delta_R: displacement in A
+    :param height: height of sticks
+    :param n_points: number of points
+    :param disp: width of the gaussians
     """
     ph_e_meV = get_energies(phonons) * 1000 / eV_in_J
 
@@ -651,8 +662,8 @@ def _stick_smooth_spectra(phonons, delta_R, height, n_points, disp=1):
 
     for e, hr in zip(ph_e_meV, hrs):
         h = height(hr, e)
-        g_thin = _gaussian(e_meV - e, w)
-        g_fat = _gaussian(e_meV - e, disp)
+        g_thin = gaussian(e_meV - e, w)
+        g_fat = gaussian(e_meV - e, disp)
         fc_sticks += h * g_thin / np.max(g_thin)  # g_thin should be h high
         fc_spec += h * g_fat  # g_fat has a g area
 
@@ -674,7 +685,7 @@ def sigma_hybrid(T, S, e_phonon, e_phonon_e):
 
 
 def duschinsky(phonons_a, phonons_b):
-    """Dushinsky matrix from b to a $S_{a \\gets b}$."""
+    r"""Dushinsky matrix from b to a $S_{a \\gets b}$."""
     return rot_c_to_v(phonons_a) @ rot_c_to_v(phonons_b).transpose()
 
 
@@ -722,9 +733,9 @@ def freq_from_finite_diff(left, mid, right, mu, A=0.01):
     :param mid: energy (eV) of the middle point
     :param right: energy (eV) of the right point
     :param mu: effective mass associated with the displacement from the middle
-      point to the sides.
+        point to the sides.
     :param A: (optional, 0.01) amplitude (A) of the displacement between the
-      middle point and the sides.
+        middle point and the sides.
     """
     curvature = (left + right - 2 * mid) * eV_in_J / (A * 1e-10) ** 2
     e_vib = hbar_si * np.sqrt(2 * curvature / mu)
@@ -739,7 +750,7 @@ def effective_phonon_energy(omega_eff_type, hrs, es, masses, delta_R=None):
     :param es: The array of phonon energy in eV.
     :param masses: The array of atomic masses in atomic mass unit.
     :param delta_R: (optional, None) The displacement between GS and ES in A.
-      It is only required if omega_eff_type is ONED_FREQ.
+        It is only required if omega_eff_type is ONED_FREQ.
     :return: The effective energy in eV.
     """
 
@@ -771,6 +782,12 @@ def effective_phonon_energy(omega_eff_type, hrs, es, masses, delta_R=None):
 
 
 def dynmatshow(dynmat, blocks=None):
+    """Plot the dynamical matrix.
+
+    :param dynmat: numpy array representing the dynamical matrice in SI.
+    :param blocks: (optional) a list of coloured blocks in the form `(label,
+        number_of_atoms, color)`.
+    """
     from matplotlib.patches import Patch
     from matplotlib.colors import LinearSegmentedColormap
     import matplotlib.pyplot as plt

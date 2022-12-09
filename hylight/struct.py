@@ -4,8 +4,14 @@ from .constants import electronegativity
 
 
 class Struct:
+    """A general description of a periodic crystal cell.
+
+    Store all the required infos to describe a given set of atomic positions.
+    """
     def __init__(self, cell_parameters, species, species_names=None):
         """Store all informations about a unit cell.
+
+        See also :py:class:`hylight.vasp.common.Poscar`.
 
         :param cell_parameters: a 3x3 np.array with lattice vectors in line
         :param species: a dict[str, np.array] where the key is the name of the
@@ -25,6 +31,7 @@ class Struct:
 
     @property
     def atoms(self):
+        "List the species names in an order matching `self.raw`."
         atoms = []
 
         for sp in self._species_names:
@@ -34,6 +41,10 @@ class Struct:
 
     @property
     def raw(self):
+        """Return an array of atomic positions.
+
+        This can be modified overwritten, but not modified in place.
+        """
         return np.vstack([self.species[n] for n in self._species_names])
 
     @raw.setter
@@ -46,6 +57,10 @@ class Struct:
 
     @property
     def system_name(self):
+        """The name of the system, eventually generated from formula.
+
+        Can be overwritten.
+        """
         if self._system_name:
             return self._system_name
         else:

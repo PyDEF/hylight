@@ -3,7 +3,11 @@ import numpy as np
 
 
 class Mode:
-    """The representation of a vibrational mode."""
+    """The representation of a vibrational mode.
+
+    It stores the eigenvector and eigendisplacement.
+    It can be used to project other displacement on the eigenvector.
+    """
 
     def __init__(self, atoms, n, real, energy, ref, eigenvector, masses):
         """Build the mode from OUTCAR data.
@@ -39,9 +43,11 @@ class Mode:
     def huang_rhys(self, delta_R):
         r"""Compute the Huang-Rhyes factor
 
+        .. math::
+            S_i = 1/2 \frac{\omega}{\hbar} [({M^{1/2}}^T \Delta R) \cdot \gamma_i]^2
+            = 1/2 \frac{\omega}{\hbar} {\sum_i m_i^{1/2} \gamma_i {\Delta R}_i}^2
+
         :param delta_R: displacement in SI
-        S_i = 1/2 \frac{\omega}{\hbar} [({M^{1/2}^T \Delta R) \cdot \gamma_i]^2
-        = 1/2 \frac{\omega}{\hbar} {\sum_i m_i^{1/2} \gamma_i {\Delta R}_i}^2
         """
 
         delta_Q = np.sqrt(self.masses).reshape((-1, 1)) * delta_R
@@ -67,6 +73,10 @@ class Mode:
         return traj
 
     def to_jmol(self, **opts):
+        """Write a mode into a Jmol file.
+
+        See :py:func:`hylight.jmol.export` for the parameters.
+        """
         from .jmol import export
 
         return export(self, **opts)
@@ -78,6 +88,12 @@ def rot_c_to_v(phonons):
 
 
 def dynamical_matrix(phonons):
+    """Retrieve the dynamical matrix from a set of modes.
+
+    Note that if some modes are missing the computation will fail.
+
+    :param phonons: list of modes
+    """
     dynamical_matrix_diag = np.diag(
         [(1 if m.real else -1) * (m.energy / hbar_si) ** 2 for m in phonons]
     )
@@ -87,8 +103,11 @@ def dynamical_matrix(phonons):
 
 
 def get_HR_factors(phonons, delta_R_tot, bias=0):
-    """
-    delta_R_tot in SI
+    """Compute the Huang-Rhys factors for all the real modes with energy above bias.
+
+    :param phonons: list of modes
+    :param delta_R_tot: displacement in SI
+    :param bias: (optional, 0) energy under which modes are ignored in SI.
     """
     return np.array(
         [ph.huang_rhys(delta_R_tot) for ph in phonons if ph.real if ph.energy >= bias]

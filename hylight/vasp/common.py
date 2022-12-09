@@ -7,6 +7,11 @@ from ..struct import Struct
 class Poscar(Struct):
     @classmethod
     def from_file(cls, filename):
+        """Load a POSCAR file
+
+        :param filename: path to the file to read
+        :returns: a Poscar object.
+        """
         with open(filename) as f:
             next(f)  # system name
             fac = float(next(f))
@@ -57,9 +62,10 @@ class Poscar(Struct):
 
         The property system_name may be set to change the comment at the top of
         the file.
+
         :param path: path to the file to write
         :param cartesian: if True, write the file in cartesian representation,
-          if False, write in fractional representation
+            if False, write in fractional representation
         """
         with open(path, "w+") as out:
             species = [(n, self.species[n]) for n in self._species_names]

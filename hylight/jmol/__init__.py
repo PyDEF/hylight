@@ -5,7 +5,6 @@ import numpy as np
 
 from .. import __version__
 from ..constants import atomic_mass
-from .data import manifest, state
 
 
 def write_xyz(f, atoms, ref, delta):
@@ -64,12 +63,12 @@ def export(dest, mode, compression=ZIP_DEFLATED, **opts):
     :param mode: the mode to export.
     :param compression: (optional) zipfile compression algorithm.
     :keyword unitcell: lattice vectors as a 3x3 matrix where vectors are in rows.
-    :keyword bonds: a list of (sp_a, sp_b, min_dist, max_dis) where species
-    names are strings of names of species and *_dist are interatomic distances
-    in Angstrom.
+    :keyword bonds: a list of `(sp_a, sp_b, min_dist, max_dist)` where species
+        names are strings of names of species and `*_dist` are interatomic distances
+        in Angstrom.
     :keyword atom_colors: a list of (sp, color) where sp is the name of a
-    species and color is the name of a color or an HTML hex code (example
-    "#FF0000" for pure red).
+        species and color is the name of a color or an HTML hex code (example
+        "#FF0000" for pure red).
     """
     with ZipFile(dest, mode="w", compression=compression) as ar:
         ar.writestr("JmolManifest.txt", manifest.encode("utf8"))
@@ -89,7 +88,20 @@ def export(dest, mode, compression=ZIP_DEFLATED, **opts):
 
 
 def export_disp(dest, struct, disp, compression=ZIP_DEFLATED, **opts):
-    "TODO"
+    """Export a difference between two positions to JMol zip format.
+
+    :param dest: path to the JMol zip file.
+    :param struct: the reference position (a :py:class:`hylight.struct.Struct` instance).
+    :param disp: an array of displacements.
+    :param compression: (optional) zipfile compression algorithm.
+    :keyword unitcell: lattice vectors as a 3x3 matrix where vectors are in rows.
+    :keyword bonds: a list of `(sp_a, sp_b, min_dist, max_dist)` where species
+        names are strings of names of species and `*_dist` are interatomic distances
+        in Angstrom.
+    :keyword atom_colors: a list of (sp, color) where sp is the name of a
+        species and color is the name of a color or an HTML hex code (example
+        "#FF0000" for pure red).
+    """
     with ZipFile(dest, mode="w", compression=compression) as ar:
         ar.writestr("JmolManifest.txt", manifest.encode("utf8"))
         ar.writestr("state.spt", state.encode("utf8"))
@@ -105,3 +117,47 @@ def export_disp(dest, struct, disp, compression=ZIP_DEFLATED, **opts):
             print(f"// Generated with Hylight {__version__}", file=f)
             write_jmol_options(f, opts)
             ar.writestr("system.spt", f.getvalue().encode("utf8"))
+
+
+manifest = f"""\
+# Jmol Manifest Zip Format 1.1
+# Created with Hylight {__version__}
+state.spt
+"""
+
+state = """\
+function setupDisplay() {
+  set antialiasDisplay;
+
+  color background white;
+}
+
+function setupVectors() {
+  vector on;
+  color vector yellow;
+  vector scale 2;
+  vector 0.12;
+}
+
+function setupBonds() {
+    wireframe 0.1;
+}
+
+function loadSystem() {
+  load "xyz::$SCRIPT_PATH$system.xyz";
+  connect delete;
+  script "$SCRIPT_PATH$system.spt";
+}
+
+function _setup() {
+  initialize;
+  set refreshing false;
+  setupDisplay;
+  loadSystem;
+  setupVectors;
+  setupBonds;
+  set refreshing true;
+}
+
+_setup;
+"""
