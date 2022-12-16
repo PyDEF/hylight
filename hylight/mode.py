@@ -59,7 +59,7 @@ class Mode:
 
         :param duration: duration of the animation in seconds
         :param amplitude: amplitude applied to the mode in A (the modes are normalized)
-        :param framerate: (optional, default 25) number of frame per second of animation
+        :param framerate: number of frame per second of animation
         """
         from ase import Atoms
 
@@ -107,7 +107,7 @@ def get_HR_factors(phonons, delta_R_tot, bias=0):
 
     :param phonons: list of modes
     :param delta_R_tot: displacement in SI
-    :param bias: (optional, 0) energy under which modes are ignored in SI.
+    :param bias: energy under which modes are ignored in SI.
     """
     return np.array(
         [ph.huang_rhys(delta_R_tot) for ph in phonons if ph.real if ph.energy >= bias]

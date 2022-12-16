@@ -69,8 +69,8 @@ def select_interval(x, y, emin, emax, normalize=False, npoints=None):
     :param y: y array
     :param emin: lower bound for the window
     :param emax: higher bound for the window
-    :param normalize: (optional, False) if true, the result y array is normalized
-    :param npoints: (optional, None) if an integer, the result arrays will be
+    :param normalize: if true, the result y array is normalized
+    :param npoints: if an integer, the result arrays will be
         interpolated to contains exactly npoints linearly distributed between emin
         and emax.
     :return: (windowed_x, windowed_y)
@@ -106,7 +106,7 @@ def gaussian(e, sigma, standard=True):
 
     :param e: mean
     :param sigma: standard deviation
-    :param standard: (optional, True)
+    :param standard:
         if True the curve is normalized to have an area of 1
         if False the curve is normalized to have a maximum of 1
     """

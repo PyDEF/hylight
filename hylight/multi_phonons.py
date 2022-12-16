@@ -123,10 +123,10 @@ def spectra(
     :param zpl: zero phonon line energy in eV
     :param T: temperature in K
     :param fc_shift_gs: Ground state/absorption Franck-Condon shift in eV
-    :param fc_shift_es: (optional, equal to fc_shift_gs) Exited state/emmission Franck-Condon shift in eV
+    :param fc_shift_es: Exited state/emmission Franck-Condon shift in eV
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param resolution_e: energy resolution in eV
-    :param bias: (optional, 0) ignore low energy vibrations under bias in eV
+    :param bias: ignore low energy vibrations under bias in eV
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
     :param load_phonons: a function that takes mode_source and produce a list of phonons. By default expect an mode_source.
     :returns: (energy_array, intensity_array)
@@ -175,10 +175,10 @@ def plot_spectral_function(
     :param mode_source: path to the mode file (by default a pickle file)
     :param poscar_gs: path to the file containing the ground state atomic positions.
     :param poscar_es: path to the file containing the excited state atomic positions.
-    :param load_phonons: (optional, default to hylight.loader.load_phonons) a function to read mode_source.
-    :param use_cm1: (optional, default False) use cm1 as the unit for frequency instead of meV.
-    :param disp: (optional, default 1) standard deviation of the gaussians in background in meV.
-    :param mpl_params: (optional, default None) dictionary of kw parameters for pyplot.plot.
+    :param load_phonons: a function to read mode_source.
+    :param use_cm1: use cm1 as the unit for frequency instead of meV.
+    :param disp: standard deviation of the gaussians in background in meV.
+    :param mpl_params: dictionary of kw parameters for pyplot.plot.
     :returns: (figure, (ax_FC, ax_S))
     """
     from matplotlib import pyplot as plt
@@ -257,14 +257,14 @@ def compute_spectra_soft(
     :param fc_shift_es: Exceited state/emmission Franck-Condon shift in eV
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param resolution_e: energy resolution in eV
-    :param bias: (optional, 0) ignore low energy vibrations under bias in eV
-    :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
+    :param bias: ignore low energy vibrations under bias in eV
+    :param window_fn: windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :param shape: (optional, default LineShape.GAUSSIAN) ZPL line shape.
-    :param omega_eff_type: (optional, default OmegaEff.FC_MEAN) mode of evaluation of effective frequency.
-    :param result_store: (optional, default None) a dictionary to store some intermediate results.
-    :param ex_pes: (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.
-    :param correct_zpe: (optional, default False) correct the ZPL to take the zero point energy into account.
+    :param shape: ZPL line shape.
+    :param omega_eff_type: mode of evaluation of effective frequency.
+    :param result_store: a dictionary to store some intermediate results.
+    :param ex_pes: mode of evaluation of the ES PES curvature.
+    :param correct_zpe: correct the ZPL to take the zero point energy into account.
     :returns: (energy_array, intensity_array)
     """
 
@@ -412,14 +412,14 @@ def compute_spectra_width_ah(
     :param fc_shift_es: Exceited state/emmission Franck-Condon shift in eV
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param resolution_e: energy resolution in eV
-    :param bias: (optional, 0) ignore low energy vibrations under bias in eV
-    :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
+    :param bias: ignore low energy vibrations under bias in eV
+    :param window_fn: windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :param shape: (optional, default LineShape.GAUSSIAN) ZPL line shape.
-    :param omega_eff_type: (optional, default OmegaEff.FC_MEAN) mode of evaluation of effective frequency.
-    :param result_store: (optional, default None) a dictionary to store some intermediate results.
-    :param ex_pes: (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.
-    :param correct_zpe: (optional, default False) correct the ZPL to take the zero point energy into account.
+    :param shape: ZPL line shape.
+    :param omega_eff_type: mode of evaluation of effective frequency.
+    :param result_store: a dictionary to store some intermediate results.
+    :param ex_pes: mode of evaluation of the ES PES curvature.
+    :param correct_zpe: correct the ZPL to take the zero point energy into account.
     :returns: (energy_array, intensity_array)
     """
 
@@ -514,8 +514,8 @@ def compute_spectra(
       if fwhm > 0: the spectra is convoluted with a gaussian line shape
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param resolution_e: energy resolution in eV
-    :param bias: (optional, 0) ignore low energy vibrations under bias in eV
-    :param window_fn: (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)
+    :param bias: ignore low energy vibrations under bias in eV
+    :param window_fn: windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
     :returns: (energy_array, intensity_array)
     """
@@ -734,7 +734,7 @@ def freq_from_finite_diff(left, mid, right, mu, A=0.01):
     :param right: energy (eV) of the right point
     :param mu: effective mass associated with the displacement from the middle
         point to the sides.
-    :param A: (optional, 0.01) amplitude (A) of the displacement between the
+    :param A: amplitude (A) of the displacement between the
         middle point and the sides.
     """
     curvature = (left + right - 2 * mid) * eV_in_J / (A * 1e-10) ** 2
@@ -749,7 +749,7 @@ def effective_phonon_energy(omega_eff_type, hrs, es, masses, delta_R=None):
     :param hrs: The array of Huang-Rhyes factor for each mode.
     :param es: The array of phonon energy in eV.
     :param masses: The array of atomic masses in atomic mass unit.
-    :param delta_R: (optional, None) The displacement between GS and ES in A.
+    :param delta_R: The displacement between GS and ES in A.
         It is only required if omega_eff_type is ONED_FREQ.
     :return: The effective energy in eV.
     """

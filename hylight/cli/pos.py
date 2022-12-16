@@ -79,8 +79,33 @@ def diff(opts):
         else:
             dest = opts.poscar_ref + ".jmol"
 
+        jmol_opts = {}
+
+        if opts.bond:
+            jmol_opts["bonds"] = []
+            with error_catch():
+                for s in opts.bond:
+                    at1, at2, *lengths = s.split(",")
+                    if len(lengths) == 1:
+                        jmol_opts["bonds"].append((at1, at2, 0., float(lengths[0])))
+                    elif len(lengths) == 2:
+                        jmol_opts["bonds"].append((at1, at2, float(lengths[0]), float(lengths[1])))
+                    else:
+                        raise ValueError("For bond {at1}-{at2}: you need to at least specify the max distance (ex: {at1},{at2},2.2).")
+
+        if opts.color:
+            jmol_opts["colors"] = []
+            with error_catch():
+                for s in opts.color:
+                    at, color = s.split(",")
+
+                    if not is_hex_code(color):
+                        raise ValueError(f"{color} is not a valid color code.")
+
+                    jmol_opts["colors"].append((at, color))
+
         with error_catch():
-            export_disp(dest, poscar_a, diff)
+            export_disp(dest, poscar_a, diff, **jmol_opts)
 
         return
 
@@ -112,3 +137,12 @@ def spec(poscar, sp):
             i -= len(poscar.species[n])
 
     raise ValueError(f"sp is out of bounds: i >= {len(poscar.raw)}")
+
+
+def is_hex_code(code):
+    "Predicate to identify HTML like hexadecimal color codes."
+    return (
+        len(code) in {7, 4}
+        and code[0] == "#"
+        and not set(code[1:]).difference("ABCDEFabcdef0123456789")
+    )
