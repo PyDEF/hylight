@@ -29,6 +29,7 @@ class Mode:
         self.masses = np.array(masses) * atomic_mass
         # vibrational mode eigendisplacement
         self.delta = np.sqrt(self.masses.reshape((-1, 1))) * eigenvector
+        self.mass = np.linalg.norm(self.delta)**2
 
     def project(self, delta_Q):
         """Project delta_Q onto the eigenvector"""
@@ -39,6 +40,11 @@ class Mode:
         """Square lenght of the projection of delta_Q onto the eigenvector."""
         delta_Q_dot_mode = np.sum(delta_Q * self.eigenvector)
         return delta_Q_dot_mode**2
+
+    def project_coef2_R(self, delta_R):
+        """Square lenght of the projection of delta_R onto the eigenvector."""
+        delta_Q = np.sqrt(self.masses).reshape((-1, 1)) * delta_R
+        return self.project_coef2(delta_Q)
 
     def huang_rhys(self, delta_R):
         r"""Compute the Huang-Rhyes factor
@@ -102,18 +108,31 @@ def dynamical_matrix(phonons):
     return Lt.transpose() @ dynamical_matrix_diag @ Lt
 
 
-def get_HR_factors(phonons, delta_R_tot, bias=0):
+def get_HR_factors(phonons, delta_R_tot, mask=None):
     """Compute the Huang-Rhys factors for all the real modes with energy above bias.
 
     :param phonons: list of modes
     :param delta_R_tot: displacement in SI
-    :param bias: energy under which modes are ignored in SI.
+    :param mask: a mask to filter modes based on their energies.
     """
-    return np.array(
-        [ph.huang_rhys(delta_R_tot) for ph in phonons if ph.real if ph.energy >= bias]
-    )
+    if mask:
+        return np.array(
+            [
+                ph.huang_rhys(delta_R_tot)
+                for ph in phonons
+                if ph.real
+                if mask.accept(ph.energy)
+            ]
+        )
+    else:
+        return np.array([ph.huang_rhys(delta_R_tot) for ph in phonons if ph.real])
 
 
-def get_energies(phonons, bias=0):
+def get_energies(phonons, mask=None):
     """Return an array of mode energies in SI"""
-    return np.array([ph.energy for ph in phonons if ph.real if ph.energy >= bias])
+    if mask:
+        return np.array(
+            [ph.energy for ph in phonons if ph.real if mask.accept(ph.energy)]
+        )
+    else:
+        return np.array([ph.energy for ph in phonons if ph.real])

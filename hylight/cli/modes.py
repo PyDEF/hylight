@@ -284,8 +284,8 @@ def show(opts):
 
     n = len(phonons)
     m = sum(not m.real for m in phonons)
-    e_re = max(m.energy for m in phonons if m.real)
-    e_im = max(m.energy for m in phonons if not m.real)
+    e_re = max((m.energy for m in phonons if m.real), default=0)
+    e_im = max((m.energy for m in phonons if not m.real), default=0)
 
     print(f"There are {n} modes, among which {m} are unstable.")
     print(

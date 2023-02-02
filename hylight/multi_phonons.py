@@ -107,6 +107,7 @@ def spectra(
     e_max=None,
     resolution_e=1e-4,
     bias=0,
+    mask=None,
     load_phonons=load_phonons,
     pre_convolve=None,
     shape=LineShape.GAUSSIAN,
@@ -140,6 +141,9 @@ def spectra(
     if fc_shift_es is None:
         fc_shift_es = fc_shift_gs
 
+    if mask is None:
+        mask = Mask.from_bias(bias)
+
     e, I = compute_spectra_soft(  # noqa: E741
         phonons,
         delta_R,
@@ -149,7 +153,7 @@ def spectra(
         fc_shift_es,
         e_max,
         resolution_e,
-        bias=bias,
+        mask=mask,
         pre_convolve=pre_convolve,
         shape=shape,
         omega_eff_type=omega_eff_type,
@@ -169,6 +173,7 @@ def plot_spectral_function(
     use_cm1=False,
     disp=1,
     mpl_params=None,
+    mask=None,
 ):
     """Plot a two panel representation of the spectral function of the distorsion.
 
@@ -179,12 +184,15 @@ def plot_spectral_function(
     :param use_cm1: use cm1 as the unit for frequency instead of meV.
     :param disp: standard deviation of the gaussians in background in meV.
     :param mpl_params: dictionary of kw parameters for pyplot.plot.
+    :param mask: a mask used in other computations to show on the plot.
     :returns: (figure, (ax_FC, ax_S))
     """
     from matplotlib import pyplot as plt
 
     phonons, _, _ = load_phonons(mode_source)
     delta_R = compute_delta_R(poscar_gs, poscar_es)
+
+    updaters = []
 
     if not any(p.real for p in phonons):
         raise ValueError("No real mode extracted.")
@@ -196,6 +204,9 @@ def plot_spectral_function(
 
     if use_cm1:
         f *= 1e-3 * eV_in_J / cm1_in_J
+        unit = cm1_in_J
+    else:
+        unit = 1e-3 * eV_in_J
 
     s_stack = {"color": "grey"}
     fc_stack = {"color": "grey"}
@@ -209,12 +220,20 @@ def plot_spectral_function(
         fc_peaks.update(mpl_params.get("FC_peaks", {}))
 
     fig, (ax_fc, ax_s) = _, (_, ax_bottom) = plt.subplots(2, 1, sharex=True)
+
+    if mask:
+        updaters.append(mask.plot(ax_s, unit))
+
     ax_s.stackplot(f, s, **s_stack)
     ax_s.plot(f, dirac_s, **s_peaks)
-    ax_s.set_ylabel("$S(\\hbar\\omega)$ (A. U.)")
+
+    if mask:
+        updaters.append(mask.plot(ax_fc, unit))
 
     ax_fc.stackplot(f, fc, **fc_stack)
     ax_fc.plot(f, dirac_fc, **fc_peaks)
+
+    ax_s.set_ylabel("$S(\\hbar\\omega)$ (A. U.)")
     ax_fc.set_ylabel("FC shift (meV)")
 
     plt.subplots_adjust(hspace=0)
@@ -225,6 +244,12 @@ def plot_spectral_function(
         ax_bottom.set_xlabel("E (meV)")
 
     fig.set_size_inches((10, 9))
+
+    def update():
+        for fn in updaters:
+            fn()
+
+    update()
 
     return fig, (ax_fc, ax_s)
 
@@ -238,7 +263,7 @@ def compute_spectra_soft(
     fc_shift_es,
     e_max,
     resolution_e,
-    bias=0,
+    mask=None,
     window_fn=np.hamming,
     pre_convolve=None,
     shape=LineShape.GAUSSIAN,
@@ -271,10 +296,8 @@ def compute_spectra_soft(
     if result_store is None:
         result_store = {}
 
-    bias_si = bias * eV_in_J
-
-    hrs = get_HR_factors(phonons, delta_R * 1e-10, bias=bias_si)
-    es = get_energies(phonons, bias=bias_si) / eV_in_J
+    hrs = get_HR_factors(phonons, delta_R * 1e-10, mask=mask)
+    es = get_energies(phonons, mask=mask) / eV_in_J
 
     S_em = np.sum(hrs)
     dfcg_vib = np.sum(hrs * es)
@@ -376,7 +399,7 @@ def compute_spectra_soft(
         fwhm,
         e_max,
         resolution_e,
-        bias=bias,
+        mask=mask,
         window_fn=window_fn,
         pre_convolve=pre_convolve,
         shape=shape,
@@ -392,6 +415,7 @@ def compute_spectra_width_ah(
     e_max,
     resolution_e,
     bias=0,
+    mask=None,
     window_fn=np.hamming,
     pre_convolve=None,
     shape=LineShape.GAUSSIAN,
@@ -426,23 +450,24 @@ def compute_spectra_width_ah(
     if result_store is None:
         result_store = {}
 
-    bias_si = bias * eV_in_J
+    if mask is None:
+        mask = Mask.from_bias(bias)
 
-    hrs = get_HR_factors(phonons_gs, delta_R * 1e-10, bias=bias_si)
-    es = get_energies(phonons_gs, bias=bias_si) / eV_in_J
+    hrs = get_HR_factors(phonons_gs, delta_R * 1e-10, mask=mask)
+    es = get_energies(phonons_gs, mask=mask) / eV_in_J
 
     S_em = np.sum(hrs)
     dfcg_vib = np.sum(hrs * es)
 
     sig = np.sqrt(
-        np.sum(sigma_full_nd(T, delta_R, phonons_gs, phonons_es, bias=bias) ** 2)
+        np.sum(sigma_full_nd(T, delta_R, phonons_gs, phonons_es, mask=mask) ** 2)
     )
     sig0 = np.sqrt(
-        np.sum(sigma_full_nd(0, delta_R, phonons_gs, phonons_es, bias=bias) ** 2)
+        np.sum(sigma_full_nd(0, delta_R, phonons_gs, phonons_es, mask=mask) ** 2)
     )
 
     if correct_zpe:
-        es_es = get_energies(phonons_gs, bias=bias_si) / eV_in_J
+        es_es = get_energies(phonons_gs, mask=mask) / eV_in_J
         zpe_gs = 0.5 * np.sum(es)
         zpe_es = 0.5 * np.sum(es_es)
 
@@ -484,7 +509,7 @@ def compute_spectra_width_ah(
         fwhm,
         e_max,
         resolution_e,
-        bias=bias,
+        mask=mask,
         window_fn=window_fn,
         pre_convolve=pre_convolve,
         shape=shape,
@@ -499,6 +524,7 @@ def compute_spectra(
     e_max,
     resolution_e,
     bias=0,
+    mask=None,
     window_fn=np.hamming,
     pre_convolve=None,
     shape=LineShape.GAUSSIAN,
@@ -520,8 +546,6 @@ def compute_spectra(
     :returns: (energy_array, intensity_array)
     """
 
-    bias_si = bias * eV_in_J
-
     if fwhm is None:
         sigma_si = None
     else:
@@ -536,11 +560,11 @@ def compute_spectra(
     t = np.arange((-N) // 2 + 1, (N) // 2 + 1) * resolution_t
 
     # array of mode specific HR factors
-    hrs = get_HR_factors(phonons, delta_R * 1e-10, bias=bias_si)
+    hrs = get_HR_factors(phonons, delta_R * 1e-10, mask=mask)
     S = np.sum(hrs)
 
     # array of mode specific pulsations/radial frequencies
-    energies = get_energies(phonons, bias=bias_si)
+    energies = get_energies(phonons, mask=mask)
 
     freqs = energies / h_si
 
@@ -689,7 +713,7 @@ def duschinsky(phonons_a, phonons_b):
     return rot_c_to_v(phonons_a) @ rot_c_to_v(phonons_b).transpose()
 
 
-def sigma_full_nd(T, delta_R, modes_gs, modes_es, bias=0):
+def sigma_full_nd(T, delta_R, modes_gs, modes_es, mask=None):
     """Compute the width of the ZPL for the ExPES.FULL_ND mode.
 
     :param T: temperature in K.
@@ -715,13 +739,13 @@ def sigma_full_nd(T, delta_R, modes_gs, modes_es, bias=0):
         )
 
     e_g = np.array([mode.energy for mode in modes_gs]) / eV_in_J
-    S = get_HR_factors(modes_gs, delta_R * 1e-10, bias=bias)
+    S = get_HR_factors(modes_gs, delta_R * 1e-10, mask=mask)
 
     return np.array(
         [
             sigma_soft(T, S_i, e_g_i, e_e_i)
             for S_i, m, e_g_i, e_e_i in zip(S, modes_gs, e_g, e_e)
-            if m.real and m.energy >= bias
+            if m.real and mask.accept(m.energy)
         ]
     )
 
@@ -821,8 +845,8 @@ def dynmatshow(dynmat, blocks=None):
     im = plt.imshow(y, cmap=blacks)
     ax = plt.gca()
 
-    ax.set_xlabel("atom+direction index")
-    ax.set_ylabel("atom+direction index")
+    ax.set_xlabel("(atoms $\\times$ axes) index")
+    ax.set_ylabel("(atoms $\\times$ axes) index")
 
     fig = plt.gcf()
     cb = fig.colorbar(im)
@@ -830,3 +854,49 @@ def dynmatshow(dynmat, blocks=None):
     cb.ax.set_ylabel("Dynamical matrix (eV . A$^{-2}$ . m$_p^{-1}$)")
 
     return fig, im
+
+
+class Mask:
+    def __init__(self, intervals):
+        self.intervals = intervals
+
+    @classmethod
+    def from_bias(cls, bias):
+        if bias > 0:
+            return cls([(0, bias * eV_in_J)])
+        else:
+            return cls([])
+
+    def add_interval(self, interval):
+        assert isinstance(interval, tuple) and len(tuple) == 2, "interval must be a tuple of two values."
+        self.intervals.append(interval)
+
+    def as_bool(self, ener):
+        bmask = np.ones(ener.shape, dtype=bool)
+
+        for bot, top in self.intervals:
+            bmask &= (ener < bot) | (ener > top)
+
+        return bmask
+
+    def accept(self, value):
+        return not any(bot <= value <= top for bot, top in self.intervals)
+
+    def reject(self, value):
+        return any(bot <= value <= top for bot, top in self.intervals)
+
+    def plot(self, ax, unit):
+        from matplotlib.patches import Rectangle
+
+        rects = []
+        for bot, top in self.intervals:
+            p = Rectangle((bot / unit, 0), (top - bot) / unit, 0, facecolor="grey")
+            ax.add_patch(p)
+            rects.append(p)
+
+        def resize():
+            (_, h) = ax.transAxes.transform([(0, 1)])
+            for r in rects:
+                r.set(height=h)
+
+        return resize

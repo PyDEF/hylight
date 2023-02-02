@@ -3,9 +3,8 @@ from copy import deepcopy as copy
 import numpy as np
 
 from ..constants import atomic_mass
-from ..multi_phonons import compute_delta_R
+from ..multi_phonons import compute_delta_R, Mask
 from ..mode import get_energies
-from ..constants import eV_in_J
 
 from ..loader import load_phonons
 from .common import Poscar
@@ -18,6 +17,7 @@ def make_finite_diff_poscar(
     A=0.01,
     load_phonons=load_phonons,
     bias=0,
+    mask=None,
 ):
     """Compute positions for evaluation of the curvature of the ES PES.
 
@@ -33,7 +33,10 @@ def make_finite_diff_poscar(
       pes_left: a Poscar instance representing the left displacement
       pes_right: a Poscar instance representing the right displacement
     """
-    bias_si = bias * eV_in_J
+
+    if mask is None:
+        mask = Mask.from_bias(bias)
+
     delta_R = compute_delta_R(poscar_gs, poscar_es)
     phonons, _, masses = load_phonons(outcar)
     phonons = [p for p in phonons if p.real]
@@ -41,9 +44,9 @@ def make_finite_diff_poscar(
     m = np.array(masses).reshape((-1, 1))
     delta_Q = np.sqrt(m) * delta_R
 
-    k = get_energies(phonons, bias=bias_si) ** 2
+    k = get_energies(phonons, mask=mask) ** 2
     d = np.array(
-        [np.sum(p.eigenvector * delta_Q) for p in phonons if p.energy >= bias_si]
+        [np.sum(p.eigenvector * delta_Q) for p in phonons if mask.accept(p.energy)]
     )
 
     kd = k * d
