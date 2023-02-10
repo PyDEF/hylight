@@ -3,12 +3,13 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight.crystal package" href="hylight.crystal.html" /><link rel="prev" title="Hylight Tutorial" href="../tutorial.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight.crystal package" href="hylight.crystal.html" /><link rel="prev" title="BaZrO3:Ti study" href="../tutorial/tutorial.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
         <title>hylight package - Hylight 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -143,8 +144,11 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../index.html">
   
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
   
   <span class="sidebar-brand-text">Hylight 0.1.0 documentation</span>
   
@@ -155,7 +159,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Hylight Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">BaZrO3:Ti study</a></li>
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">hylight package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html">hylight.crystal package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html">hylight.findiff package</a></li>
@@ -343,6 +347,12 @@ It can be used to project other displacement on the eigenvector.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hylight.mode.Mode.project_coef2_R">
+<span class="sig-name descname"><span class="pre">project_coef2_R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.project_coef2_R" title="Permalink to this definition">#</a></dt>
+<dd><p>Square lenght of the projection of delta_R onto the eigenvector.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.to_jmol">
 <span class="sig-name descname"><span class="pre">to_jmol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.to_jmol" title="Permalink to this definition">#</a></dt>
 <dd><p>Write a mode into a Jmol file.</p>
@@ -358,7 +368,7 @@ It can be used to project other displacement on the eigenvector.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>duration</strong> – duration of the animation in seconds</p></li>
 <li><p><strong>amplitude</strong> – amplitude applied to the mode in A (the modes are normalized)</p></li>
-<li><p><strong>framerate</strong> – (optional, default 25) number of frame per second of animation</p></li>
+<li><p><strong>framerate</strong> – number of frame per second of animation</p></li>
 </ul>
 </dd>
 </dl>
@@ -380,14 +390,14 @@ It can be used to project other displacement on the eigenvector.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.get_HR_factors">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">get_HR_factors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R_tot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.get_HR_factors" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">get_HR_factors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R_tot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.get_HR_factors" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the Huang-Rhys factors for all the real modes with energy above bias.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>phonons</strong> – list of modes</p></li>
 <li><p><strong>delta_R_tot</strong> – displacement in SI</p></li>
-<li><p><strong>bias</strong> – (optional, 0) energy under which modes are ignored in SI.</p></li>
+<li><p><strong>mask</strong> – a mask to filter modes based on their energies.</p></li>
 </ul>
 </dd>
 </dl>
@@ -395,7 +405,7 @@ It can be used to project other displacement on the eigenvector.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.get_energies">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">get_energies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.get_energies" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">get_energies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.get_energies" title="Permalink to this definition">#</a></dt>
 <dd><p>Return an array of mode energies in SI</p>
 </dd></dl>
 
@@ -409,13 +419,13 @@ It can be used to project other displacement on the eigenvector.</p>
 <section id="module-hylight.mono_phonon">
 <span id="hylight-mono-phonon-module"></span><h2>hylight.mono_phonon module<a class="headerlink" href="#module-hylight.mono_phonon" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.mono_phonon.compute_spectra">
-<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">compute_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.compute_spectra" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute a spectra from 1D model with experimental like inputs</p>
+<dt class="sig sig-object py" id="hylight.mono_phonon.compute_spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.compute_spectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute a spectrum from 1D model with experimental like inputs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>e</strong> – a numpy array of energies to compute the spectra at</p></li>
+<li><p><strong>e</strong> – a numpy array of energies to compute the spectrum at</p></li>
 <li><p><strong>e_zpl</strong> – energy of the zero phonon line, in eV</p></li>
 <li><p><strong>S</strong> – the emission Huang-Rhys factor</p></li>
 <li><p><strong>sig</strong> – the lineshape standard deviation</p></li>
@@ -455,9 +465,9 @@ It can be used to project other displacement on the eigenvector.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.mono_phonon.spectra">
-<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hard_osc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.spectra" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute a spectra from a single vibrational mode and some energetic terms.</p>
+<dt class="sig sig-object py" id="hylight.mono_phonon.spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hard_osc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.spectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute a spectrum from a single vibrational mode and some energetic terms.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -466,11 +476,11 @@ It can be used to project other displacement on the eigenvector.</p>
 <li><p><strong>fc_shift_g</strong> – Franck-Condon shift of emmission in eV</p></li>
 <li><p><strong>fc_shift_e</strong> – Franck-Condon shift of absobtion in eV</p></li>
 <li><p><strong>e_phonon_g</strong> – Mode energy in ground state in eV</p></li>
-<li><p><strong>hard_osc</strong> – boolean, (optional, False) use the hard oscillator mode:
+<li><p><strong>hard_osc</strong> – boolean, use the hard oscillator mode:
 vibration mode has the same energy in GD and ES</p></li>
-<li><p><strong>n_points</strong> – (optional, 5000) number of points in the spectra</p></li>
-<li><p><strong>e_min</strong> – (optional, 0) energy lower bound for the spectra, in eV</p></li>
-<li><p><strong>e_max</strong> – (optional, 5) energy higher bound for the spectra, in eV</p></li>
+<li><p><strong>n_points</strong> – number of points in the spectrum</p></li>
+<li><p><strong>e_min</strong> – energy lower bound for the spectrum, in eV</p></li>
+<li><p><strong>e_max</strong> – energy higher bound for the spectrum, in eV</p></li>
 </ul>
 </dd>
 </dl>
@@ -525,6 +535,42 @@ vibration mode has the same energy in GD and ES</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.multi_phonons.LineShape.NONE">
 <span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#hylight.multi_phonons.LineShape.NONE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hylight.multi_phonons.Mask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hylight.multi_phonons.Mask.accept">
+<span class="sig-name descname"><span class="pre">accept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.accept" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hylight.multi_phonons.Mask.add_interval">
+<span class="sig-name descname"><span class="pre">add_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.add_interval" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hylight.multi_phonons.Mask.as_bool">
+<span class="sig-name descname"><span class="pre">as_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.as_bool" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hylight.multi_phonons.Mask.from_bias">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bias</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.from_bias" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hylight.multi_phonons.Mask.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.plot" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hylight.multi_phonons.Mask.reject">
+<span class="sig-name descname"><span class="pre">reject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.reject" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -594,9 +640,9 @@ effective frequency should be computed beforehand)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.compute_spectra">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">compute_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwhm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.compute_spectra" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute a luminescence spectra with the time-dependant formulation with an arbitrary linewidth.</p>
+<dt class="sig sig-object py" id="hylight.multi_phonons.compute_spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwhm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.compute_spectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute a luminescence spectrum with the time-dependant formulation with an arbitrary linewidth.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -604,13 +650,13 @@ effective frequency should be computed beforehand)</p>
 <li><p><strong>delta_R</strong> – displacement in A</p></li>
 <li><p><strong>zpl</strong> – zero phonon line energy in eV</p></li>
 <li><p><strong>fwhm</strong> – zpl lineshape full width at half maximum in eV or None
-if fwhm is None: the raw spectra is not convoluted with a line shape
-if fwhm &lt; 0: the spectra is convoluted with a lorentizan line shape
-if fwhm &gt; 0: the spectra is convoluted with a gaussian line shape</p></li>
+if fwhm is None: the raw spectrum is not convoluted with a line shape
+if fwhm &lt; 0: the spectrum is convoluted with a lorentizan line shape
+if fwhm &gt; 0: the spectrum is convoluted with a gaussian line shape</p></li>
 <li><p><strong>e_max</strong> – max energy in eV (should be at least &gt; 2*zpl)</p></li>
 <li><p><strong>resolution_e</strong> – energy resolution in eV</p></li>
-<li><p><strong>bias</strong> – (optional, 0) ignore low energy vibrations under bias in eV</p></li>
-<li><p><strong>window_fn</strong> – (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)</p></li>
+<li><p><strong>bias</strong> – ignore low energy vibrations under bias in eV</p></li>
+<li><p><strong>window_fn</strong> – windowing function in the form provided by numpy (see numpy.hamming)</p></li>
 <li><p><strong>pre_convolve</strong> – (float, optional, None) if not None, standard deviation of the pre convolution gaussian</p></li>
 </ul>
 </dd>
@@ -621,9 +667,9 @@ if fwhm &gt; 0: the spectra is convoluted with a gaussian line shape</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.compute_spectra_soft">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">compute_spectra_soft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_eff_type=OmegaEff.FC_MEAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_store=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_pes=&lt;hylight.multi_phonons.ExPES</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_zpe=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.compute_spectra_soft" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute a spectra without free parameters.</p>
+<dt class="sig sig-object py" id="hylight.multi_phonons.compute_spectrum_soft">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum_soft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_eff_type=OmegaEff.FC_MEAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_store=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_pes=&lt;hylight.multi_phonons.ExPES</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_zpe=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.compute_spectrum_soft" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute a spectrum without free parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -635,14 +681,14 @@ if fwhm &gt; 0: the spectra is convoluted with a gaussian line shape</p></li>
 <li><p><strong>fc_shift_es</strong> – Exceited state/emmission Franck-Condon shift in eV</p></li>
 <li><p><strong>e_max</strong> – max energy in eV (should be at least &gt; 2*zpl)</p></li>
 <li><p><strong>resolution_e</strong> – energy resolution in eV</p></li>
-<li><p><strong>bias</strong> – (optional, 0) ignore low energy vibrations under bias in eV</p></li>
-<li><p><strong>window_fn</strong> – (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)</p></li>
+<li><p><strong>bias</strong> – ignore low energy vibrations under bias in eV</p></li>
+<li><p><strong>window_fn</strong> – windowing function in the form provided by numpy (see numpy.hamming)</p></li>
 <li><p><strong>pre_convolve</strong> – (float, optional, None) if not None, standard deviation of the pre convolution gaussian</p></li>
-<li><p><strong>shape</strong> – (optional, default LineShape.GAUSSIAN) ZPL line shape.</p></li>
-<li><p><strong>omega_eff_type</strong> – (optional, default OmegaEff.FC_MEAN) mode of evaluation of effective frequency.</p></li>
-<li><p><strong>result_store</strong> – (optional, default None) a dictionary to store some intermediate results.</p></li>
-<li><p><strong>ex_pes</strong> – (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.</p></li>
-<li><p><strong>correct_zpe</strong> – (optional, default False) correct the ZPL to take the zero point energy into account.</p></li>
+<li><p><strong>shape</strong> – ZPL line shape.</p></li>
+<li><p><strong>omega_eff_type</strong> – mode of evaluation of effective frequency.</p></li>
+<li><p><strong>result_store</strong> – a dictionary to store some intermediate results.</p></li>
+<li><p><strong>ex_pes</strong> – mode of evaluation of the ES PES curvature.</p></li>
+<li><p><strong>correct_zpe</strong> – correct the ZPL to take the zero point energy into account.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -652,9 +698,9 @@ if fwhm &gt; 0: the spectra is convoluted with a gaussian line shape</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.compute_spectra_width_ah">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">compute_spectra_width_ah</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phonons_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_store=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_zpe=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.compute_spectra_width_ah" title="Permalink to this definition">#</a></dt>
-<dd><p>Luminescence spectra with a line width that takes the ES PES curvature into account.</p>
+<dt class="sig sig-object py" id="hylight.multi_phonons.compute_spectrum_width_ah">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum_width_ah</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phonons_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_store=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_zpe=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.compute_spectrum_width_ah" title="Permalink to this definition">#</a></dt>
+<dd><p>Luminescence spectrum with a line width that takes the ES PES curvature into account.</p>
 <p>Uses the full Dushinsky matrix for the computation of the line width, but
 assume the Dushinsky matrix to be the identity in the computation of the FC
 integrals (thus ignoring mode mixing).</p>
@@ -669,14 +715,14 @@ integrals (thus ignoring mode mixing).</p>
 <li><p><strong>fc_shift_es</strong> – Exceited state/emmission Franck-Condon shift in eV</p></li>
 <li><p><strong>e_max</strong> – max energy in eV (should be at least &gt; 2*zpl)</p></li>
 <li><p><strong>resolution_e</strong> – energy resolution in eV</p></li>
-<li><p><strong>bias</strong> – (optional, 0) ignore low energy vibrations under bias in eV</p></li>
-<li><p><strong>window_fn</strong> – (optional, np.hamming) windowing function in the form provided by numpy (see numpy.hamming)</p></li>
+<li><p><strong>bias</strong> – ignore low energy vibrations under bias in eV</p></li>
+<li><p><strong>window_fn</strong> – windowing function in the form provided by numpy (see numpy.hamming)</p></li>
 <li><p><strong>pre_convolve</strong> – (float, optional, None) if not None, standard deviation of the pre convolution gaussian</p></li>
-<li><p><strong>shape</strong> – (optional, default LineShape.GAUSSIAN) ZPL line shape.</p></li>
-<li><p><strong>omega_eff_type</strong> – (optional, default OmegaEff.FC_MEAN) mode of evaluation of effective frequency.</p></li>
-<li><p><strong>result_store</strong> – (optional, default None) a dictionary to store some intermediate results.</p></li>
-<li><p><strong>ex_pes</strong> – (optional, default ExPES.ISO_SCALE) mode of evaluation of the ES PES curvature.</p></li>
-<li><p><strong>correct_zpe</strong> – (optional, default False) correct the ZPL to take the zero point energy into account.</p></li>
+<li><p><strong>shape</strong> – ZPL line shape.</p></li>
+<li><p><strong>omega_eff_type</strong> – mode of evaluation of effective frequency.</p></li>
+<li><p><strong>result_store</strong> – a dictionary to store some intermediate results.</p></li>
+<li><p><strong>ex_pes</strong> – mode of evaluation of the ES PES curvature.</p></li>
+<li><p><strong>correct_zpe</strong> – correct the ZPL to take the zero point energy into account.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -717,7 +763,7 @@ number_of_atoms, color)</cite>.</p></li>
 <li><p><strong>hrs</strong> – The array of Huang-Rhyes factor for each mode.</p></li>
 <li><p><strong>es</strong> – The array of phonon energy in eV.</p></li>
 <li><p><strong>masses</strong> – The array of atomic masses in atomic mass unit.</p></li>
-<li><p><strong>delta_R</strong> – (optional, None) The displacement between GS and ES in A.
+<li><p><strong>delta_R</strong> – The displacement between GS and ES in A.
 It is only required if omega_eff_type is ONED_FREQ.</p></li>
 </ul>
 </dd>
@@ -728,8 +774,8 @@ It is only required if omega_eff_type is ONED_FREQ.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.fc_spectra">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">fc_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.fc_spectra" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_phonons.fc_spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">fc_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.fc_spectrum" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -744,7 +790,7 @@ It is only required if omega_eff_type is ONED_FREQ.</p></li>
 <li><p><strong>right</strong> – energy (eV) of the right point</p></li>
 <li><p><strong>mu</strong> – effective mass associated with the displacement from the middle
 point to the sides.</p></li>
-<li><p><strong>A</strong> – (optional, 0.01) amplitude (A) of the displacement between the
+<li><p><strong>A</strong> – amplitude (A) of the displacement between the
 middle point and the sides.</p></li>
 </ul>
 </dd>
@@ -752,13 +798,13 @@ middle point and the sides.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.hr_spectra">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">hr_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.hr_spectra" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_phonons.hr_spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">hr_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.hr_spectrum" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.multi_phonons.plot_spectral_function">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">plot_spectral_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cm1=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpl_params=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.plot_spectral_function" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">plot_spectral_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cm1=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpl_params=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.plot_spectral_function" title="Permalink to this definition">#</a></dt>
 <dd><p>Plot a two panel representation of the spectral function of the distorsion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -766,10 +812,11 @@ middle point and the sides.</p></li>
 <li><p><strong>mode_source</strong> – path to the mode file (by default a pickle file)</p></li>
 <li><p><strong>poscar_gs</strong> – path to the file containing the ground state atomic positions.</p></li>
 <li><p><strong>poscar_es</strong> – path to the file containing the excited state atomic positions.</p></li>
-<li><p><strong>load_phonons</strong> – (optional, default to hylight.loader.load_phonons) a function to read mode_source.</p></li>
-<li><p><strong>use_cm1</strong> – (optional, default False) use cm1 as the unit for frequency instead of meV.</p></li>
-<li><p><strong>disp</strong> – (optional, default 1) standard deviation of the gaussians in background in meV.</p></li>
-<li><p><strong>mpl_params</strong> – (optional, default None) dictionary of kw parameters for pyplot.plot.</p></li>
+<li><p><strong>load_phonons</strong> – a function to read mode_source.</p></li>
+<li><p><strong>use_cm1</strong> – use cm1 as the unit for frequency instead of meV.</p></li>
+<li><p><strong>disp</strong> – standard deviation of the gaussians in background in meV.</p></li>
+<li><p><strong>mpl_params</strong> – dictionary of kw parameters for pyplot.plot.</p></li>
+<li><p><strong>mask</strong> – a mask used in other computations to show on the plot.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -786,7 +833,7 @@ middle point and the sides.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.multi_phonons.sigma_full_nd">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">sigma_full_nd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.sigma_full_nd" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">sigma_full_nd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.sigma_full_nd" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the width of the ZPL for the ExPES.FULL_ND mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -810,9 +857,9 @@ middle point and the sides.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.spectra">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_gs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_es=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e=0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_eff_type=OmegaEff.FC_MEAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_store=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_pes=&lt;hylight.multi_phonons.ExPES</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_zpe=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.spectra" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute a complete spectra without free parameters.</p>
+<dt class="sig sig-object py" id="hylight.multi_phonons.spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_gs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_es=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e=0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_eff_type=OmegaEff.FC_MEAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_store=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_pes=&lt;hylight.multi_phonons.ExPES</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_zpe=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.spectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute a complete spectrum without free parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -822,10 +869,10 @@ middle point and the sides.</p></li>
 <li><p><strong>zpl</strong> – zero phonon line energy in eV</p></li>
 <li><p><strong>T</strong> – temperature in K</p></li>
 <li><p><strong>fc_shift_gs</strong> – Ground state/absorption Franck-Condon shift in eV</p></li>
-<li><p><strong>fc_shift_es</strong> – (optional, equal to fc_shift_gs) Exited state/emmission Franck-Condon shift in eV</p></li>
+<li><p><strong>fc_shift_es</strong> – Exited state/emmission Franck-Condon shift in eV</p></li>
 <li><p><strong>e_max</strong> – max energy in eV (should be at least &gt; 2*zpl)</p></li>
 <li><p><strong>resolution_e</strong> – energy resolution in eV</p></li>
-<li><p><strong>bias</strong> – (optional, 0) ignore low energy vibrations under bias in eV</p></li>
+<li><p><strong>bias</strong> – ignore low energy vibrations under bias in eV</p></li>
 <li><p><strong>pre_convolve</strong> – (float, optional, None) if not None, standard deviation of the pre convolution gaussian</p></li>
 <li><p><strong>load_phonons</strong> – a function that takes mode_source and produce a list of phonons. By default expect an mode_source.</p></li>
 </ul>
@@ -933,8 +980,7 @@ middle point and the sides.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>e</strong> – mean</p></li>
 <li><p><strong>sigma</strong> – standard deviation</p></li>
-<li><p><strong>standard</strong> – (optional, True)
-if True the curve is normalized to have an area of 1
+<li><p><strong>standard</strong> – if True the curve is normalized to have an area of 1
 if False the curve is normalized to have a maximum of 1</p></li>
 </ul>
 </dd>
@@ -980,7 +1026,7 @@ if False the curve is normalized to have a maximum of 1</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.measure_fwhm">
 <span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">measure_fwhm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.measure_fwhm" title="Permalink to this definition">#</a></dt>
-<dd><p>Measure the full width at half maximum of a given spectra.</p>
+<dd><p>Measure the full width at half maximum of a given spectrum.</p>
 <p>Warning: It may fail if there are more than one band that reach half
 maximum in the array. In this case you may want to use select_interval to
 make a window around a single band.</p>
@@ -1006,7 +1052,7 @@ make a window around a single band.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.select_interval">
 <span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">select_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.select_interval" title="Permalink to this definition">#</a></dt>
-<dd><p>Extract an interval of a spectra and return the windows x and y arrays.</p>
+<dd><p>Extract an interval of a spectrum and return the windows x and y arrays.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1014,8 +1060,8 @@ make a window around a single band.</p>
 <li><p><strong>y</strong> – y array</p></li>
 <li><p><strong>emin</strong> – lower bound for the window</p></li>
 <li><p><strong>emax</strong> – higher bound for the window</p></li>
-<li><p><strong>normalize</strong> – (optional, False) if true, the result y array is normalized</p></li>
-<li><p><strong>npoints</strong> – (optional, None) if an integer, the result arrays will be
+<li><p><strong>normalize</strong> – if true, the result y array is normalized</p></li>
+<li><p><strong>npoints</strong> – if an integer, the result arrays will be
 interpolated to contains exactly npoints linearly distributed between emin
 and emax.</p></li>
 </ul>
@@ -1051,23 +1097,26 @@ and emax.</p></li>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../tutorial.html">
+          <a class="prev-page" href="../tutorial/tutorial.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Hylight Tutorial</div>
+                <div class="title">BaZrO3:Ti study</div>
                 
               </div>
             </a>
         </div>
         <div class="bottom-of-page">
+          <div>
+              <a href="https://creativecommons.org/licenses/by/4.0/" >
+                  <img src="../_static/by.svg" border="0" alt="Creative Commons License"/>
+              </a>
+          </div>
           <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2022, Théo Cavignac
-            </div>
+            This document is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
@@ -1102,6 +1151,7 @@ and emax.</p></li>
 <li><a class="reference internal" href="#hylight.mode.Mode.huang_rhys"><code class="docutils literal notranslate"><span class="pre">Mode.huang_rhys()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mode.Mode.project"><code class="docutils literal notranslate"><span class="pre">Mode.project()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mode.Mode.project_coef2"><code class="docutils literal notranslate"><span class="pre">Mode.project_coef2()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.mode.Mode.project_coef2_R"><code class="docutils literal notranslate"><span class="pre">Mode.project_coef2_R()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mode.Mode.to_jmol"><code class="docutils literal notranslate"><span class="pre">Mode.to_jmol()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mode.Mode.to_traj"><code class="docutils literal notranslate"><span class="pre">Mode.to_traj()</span></code></a></li>
 </ul>
@@ -1113,11 +1163,11 @@ and emax.</p></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-hylight.mono_phonon">hylight.mono_phonon module</a><ul>
-<li><a class="reference internal" href="#hylight.mono_phonon.compute_spectra"><code class="docutils literal notranslate"><span class="pre">compute_spectra()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.mono_phonon.compute_spectrum"><code class="docutils literal notranslate"><span class="pre">compute_spectrum()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mono_phonon.huang_rhys"><code class="docutils literal notranslate"><span class="pre">huang_rhys()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mono_phonon.sigma"><code class="docutils literal notranslate"><span class="pre">sigma()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mono_phonon.sigma_soft"><code class="docutils literal notranslate"><span class="pre">sigma_soft()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.mono_phonon.spectra"><code class="docutils literal notranslate"><span class="pre">spectra()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.mono_phonon.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-hylight.multi_phonons">hylight.multi_phonons module</a><ul>
@@ -1133,6 +1183,15 @@ and emax.</p></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.LineShape.NONE"><code class="docutils literal notranslate"><span class="pre">LineShape.NONE</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#hylight.multi_phonons.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a><ul>
+<li><a class="reference internal" href="#hylight.multi_phonons.Mask.accept"><code class="docutils literal notranslate"><span class="pre">Mask.accept()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.Mask.add_interval"><code class="docutils literal notranslate"><span class="pre">Mask.add_interval()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.Mask.as_bool"><code class="docutils literal notranslate"><span class="pre">Mask.as_bool()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.Mask.from_bias"><code class="docutils literal notranslate"><span class="pre">Mask.from_bias()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.Mask.plot"><code class="docutils literal notranslate"><span class="pre">Mask.plot()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.Mask.reject"><code class="docutils literal notranslate"><span class="pre">Mask.reject()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#hylight.multi_phonons.OmegaEff"><code class="docutils literal notranslate"><span class="pre">OmegaEff</span></code></a><ul>
 <li><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.FC_MEAN"><code class="docutils literal notranslate"><span class="pre">OmegaEff.FC_MEAN</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.FC_RMS"><code class="docutils literal notranslate"><span class="pre">OmegaEff.FC_RMS</span></code></a></li>
@@ -1142,20 +1201,20 @@ and emax.</p></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#hylight.multi_phonons.compute_delta_R"><code class="docutils literal notranslate"><span class="pre">compute_delta_R()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.compute_spectra"><code class="docutils literal notranslate"><span class="pre">compute_spectra()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.compute_spectra_soft"><code class="docutils literal notranslate"><span class="pre">compute_spectra_soft()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.compute_spectra_width_ah"><code class="docutils literal notranslate"><span class="pre">compute_spectra_width_ah()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.compute_spectrum"><code class="docutils literal notranslate"><span class="pre">compute_spectrum()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.compute_spectrum_soft"><code class="docutils literal notranslate"><span class="pre">compute_spectrum_soft()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.compute_spectrum_width_ah"><code class="docutils literal notranslate"><span class="pre">compute_spectrum_width_ah()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.duschinsky"><code class="docutils literal notranslate"><span class="pre">duschinsky()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.dynmatshow"><code class="docutils literal notranslate"><span class="pre">dynmatshow()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.effective_phonon_energy"><code class="docutils literal notranslate"><span class="pre">effective_phonon_energy()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.fc_spectra"><code class="docutils literal notranslate"><span class="pre">fc_spectra()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.fc_spectrum"><code class="docutils literal notranslate"><span class="pre">fc_spectrum()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.freq_from_finite_diff"><code class="docutils literal notranslate"><span class="pre">freq_from_finite_diff()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.hr_spectra"><code class="docutils literal notranslate"><span class="pre">hr_spectra()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.hr_spectrum"><code class="docutils literal notranslate"><span class="pre">hr_spectrum()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.plot_spectral_function"><code class="docutils literal notranslate"><span class="pre">plot_spectral_function()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.rect"><code class="docutils literal notranslate"><span class="pre">rect()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.sigma_full_nd"><code class="docutils literal notranslate"><span class="pre">sigma_full_nd()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.sigma_hybrid"><code class="docutils literal notranslate"><span class="pre">sigma_hybrid()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.spectra"><code class="docutils literal notranslate"><span class="pre">spectra()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_phonons.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-hylight.pkl">hylight.pkl module</a><ul>
@@ -1208,7 +1267,7 @@ and emax.</p></li>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}, "svg": {"fontCache": "global"}}</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}, "svg": {"fontCache": "global"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

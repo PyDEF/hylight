@@ -34,6 +34,8 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.mathjax",
+    "myst_nb",
+    "IPython.sphinxext.ipython_console_highlighting",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -52,6 +54,12 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 #
 html_theme = "furo"
 
+html_logo = "_static/logo.svg"
+
+html_show_copyright = False
+# html_theme_options = {
+# }
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -63,3 +71,7 @@ mathjax3_config = {
     "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]},
     "svg": {"fontCache": "global"},
 }
+
+myst_enable_extensions = [
+    "dollarmath",
+]

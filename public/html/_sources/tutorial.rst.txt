@@ -1,4 +1,0 @@
-.. _tuto:
-
-Hylight Tutorial
-================
