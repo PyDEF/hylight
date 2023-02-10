@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight.crystal package" href="hylight.crystal.html" /><link rel="prev" title="BaZrO3:Ti study" href="../tutorial/tutorial.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>hylight package - Hylight 0.1.0 documentation</title>
+        <title>hylight package - Hylight 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Hylight 0.1.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">Hylight 1.0.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -150,7 +150,7 @@
     <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">Hylight 0.1.0 documentation</span>
+  <span class="sidebar-brand-text">Hylight 1.0.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -305,12 +305,56 @@
 <section id="module-hylight.constants">
 <span id="hylight-constants-module"></span><h2>hylight.constants module<a class="headerlink" href="#module-hylight.constants" title="Permalink to this heading">#</a></h2>
 <p>A collection of useful physics constants.</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 </section>
 <section id="module-hylight.loader">
 <span id="hylight-loader-module"></span><h2>hylight.loader module<a class="headerlink" href="#module-hylight.loader" title="Permalink to this heading">#</a></h2>
+<p>Wrapper for the npz loader.</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 </section>
 <section id="module-hylight.mode">
 <span id="hylight-mode-module"></span><h2>hylight.mode module<a class="headerlink" href="#module-hylight.mode" title="Permalink to this heading">#</a></h2>
+<p>Vibrational mode and related utilities.</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.mode.Mode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenvector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode" title="Permalink to this definition">#</a></dt>
@@ -418,6 +462,21 @@ It can be used to project other displacement on the eigenvector.</p>
 </section>
 <section id="module-hylight.mono_phonon">
 <span id="hylight-mono-phonon-module"></span><h2>hylight.mono_phonon module<a class="headerlink" href="#module-hylight.mono_phonon" title="Permalink to this heading">#</a></h2>
+<p>Simulation of spectra in 1D model.</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mono_phonon.compute_spectrum">
 <span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.compute_spectrum" title="Permalink to this definition">#</a></dt>
@@ -489,6 +548,21 @@ vibration mode has the same energy in GD and ES</p></li>
 </section>
 <section id="module-hylight.multi_phonons">
 <span id="hylight-multi-phonons-module"></span><h2>hylight.multi_phonons module<a class="headerlink" href="#module-hylight.multi_phonons" title="Permalink to this heading">#</a></h2>
+<p>Simulation of spectra in nD model.</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.multi_phonons.ExPES">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">ExPES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.ExPES" title="Permalink to this definition">#</a></dt>
@@ -884,11 +958,26 @@ middle point and the sides.</p></li>
 </dd></dl>
 
 </section>
-<section id="module-hylight.pkl">
-<span id="hylight-pkl-module"></span><h2>hylight.pkl module<a class="headerlink" href="#module-hylight.pkl" title="Permalink to this heading">#</a></h2>
+<section id="module-hylight.npz">
+<span id="hylight-npz-module"></span><h2>hylight.npz module<a class="headerlink" href="#module-hylight.npz" title="Permalink to this heading">#</a></h2>
+<p>Serialization of modes to numpy zipped file.</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.pkl.archive_modes">
-<span class="sig-prename descclassname"><span class="pre">hylight.pkl.</span></span><span class="sig-name descname"><span class="pre">archive_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.pkl.archive_modes" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.npz.archive_modes">
+<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">archive_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.archive_modes" title="Permalink to this definition">#</a></dt>
 <dd><p>Store modes in dest using numpy’s npz format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -904,30 +993,45 @@ middle point and the sides.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.pkl.load_phonons">
-<span class="sig-prename descclassname"><span class="pre">hylight.pkl.</span></span><span class="sig-name descname"><span class="pre">load_phonons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.pkl.load_phonons" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.npz.load_phonons">
+<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">load_phonons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.load_phonons" title="Permalink to this definition">#</a></dt>
 <dd><p>Load modes from a Hylight archive.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.pkl.load_phonons_npz">
-<span class="sig-prename descclassname"><span class="pre">hylight.pkl.</span></span><span class="sig-name descname"><span class="pre">load_phonons_npz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.pkl.load_phonons_npz" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.npz.load_phonons_npz">
+<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">load_phonons_npz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.load_phonons_npz" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.pkl.load_phonons_pickle">
-<span class="sig-prename descclassname"><span class="pre">hylight.pkl.</span></span><span class="sig-name descname"><span class="pre">load_phonons_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.pkl.load_phonons_pickle" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.npz.load_phonons_pickle">
+<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">load_phonons_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.load_phonons_pickle" title="Permalink to this definition">#</a></dt>
 <dd><p>Load modes from a pickled file.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.pkl.pops_and_masses">
-<span class="sig-prename descclassname"><span class="pre">hylight.pkl.</span></span><span class="sig-name descname"><span class="pre">pops_and_masses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.pkl.pops_and_masses" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.npz.pops_and_masses">
+<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">pops_and_masses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.pops_and_masses" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="module-hylight.struct">
 <span id="hylight-struct-module"></span><h2>hylight.struct module<a class="headerlink" href="#module-hylight.struct" title="Permalink to this heading">#</a></h2>
+<p>A generic representation of a crystal cell.</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.struct.Struct">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.struct.</span></span><span class="sig-name descname"><span class="pre">Struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.struct.Struct" title="Permalink to this definition">#</a></dt>
@@ -964,6 +1068,21 @@ middle point and the sides.</p></li>
 </section>
 <section id="module-hylight.utils">
 <span id="hylight-utils-module"></span><h2>hylight.utils module<a class="headerlink" href="#module-hylight.utils" title="Permalink to this heading">#</a></h2>
+<p>Pervasive utilities.</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py exception">
 <dt class="sig sig-object py" id="hylight.utils.InputError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">InputError</span></span><a class="headerlink" href="#hylight.utils.InputError" title="Permalink to this definition">#</a></dt>
@@ -1075,6 +1194,21 @@ and emax.</p></li>
 </section>
 <section id="module-hylight">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hylight" title="Permalink to this heading">#</a></h2>
+<p>Hylight</p>
+<dl>
+<dt>License</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.setup_logging">
 <span class="sig-prename descclassname"><span class="pre">hylight.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.setup_logging" title="Permalink to this definition">#</a></dt>
@@ -1217,12 +1351,12 @@ and emax.</p></li>
 <li><a class="reference internal" href="#hylight.multi_phonons.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-hylight.pkl">hylight.pkl module</a><ul>
-<li><a class="reference internal" href="#hylight.pkl.archive_modes"><code class="docutils literal notranslate"><span class="pre">archive_modes()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.pkl.load_phonons"><code class="docutils literal notranslate"><span class="pre">load_phonons()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.pkl.load_phonons_npz"><code class="docutils literal notranslate"><span class="pre">load_phonons_npz()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.pkl.load_phonons_pickle"><code class="docutils literal notranslate"><span class="pre">load_phonons_pickle()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.pkl.pops_and_masses"><code class="docutils literal notranslate"><span class="pre">pops_and_masses()</span></code></a></li>
+<li><a class="reference internal" href="#module-hylight.npz">hylight.npz module</a><ul>
+<li><a class="reference internal" href="#hylight.npz.archive_modes"><code class="docutils literal notranslate"><span class="pre">archive_modes()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.npz.load_phonons"><code class="docutils literal notranslate"><span class="pre">load_phonons()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.npz.load_phonons_npz"><code class="docutils literal notranslate"><span class="pre">load_phonons_npz()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.npz.load_phonons_pickle"><code class="docutils literal notranslate"><span class="pre">load_phonons_pickle()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.npz.pops_and_masses"><code class="docutils literal notranslate"><span class="pre">pops_and_masses()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-hylight.struct">hylight.struct module</a><ul>

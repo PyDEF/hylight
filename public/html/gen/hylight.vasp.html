@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="hylight.phonopy package" href="hylight.phonopy.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>hylight.vasp package - Hylight 0.1.0 documentation</title>
+        <title>hylight.vasp package - Hylight 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Hylight 0.1.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">Hylight 1.0.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -150,7 +150,7 @@
     <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">Hylight 0.1.0 documentation</span>
+  <span class="sidebar-brand-text">Hylight 1.0.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -209,6 +209,21 @@
 </section>
 <section id="module-hylight.vasp.common">
 <span id="hylight-vasp-common-module"></span><h2>hylight.vasp.common module<a class="headerlink" href="#module-hylight.vasp.common" title="Permalink to this heading">#</a></h2>
+<p>Common utilities to read and write VASP files.</p>
+<dl>
+<dt>License:</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.vasp.common.Poscar">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.vasp.common.</span></span><span class="sig-name descname"><span class="pre">Poscar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.vasp.common.Poscar" title="Permalink to this definition">#</a></dt>
@@ -249,13 +264,28 @@ if False, write in fractional representation</p></li>
 </section>
 <section id="module-hylight.vasp.loader">
 <span id="hylight-vasp-loader-module"></span><h2>hylight.vasp.loader module<a class="headerlink" href="#module-hylight.vasp.loader" title="Permalink to this heading">#</a></h2>
+<p>Read vibrational modes from VASP files.</p>
+<dl>
+<dt>License:</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.vasp.loader.load_phonons">
 <span class="sig-prename descclassname"><span class="pre">hylight.vasp.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.vasp.loader.load_phonons" title="Permalink to this definition">#</a></dt>
 <dd><p>Load phonons from a OUTCAR.</p>
 <p>Remark: This function is a bit heavy because of text parsing. You may want
-to use hyligh-pkl to parse one for all the file and later load that
-preparsed file using pkl.load_phonons instead.</p>
+to use hyligh-modes to parse one for all the file and later load that
+preparsed file using npz.load_phonons instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>(phonons, pops, masses)
@@ -293,6 +323,21 @@ second element is the lattice parameters</p>
 </section>
 <section id="module-hylight.vasp.utils">
 <span id="hylight-vasp-utils-module"></span><h2>hylight.vasp.utils module<a class="headerlink" href="#module-hylight.vasp.utils" title="Permalink to this heading">#</a></h2>
+<p>Pervasive utilities for hylight.vasp submodule.</p>
+<dl>
+<dt>License:</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.vasp.utils.make_finite_diff_poscar">
 <span class="sig-prename descclassname"><span class="pre">hylight.vasp.utils.</span></span><span class="sig-name descname"><span class="pre">make_finite_diff_poscar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outcar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A=0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.vasp.utils.make_finite_diff_poscar" title="Permalink to this definition">#</a></dt>

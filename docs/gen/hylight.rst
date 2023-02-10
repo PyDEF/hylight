@@ -56,10 +56,10 @@ hylight.multi\_phonons module
    :undoc-members:
    :show-inheritance:
 
-hylight.pkl module
+hylight.npz module
 ------------------
 
-.. automodule:: hylight.pkl
+.. automodule:: hylight.npz
    :members:
    :undoc-members:
    :show-inheritance:

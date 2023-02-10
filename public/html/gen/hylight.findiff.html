@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight.jmol package" href="hylight.jmol.html" /><link rel="prev" title="hylight.crystal package" href="hylight.crystal.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>hylight.findiff package - Hylight 0.1.0 documentation</title>
+        <title>hylight.findiff package - Hylight 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Hylight 0.1.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">Hylight 1.0.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -150,7 +150,7 @@
     <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">Hylight 0.1.0 documentation</span>
+  <span class="sidebar-brand-text">Hylight 1.0.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -209,6 +209,21 @@
 </section>
 <section id="module-hylight.findiff.collect">
 <span id="hylight-findiff-collect-module"></span><h2>hylight.findiff.collect module<a class="headerlink" href="#module-hylight.findiff.collect" title="Permalink to this heading">#</a></h2>
+<p>Grab forces from a collection of single point computations and compute hessian.</p>
+<dl>
+<dt>License:</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.findiff.collect.dropwhile_err">
 <span class="sig-prename descclassname"><span class="pre">hylight.findiff.collect.</span></span><span class="sig-name descname"><span class="pre">dropwhile_err</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">it</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">else_err</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.findiff.collect.dropwhile_err" title="Permalink to this definition">#</a></dt>
@@ -275,6 +290,21 @@ errors found in the OUTCAR.</p>
 </section>
 <section id="module-hylight.findiff.gen">
 <span id="hylight-findiff-gen-module"></span><h2>hylight.findiff.gen module<a class="headerlink" href="#module-hylight.findiff.gen" title="Permalink to this heading">#</a></h2>
+<p>Generate a collection of positions for finite differences computations.</p>
+<dl>
+<dt>License:</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.findiff.gen.gen_disp">
 <span class="sig-prename descclassname"><span class="pre">hylight.findiff.gen.</span></span><span class="sig-name descname"><span class="pre">gen_disp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.findiff.gen.gen_disp" title="Permalink to this definition">#</a></dt>
@@ -384,6 +414,21 @@ ref-delta POSCARs for each direction.</p></li>
 </section>
 <section id="module-hylight.findiff">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hylight.findiff" title="Permalink to this heading">#</a></h2>
+<p>A module for finite differences computations.</p>
+<dl>
+<dt>License:</dt><dd><p>Copyright (C) 2023  PyDEF development team</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</dd>
+</dl>
 </section>
 </section>
 

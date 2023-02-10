@@ -22,7 +22,8 @@ copyright = "2022, Théo Cavignac"
 author = "Théo Cavignac"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
+from hylight import __version__
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------

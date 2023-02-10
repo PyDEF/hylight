@@ -17,7 +17,7 @@ luminescence of solids based on the results of *ab initio* computations.
 You may be interested in reading our first paper using it on the luminescence of |BaZrO3:Ti| [BaZrO3:Ti]_.
 
 To learn how to use Hylight, you can read the tutorial_.
-Finally there is a complete reference_ that goes over all individual functions implemented in the packlge.
+Finally there is a complete reference_ that goes over all individual functions implemented in the package.
 
 Citing Hylight
 --------------
