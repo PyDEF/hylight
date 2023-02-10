@@ -103,11 +103,15 @@ def diff(opts):
                 for s in opts.bond:
                     at1, at2, *lengths = s.split(",")
                     if len(lengths) == 1:
-                        jmol_opts["bonds"].append((at1, at2, 0., float(lengths[0])))
+                        jmol_opts["bonds"].append((at1, at2, 0.0, float(lengths[0])))
                     elif len(lengths) == 2:
-                        jmol_opts["bonds"].append((at1, at2, float(lengths[0]), float(lengths[1])))
+                        jmol_opts["bonds"].append(
+                            (at1, at2, float(lengths[0]), float(lengths[1]))
+                        )
                     else:
-                        raise ValueError("For bond {at1}-{at2}: you need to at least specify the max distance (ex: {at1},{at2},2.2).")
+                        raise ValueError(
+                            "For bond {at1}-{at2}: you need to at least specify the max distance (ex: {at1},{at2},2.2)."
+                        )
 
         if opts.color:
             jmol_opts["colors"] = []

@@ -31,7 +31,7 @@ from .constants import (
     hbar_si,
     atomic_mass,
 )
-from .mono_phonon import sigma_soft
+from .mono_phonon import sigma
 from .utils import periodic_diff, gaussian
 
 import logging
@@ -362,8 +362,8 @@ def compute_spectrum_soft(
         result_store["alpha"] = alpha
 
     if ex_pes == ExPES.ISO_SCALE:
-        sig = sigma_soft(T, S_em, e_phonon_eff, e_phonon_eff_e)
-        sig0 = sigma_soft(0, S_em, e_phonon_eff, e_phonon_eff_e)
+        sig = sigma(T, S_em, e_phonon_eff, e_phonon_eff_e)
+        sig0 = sigma(0, S_em, e_phonon_eff, e_phonon_eff_e)
     elif ex_pes == ExPES.SINGLE_ES_FREQ:
         if ex_pes.omega is not None:
             e_phonon_eff_e = ex_pes.omega
@@ -736,9 +736,7 @@ def rect(n):
 def sigma_hybrid(T, S, e_phonon, e_phonon_e):
     """Compute the width of the ZPL for the ExPES.SINGLE_ES_FREQ mode."""
     return np.sqrt(
-        np.sum(
-            [sigma_soft(T, S_i, e_i, e_phonon_e) ** 2 for S_i, e_i in zip(S, e_phonon)]
-        )
+        np.sum([sigma(T, S_i, e_i, e_phonon_e) ** 2 for S_i, e_i in zip(S, e_phonon)])
     )
 
 
@@ -777,7 +775,7 @@ def sigma_full_nd(T, delta_R, modes_gs, modes_es, mask=None):
 
     return np.array(
         [
-            sigma_soft(T, S_i, e_g_i, e_e_i)
+            sigma(T, S_i, e_g_i, e_e_i)
             for S_i, m, e_g_i, e_e_i in zip(S, modes_gs, e_g, e_e)
             if m.real and mask.accept(m.energy)
         ]
@@ -891,21 +889,32 @@ def dynmatshow(dynmat, blocks=None):
 
 
 class Mask:
+    "An energy based mask for the set of modes."
+
     def __init__(self, intervals):
         self.intervals = intervals
 
     @classmethod
     def from_bias(cls, bias):
+        """Create a mask that reject modes of energy between 0 and `bias`.
+
+        :param bias: minimum of accepted energy (eV)
+        :return: a fresh instance of `Mask`.
+        """
         if bias > 0:
             return cls([(0, bias * eV_in_J)])
         else:
             return cls([])
 
     def add_interval(self, interval):
-        assert isinstance(interval, tuple) and len(tuple) == 2, "interval must be a tuple of two values."
+        "Add a new interval to the mask."
+        assert (
+            isinstance(interval, tuple) and len(tuple) == 2
+        ), "interval must be a tuple of two values."
         self.intervals.append(interval)
 
     def as_bool(self, ener):
+        "Convert to a boolean `np.ndarray` based on `ener`."
         bmask = np.ones(ener.shape, dtype=bool)
 
         for bot, top in self.intervals:
@@ -914,12 +923,20 @@ class Mask:
         return bmask
 
     def accept(self, value):
+        "Return True if value is not under the mask."
         return not any(bot <= value <= top for bot, top in self.intervals)
 
     def reject(self, value):
+        "Return True if `value` is under the mask."
         return any(bot <= value <= top for bot, top in self.intervals)
 
     def plot(self, ax, unit):
+        """Add a graphical representation of the mask to a plot.
+
+        :param ax: a matplotlib `Axes` object.
+        :param unit: the unit of energy to use (ex: :py:attr:`hylight.constant.eV_in_J` if the plot uses eV)
+        :returns: a function that must be called without arguments after resizing the plot.
+        """
         from matplotlib.patches import Rectangle
 
         rects = []

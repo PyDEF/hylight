@@ -55,12 +55,11 @@ def spectrum(
     if hard_osc:
         stokes_shift = fc_shift_e + fc_shift_g
         S = 0.5 * stokes_shift / e_phonon_g
-        sig = sigma(T, S, e_phonon_g)
+        sig = sigma(T, S, e_phonon_g, e_phonon_g)
     else:
         e_phonon_e = e_phonon_g * np.sqrt(fc_shift_e / fc_shift_g)
-        S_em = fc_shift_g / e_phonon_g
-        S = S_em
-        sig = sigma_soft(T, S_em, e_phonon_g, e_phonon_e)
+        S = fc_shift_g / e_phonon_g
+        sig = sigma(T, S, e_phonon_g, e_phonon_e)
 
     return compute_spectrum(e, e_zpl, S, sig, e_phonon_e)
 
@@ -106,30 +105,19 @@ def compute_spectrum(
     )
 
 
-def sigma(T, S, e_phonon):
-    if T == 0.0:
-        return e_phonon * np.sqrt(S)
-    else:
-        return e_phonon * np.sqrt(S / np.tanh(e_phonon / (kb_eV * T)))
-
-
-def sigma_soft(T, S_em, e_phonon_g, e_phonon_e):
-    """Temperature dependant standard deviation of a line dependant.
+def sigma(T, S_em, e_phonon_g, e_phonon_e):
+    """Temperature dependant standard deviation of the lineshape.
 
     :param T: temperature in K
     :param S_em: emmission Huang-Rhys factor
     :param e_phonon_g: energy of the GS PES vibration (eV)
     :param e_phonon_e: energy of the ES PES vibration (eV)
     """
-    if T == 0.0:
-        coth = 1.0
-    else:
-        coth = 1.0 / np.tanh(e_phonon_e / (2 * kb_eV * T))
+    coth = 1.0 / np.tanh(e_phonon_e / (2 * kb_eV * T)) if T > 0.0 else 1.0
 
     return np.sqrt(S_em * e_phonon_g**3 / e_phonon_e * coth)
 
 
 def huang_rhys(stokes_shift, e_phonon):
-    """Huang-Rhys factor from the Stokes shift and the phonon energy.
-    """
+    """Huang-Rhys factor from the Stokes shift and the phonon energy."""
     return 0.5 * stokes_shift / e_phonon

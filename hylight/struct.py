@@ -24,6 +24,7 @@ class Struct:
 
     Store all the required infos to describe a given set of atomic positions.
     """
+
     def __init__(self, cell_parameters, species, species_names=None):
         """Store all informations about a unit cell.
 

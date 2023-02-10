@@ -45,7 +45,7 @@ class Mode:
         self.masses = np.array(masses) * atomic_mass
         # vibrational mode eigendisplacement
         self.delta = np.sqrt(self.masses.reshape((-1, 1))) * eigenvector
-        self.mass = np.linalg.norm(self.delta)**2
+        self.mass = np.linalg.norm(self.delta) ** 2
 
     def project(self, delta_Q):
         """Project delta_Q onto the eigenvector"""
