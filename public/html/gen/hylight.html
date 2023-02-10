@@ -448,13 +448,8 @@ It can be used to project other displacement on the eigenvector.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mono_phonon.sigma">
-<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.sigma" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="hylight.mono_phonon.sigma_soft">
-<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">sigma_soft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_em</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_e</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.sigma_soft" title="Permalink to this definition">#</a></dt>
-<dd><p>Temperature dependant standard deviation of a line dependant.</p>
+<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_em</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_e</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.sigma" title="Permalink to this definition">#</a></dt>
+<dd><p>Temperature dependant standard deviation of the lineshape.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -545,35 +540,61 @@ scaled by a constant factor.</p>
 <dt class="sig sig-object py" id="hylight.multi_phonons.Mask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An energy based mask for the set of modes.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.multi_phonons.Mask.accept">
 <span class="sig-name descname"><span class="pre">accept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.accept" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Return True if value is not under the mask.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.multi_phonons.Mask.add_interval">
 <span class="sig-name descname"><span class="pre">add_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.add_interval" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Add a new interval to the mask.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.multi_phonons.Mask.as_bool">
 <span class="sig-name descname"><span class="pre">as_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.as_bool" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Convert to a boolean <cite>np.ndarray</cite> based on <cite>ener</cite>.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.multi_phonons.Mask.from_bias">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bias</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.from_bias" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Create a mask that reject modes of energy between 0 and <cite>bias</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bias</strong> – minimum of accepted energy (eV)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a fresh instance of <cite>Mask</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.multi_phonons.Mask.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.plot" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Add a graphical representation of the mask to a plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> – a matplotlib <cite>Axes</cite> object.</p></li>
+<li><p><strong>unit</strong> – the unit of energy to use (ex: <code class="xref py py-attr docutils literal notranslate"><span class="pre">hylight.constant.eV_in_J</span></code> if the plot uses eV)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a function that must be called without arguments after resizing the plot.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.multi_phonons.Mask.reject">
 <span class="sig-name descname"><span class="pre">reject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.Mask.reject" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Return True if <cite>value</cite> is under the mask.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1202,7 +1223,6 @@ along with this program.  If not, see &lt;<a class="reference external" href="ht
 <li><a class="reference internal" href="#hylight.mono_phonon.compute_spectrum"><code class="docutils literal notranslate"><span class="pre">compute_spectrum()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mono_phonon.huang_rhys"><code class="docutils literal notranslate"><span class="pre">huang_rhys()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mono_phonon.sigma"><code class="docutils literal notranslate"><span class="pre">sigma()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.mono_phonon.sigma_soft"><code class="docutils literal notranslate"><span class="pre">sigma_soft()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.mono_phonon.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
 </ul>
 </li>
