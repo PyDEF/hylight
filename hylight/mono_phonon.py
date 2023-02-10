@@ -9,7 +9,7 @@ from .utils import gaussian
 logger = logging.getLogger("hylight")
 
 
-def spectra(
+def spectrum(
     e_zpl,
     T,
     fc_shift_g,
@@ -20,7 +20,7 @@ def spectra(
     e_min=0,
     e_max=5,
 ):
-    """Compute a spectra from a single vibrational mode and some energetic terms.
+    """Compute a spectrum from a single vibrational mode and some energetic terms.
 
     :param e_zpl: energy of the zero phonon line, in eV
     :param T: temperature in K
@@ -29,9 +29,9 @@ def spectra(
     :param e_phonon_g: Mode energy in ground state in eV
     :param hard_osc: boolean, use the hard oscillator mode:
       vibration mode has the same energy in GD and ES
-    :param n_points: number of points in the spectra
-    :param e_min: energy lower bound for the spectra, in eV
-    :param e_max: energy higher bound for the spectra, in eV
+    :param n_points: number of points in the spectrum
+    :param e_min: energy lower bound for the spectrum, in eV
+    :param e_max: energy higher bound for the spectrum, in eV
     """
 
     e = np.linspace(e_min, e_max, n_points)
@@ -46,19 +46,19 @@ def spectra(
         S = S_em
         sig = sigma_soft(T, S_em, e_phonon_g, e_phonon_e)
 
-    return compute_spectra(e, e_zpl, S, sig, e_phonon_e)
+    return compute_spectrum(e, e_zpl, S, sig, e_phonon_e)
 
 
-def compute_spectra(
+def compute_spectrum(
     e,
     e_zpl,
     S,
     sig,
     e_phonon_g,
 ):
-    """Compute a spectra from 1D model with experimental like inputs
+    """Compute a spectrum from 1D model with experimental like inputs
 
-    :param e: a numpy array of energies to compute the spectra at
+    :param e: a numpy array of energies to compute the spectrum at
     :param e_zpl: energy of the zero phonon line, in eV
     :param S: the emission Huang-Rhys factor
     :param sig: the lineshape standard deviation

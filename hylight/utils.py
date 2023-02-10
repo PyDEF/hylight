@@ -46,7 +46,7 @@ def gen_translat(lattice: np.ndarray):
 
 
 def measure_fwhm(x, y):
-    """Measure the full width at half maximum of a given spectra.
+    """Measure the full width at half maximum of a given spectrum.
 
     Warning: It may fail if there are more than one band that reach half
     maximum in the array. In this case you may want to use select_interval to
@@ -63,7 +63,7 @@ def measure_fwhm(x, y):
 
 
 def select_interval(x, y, emin, emax, normalize=False, npoints=None):
-    """Extract an interval of a spectra and return the windows x and y arrays.
+    """Extract an interval of a spectrum and return the windows x and y arrays.
 
     :param x: x array
     :param y: y array

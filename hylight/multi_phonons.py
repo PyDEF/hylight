@@ -96,7 +96,7 @@ ExPES.SINGLE_ES_FREQ = ExPES(_ExPES.SINGLE_ES_FREQ)
 ExPES.FULL_ND = ExPES(_ExPES.FULL_ND)
 
 
-def spectra(
+def spectrum(
     mode_source,
     poscar_gs,
     poscar_es,
@@ -116,7 +116,7 @@ def spectra(
     ex_pes=ExPES.ISO_SCALE,
     correct_zpe=False,
 ):
-    """Compute a complete spectra without free parameters.
+    """Compute a complete spectrum without free parameters.
 
     :param mode_source: path to the vibration computation output file (by default a pickled file)
     :param path_struct_gs: path to the ground state relaxed structure file (by default a POSCAR)
@@ -144,7 +144,7 @@ def spectra(
     if mask is None:
         mask = Mask.from_bias(bias)
 
-    e, I = compute_spectra_soft(  # noqa: E741
+    e, I = compute_spectrum_soft(  # noqa: E741
         phonons,
         delta_R,
         zpl,
@@ -197,8 +197,8 @@ def plot_spectral_function(
     if not any(p.real for p in phonons):
         raise ValueError("No real mode extracted.")
 
-    f, fc, dirac_fc = fc_spectra(phonons, delta_R, disp=disp)
-    f, s, dirac_s = hr_spectra(phonons, delta_R, disp=disp)
+    f, fc, dirac_fc = fc_spectrum(phonons, delta_R, disp=disp)
+    f, s, dirac_s = hr_spectrum(phonons, delta_R, disp=disp)
     fc = s * f
     dirac_fc = dirac_s * f
 
@@ -254,7 +254,7 @@ def plot_spectral_function(
     return fig, (ax_fc, ax_s)
 
 
-def compute_spectra_soft(
+def compute_spectrum_soft(
     phonons,
     delta_R,
     zpl,
@@ -272,7 +272,7 @@ def compute_spectra_soft(
     ex_pes=ExPES.ISO_SCALE,
     correct_zpe=False,
 ):
-    """Compute a spectra without free parameters.
+    """Compute a spectrum without free parameters.
 
     :param phonons: list of modes
     :param delta_R: displacement in A
@@ -392,7 +392,7 @@ def compute_spectra_soft(
     result_store["fwhm"] = fwhm
     result_store["fwhm0"] = fwhm0
 
-    return compute_spectra(
+    return compute_spectrum(
         phonons,
         delta_R,
         zpl,
@@ -406,7 +406,7 @@ def compute_spectra_soft(
     )
 
 
-def compute_spectra_width_ah(
+def compute_spectrum_width_ah(
     phonons_gs,
     phonons_es,
     delta_R,
@@ -422,7 +422,7 @@ def compute_spectra_width_ah(
     result_store=None,
     correct_zpe=False,
 ):
-    """Luminescence spectra with a line width that takes the ES PES curvature into account.
+    """Luminescence spectrum with a line width that takes the ES PES curvature into account.
 
     Uses the full Dushinsky matrix for the computation of the line width, but
     assume the Dushinsky matrix to be the identity in the computation of the FC
@@ -502,7 +502,7 @@ def compute_spectra_width_ah(
     result_store["fwhm"] = fwhm
     result_store["fwhm0"] = fwhm0
 
-    return compute_spectra(
+    return compute_spectrum(
         phonons_gs,
         delta_R,
         zpl,
@@ -516,7 +516,7 @@ def compute_spectra_width_ah(
     )
 
 
-def compute_spectra(
+def compute_spectrum(
     phonons,
     delta_R,
     zpl,
@@ -529,15 +529,15 @@ def compute_spectra(
     pre_convolve=None,
     shape=LineShape.GAUSSIAN,
 ):
-    """Compute a luminescence spectra with the time-dependant formulation with an arbitrary linewidth.
+    """Compute a luminescence spectrum with the time-dependant formulation with an arbitrary linewidth.
 
     :param phonons: list of modes
     :param delta_R: displacement in A
     :param zpl: zero phonon line energy in eV
     :param fwhm: zpl lineshape full width at half maximum in eV or None
-      if fwhm is None: the raw spectra is not convoluted with a line shape
-      if fwhm < 0: the spectra is convoluted with a lorentizan line shape
-      if fwhm > 0: the spectra is convoluted with a gaussian line shape
+      if fwhm is None: the raw spectrum is not convoluted with a line shape
+      if fwhm < 0: the spectrum is convoluted with a lorentizan line shape
+      if fwhm > 0: the spectrum is convoluted with a gaussian line shape
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param resolution_e: energy resolution in eV
     :param bias: ignore low energy vibrations under bias in eV
@@ -647,21 +647,21 @@ def _window(data, fn=np.hamming):
     return data * fn(n)
 
 
-def fc_spectra(phonons, delta_R, n_points=5000, disp=1):
-    f, s, dirac_s = _stick_smooth_spectra(
+def fc_spectrum(phonons, delta_R, n_points=5000, disp=1):
+    f, s, dirac_s = _stick_smooth_spectrum(
         phonons, delta_R, lambda hr, e: hr * e, n_points, disp=disp
     )
 
     return f, f * s, f * dirac_s
 
 
-def hr_spectra(phonons, delta_R, n_points=5000, disp=1):
-    return _stick_smooth_spectra(
+def hr_spectrum(phonons, delta_R, n_points=5000, disp=1):
+    return _stick_smooth_spectrum(
         phonons, delta_R, lambda hr, _e: hr, n_points, disp=disp
     )
 
 
-def _stick_smooth_spectra(phonons, delta_R, height, n_points, disp=1):
+def _stick_smooth_spectrum(phonons, delta_R, height, n_points, disp=1):
     """
 
     :param phonons: list of phonons
