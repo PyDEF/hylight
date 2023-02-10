@@ -1,3 +1,21 @@
+"""Read vibrational modes from VASP files.
+
+License:
+    Copyright (C) 2023  PyDEF development team
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 import re
 from itertools import islice
 
@@ -16,8 +34,8 @@ def load_phonons(path):
     """Load phonons from a OUTCAR.
 
     Remark: This function is a bit heavy because of text parsing. You may want
-    to use hyligh-pkl to parse one for all the file and later load that
-    preparsed file using pkl.load_phonons instead.
+    to use hyligh-modes to parse one for all the file and later load that
+    preparsed file using npz.load_phonons instead.
 
     :returns: (phonons, pops, masses)
       phonons: list of hylight.mode.Mode instances

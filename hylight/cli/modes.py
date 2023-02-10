@@ -1,18 +1,32 @@
+"""Read a file containing vibrational modes and store them into a fast-read file.
+
+License
+    Copyright (C) 2023  PyDEF development team
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 import os
 import os.path as op
 import gzip
 from itertools import cycle
 
 from .script_utils import MultiCmd, positional, optional, error_catch
-from ..pkl import archive_modes, load_phonons
+from ..npz import archive_modes, load_phonons
 from ..constants import eV_in_J, cm1_in_J
 
 
-cmd = MultiCmd(
-    description="""\
-Read a file containing vibrational modes and store them into a fast-read file.
-"""
-)
+cmd = MultiCmd(description=__doc__)
 
 
 @cmd.subcmd(
