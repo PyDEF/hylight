@@ -1,4 +1,4 @@
-"""Hylight
+"""The Hylight package.
 
 License
     Copyright (C) 2023  PyDEF development team

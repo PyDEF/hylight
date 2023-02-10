@@ -19,11 +19,20 @@ You may be interested in reading our first paper using it on the luminescence of
 To learn how to use Hylight, you can read the tutorial_.
 Finally there is a complete reference_ that goes over all individual functions implemented in the package.
 
+Attribution
+-----------
+
+Licenses
+````````
+
+Hylight is written and maintained by the PyDEF team.
+The source code for Hylight is distributed under the GPLv3_ license.
+This documentation is distributed under CC-BY_ license.
+
 Citing Hylight
---------------
+``````````````
 
 If you ever use Hylight for a published scientific work, we would ask you to cite the related paper [Hylight]_.
-
 
 Content
 -------
@@ -33,7 +42,6 @@ Content
 
    tutorial/tutorial.ipynb
    gen/hylight
-
 
 Indices and tables
 ------------------
@@ -49,3 +57,5 @@ Indices and tables
    `Cavignac, T.; Jobic, S.; C. Latouche, J. Chem. Theory Comput., 2022, 18, 12, 7714-7721 <https://www.doi.org/10.1021/acs.jctc.2c00949>`_
 .. _tutorial: ./tutorial.html
 .. _reference: ./gen/hylight.html
+.. _CC-BY: https://creativecommons.org/licenses/by/4.0/
+.. _GPLv3: https://www.gnu.org/licenses/gpl-3.0.html

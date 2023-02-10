@@ -10,7 +10,7 @@ luminescence of solids based on the results of *ab initio* computations.
 You may be interested in reading our first paper using it:
 [Modeling Luminescence Spectrum of BaZrO3:Ti Including Vibronic Coupling from First Principles Calculations][1].
 
-To learn how to use Hylight, you can read [documentation](https://hylight.readthedocs.io/en/latest/).
+To learn how to use Hylight, you can read [documentation](https://hylight.readthedocs.io/en/latest/) (or the [PDF version](./public/latex/hylight.pdf))
 
 ## Citing Hylight
 
