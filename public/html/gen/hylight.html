@@ -498,10 +498,8 @@ vibration mode has the same energy in GD and ES</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">ExPES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.ExPES" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Mode of approximation of the ES PES curvature.</p>
-<dl class="simple">
-<dt><a class="reference internal" href="#hylight.multi_phonons.ExPES.ISO_SCALE" title="hylight.multi_phonons.ExPES.ISO_SCALE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ISO_SCALE</span></code></a>: We suppose eigenvectors are the same, but the frequencies are</dt><dd><p>scaled by a constant factor.</p>
-</dd>
-</dl>
+<p><a class="reference internal" href="#hylight.multi_phonons.ExPES.ISO_SCALE" title="hylight.multi_phonons.ExPES.ISO_SCALE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ISO_SCALE</span></code></a>: We suppose eigenvectors are the same, but the frequencies are
+scaled by a constant factor.</p>
 <p><a class="reference internal" href="#hylight.multi_phonons.ExPES.SINGLE_ES_FREQ" title="hylight.multi_phonons.ExPES.SINGLE_ES_FREQ"><code class="xref py py-attr docutils literal notranslate"><span class="pre">SINGLE_ES_FREQ</span></code></a>: We suppose all modes have the same frequency (that should be provided).</p>
 <p><a class="reference internal" href="#hylight.multi_phonons.ExPES.FULL_ND" title="hylight.multi_phonons.ExPES.FULL_ND"><code class="xref py py-attr docutils literal notranslate"><span class="pre">FULL_ND</span></code></a>: (Not implemented) We know the frequency of each ES mode.</p>
 <dl class="py attribute">
@@ -584,21 +582,37 @@ vibration mode has the same energy in GD and ES</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">OmegaEff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.OmegaEff" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
 <p>Mode of computation of a effective frequency.</p>
-<dl class="simple">
-<dt><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.FC_MEAN" title="hylight.multi_phonons.OmegaEff.FC_MEAN"><code class="xref py py-attr docutils literal notranslate"><span class="pre">FC_MEAN</span></code></a>: $\Omega = &lt;\omega_i&gt;_{d_{FC,i}}$</dt><dd><p>should be used with <a class="reference internal" href="#hylight.multi_phonons.ExPES.ISO_SCALE" title="hylight.multi_phonons.ExPES.ISO_SCALE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ExPES.ISO_SCALE</span></code></a> because it is associated with
+<p><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.FC_MEAN" title="hylight.multi_phonons.OmegaEff.FC_MEAN"><code class="xref py py-attr docutils literal notranslate"><span class="pre">FC_MEAN</span></code></a>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Omega = \frac{\sum_j \omega_j d^\text{FC}_j}{\sum_j d^\text{FC}_j}\]</div>
+</div>
+<p>Should be used with <a class="reference internal" href="#hylight.multi_phonons.ExPES.ISO_SCALE" title="hylight.multi_phonons.ExPES.ISO_SCALE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ExPES.ISO_SCALE</span></code></a> because it is associated with
 the idea that all the directions are softened equally in the excited state.</p>
-</dd>
-</dl>
-<p><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.HR_MEAN" title="hylight.multi_phonons.OmegaEff.HR_MEAN"><code class="xref py py-attr docutils literal notranslate"><span class="pre">HR_MEAN</span></code></a>: $\Omega = d_{FC,tot} / S_{tot} = &lt;\omega_i&gt;_{S_i}$</p>
-<p><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.HR_RMS" title="hylight.multi_phonons.OmegaEff.HR_RMS"><code class="xref py py-attr docutils literal notranslate"><span class="pre">HR_RMS</span></code></a>: $\Omega = \sqrt{&lt;\omega_i^2&gt;_{S_i}}$</p>
-<dl class="simple">
-<dt><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.FC_RMS" title="hylight.multi_phonons.OmegaEff.FC_RMS"><code class="xref py py-attr docutils literal notranslate"><span class="pre">FC_RMS</span></code></a>: $\Omega = \sqrt{&lt;\omega_i^2&gt;_{d_{FC,i}}}$</dt><dd><p>should be used with <a class="reference internal" href="#hylight.multi_phonons.ExPES.SINGLE_ES_FREQ" title="hylight.multi_phonons.ExPES.SINGLE_ES_FREQ"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ExPES.SINGLE_ES_FREQ</span></code></a> because it makes sense
+<p><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.HR_MEAN" title="hylight.multi_phonons.OmegaEff.HR_MEAN"><code class="xref py py-attr docutils literal notranslate"><span class="pre">HR_MEAN</span></code></a>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Omega = \frac{d^\text{FC}}{S_\text{tot}} = \frac{\sum_j \omega_j S_j}{\sum_j S_j}\]</div>
+</div>
+<p><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.HR_RMS" title="hylight.multi_phonons.OmegaEff.HR_RMS"><code class="xref py py-attr docutils literal notranslate"><span class="pre">HR_RMS</span></code></a>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Omega = \sqrt{\frac{\sum_j \omega_j^2 S_j}{\sum_j S_j}}\]</div>
+</div>
+<p><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.FC_RMS" title="hylight.multi_phonons.OmegaEff.FC_RMS"><code class="xref py py-attr docutils literal notranslate"><span class="pre">FC_RMS</span></code></a>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Omega = \sqrt{\frac{\sum_j \omega_j^2 d^\text{FC}_j}{\sum_j d^\text{FC}_j}}\]</div>
+</div>
+<p>Should be used with <a class="reference internal" href="#hylight.multi_phonons.ExPES.SINGLE_ES_FREQ" title="hylight.multi_phonons.ExPES.SINGLE_ES_FREQ"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ExPES.SINGLE_ES_FREQ</span></code></a> because it makes sense
 when we get only one Omega_eff for the excited state (this single
 effective frequency should be computed beforehand)</p>
-</dd>
-<dt><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.ONED_FREQ" title="hylight.multi_phonons.OmegaEff.ONED_FREQ"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ONED_FREQ</span></code></a>: $\Omega = (\Delta Q^T D \Delta Q) / {\Delta Q}^2$</dt><dd><p>Correspond to the actual curvature in the direction of the displacement.</p>
-</dd>
-</dl>
+<p><a class="reference internal" href="#hylight.multi_phonons.OmegaEff.ONED_FREQ" title="hylight.multi_phonons.OmegaEff.ONED_FREQ"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ONED_FREQ</span></code></a>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Omega = \frac{(\Delta Q^T D \Delta Q)}{{\Delta Q}^2}\]</div>
+</div>
+<p>Correspond to the actual curvature in the direction of the displacement.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.multi_phonons.OmegaEff.FC_MEAN">
 <span class="sig-name descname"><span class="pre">FC_MEAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#hylight.multi_phonons.OmegaEff.FC_MEAN" title="Permalink to this definition">#</a></dt>

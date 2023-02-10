@@ -49,21 +49,39 @@ class LineShape(Enum):
 class OmegaEff(Enum):
     r"""Mode of computation of a effective frequency.
 
-    :py:attr:`FC_MEAN`: $\\Omega = <\\omega_i>_{d_{FC,i}}$
-        should be used with :py:attr:`ExPES.ISO_SCALE` because it is associated with
-        the idea that all the directions are softened equally in the excited state.
+    :py:attr:`FC_MEAN`:
 
-    :py:attr:`HR_MEAN`: $\\Omega = d_{FC,tot} / S_{tot} = <\\omega_i>_{S_i}$
+    .. math::
+        \Omega = \frac{\sum_j \omega_j d^\text{FC}_j}{\sum_j d^\text{FC}_j}
 
-    :py:attr:`HR_RMS`: $\\Omega = \\sqrt{<\\omega_i^2>_{S_i}}$
+    Should be used with :py:attr:`ExPES.ISO_SCALE` because it is associated with
+    the idea that all the directions are softened equally in the excited state.
 
-    :py:attr:`FC_RMS`: $\\Omega = \\sqrt{<\\omega_i^2>_{d_{FC,i}}}$
-        should be used with :py:attr:`ExPES.SINGLE_ES_FREQ` because it makes sense
-        when we get only one Omega_eff for the excited state (this single
-        effective frequency should be computed beforehand)
+    :py:attr:`HR_MEAN`:
 
-    :py:attr:`ONED_FREQ`: $\\Omega = (\\Delta Q^T D \\Delta Q) / {\\Delta Q}^2$
-        Correspond to the actual curvature in the direction of the displacement.
+    .. math::
+        \Omega = \frac{d^\text{FC}}{S_\text{tot}} = \frac{\sum_j \omega_j S_j}{\sum_j S_j}
+
+    :py:attr:`HR_RMS`:
+
+    .. math::
+        \Omega = \sqrt{\frac{\sum_j \omega_j^2 S_j}{\sum_j S_j}}
+
+    :py:attr:`FC_RMS`:
+
+    .. math::
+        \Omega = \sqrt{\frac{\sum_j \omega_j^2 d^\text{FC}_j}{\sum_j d^\text{FC}_j}}
+
+    Should be used with :py:attr:`ExPES.SINGLE_ES_FREQ` because it makes sense
+    when we get only one Omega_eff for the excited state (this single
+    effective frequency should be computed beforehand)
+
+    :py:attr:`ONED_FREQ`:
+
+    .. math::
+        \Omega = \frac{(\Delta Q^T D \Delta Q)}{{\Delta Q}^2}
+
+    Correspond to the actual curvature in the direction of the displacement.
     """
 
     FC_MEAN = 0
@@ -83,7 +101,7 @@ class ExPES:
     """Mode of approximation of the ES PES curvature.
 
     :py:attr:`ISO_SCALE`: We suppose eigenvectors are the same, but the frequencies are
-      scaled by a constant factor.
+    scaled by a constant factor.
 
     :py:attr:`SINGLE_ES_FREQ`: We suppose all modes have the same frequency (that should be provided).
 
