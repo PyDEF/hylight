@@ -10,7 +10,16 @@ luminescence of solids based on the results of *ab initio* computations.
 You may be interested in reading our first paper using it:
 [Modeling Luminescence Spectrum of BaZrO3:Ti Including Vibronic Coupling from First Principles Calculations][1].
 
-To learn how to use Hylight, you can read [documentation](https://hylight.readthedocs.io/en/latest/) (or the [PDF version](./public/latex/hylight.pdf))
+## Installation
+
+Hylight is published on PyPI. You can install it with `pip`
+
+For a **minimal** installation (maybe you want to use some of the features on a cluster) use `pip install hylight`.
+For you own workstation, we recommend that you enable all optional features: `pip install hylight[`.
+
+## Usage
+
+To learn how to use Hylight, you can read [documentation and tutorial](https://hylight.github.io/) (or the [PDF version](./public/latex/hylight.pdf))
 
 ## Citing Hylight
 
