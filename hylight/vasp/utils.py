@@ -40,14 +40,15 @@ def make_finite_diff_poscar(
     :param outcar: the name of the file where the phonons will be read.
     :param poscar_gs: the path to the ground state POSCAR
     :param poscar_es: the path to the excited state POSCAR, it will be used as
-      a base for the generated Poscars
+        a base for the generated Poscars
     :param A: (optional, 0.01) the amplitude of the displacement in A.
     :param load_phonons: (optional, vasp.loader.load_phonons) the procedure use
-      to read outcar
-    :return: (mu, pes_left, pes_right)
-      mu: the effective mass in kg
-      pes_left: a Poscar instance representing the left displacement
-      pes_right: a Poscar instance representing the right displacement
+        to read outcar
+    :return: :code:`(mu, pes_left, pes_right)`
+
+        - mu: the effective mass in kg
+        - pes_left: a Poscar instance representing the left displacement
+        - pes_right: a Poscar instance representing the right displacement
     """
 
     if mask is None:

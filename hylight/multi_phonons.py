@@ -49,34 +49,34 @@ class LineShape(Enum):
 class OmegaEff(Enum):
     r"""Mode of computation of a effective frequency.
 
-    :py:attr:`FC_MEAN`:
+    :attr:`FC_MEAN`:
 
     .. math::
         \Omega = \frac{\sum_j \omega_j d^\text{FC}_j}{\sum_j d^\text{FC}_j}
 
-    Should be used with :py:attr:`ExPES.ISO_SCALE` because it is associated with
+    Should be used with :attr:`ExPES.ISO_SCALE` because it is associated with
     the idea that all the directions are softened equally in the excited state.
 
-    :py:attr:`HR_MEAN`:
+    :attr:`HR_MEAN`:
 
     .. math::
         \Omega = \frac{d^\text{FC}}{S_\text{tot}} = \frac{\sum_j \omega_j S_j}{\sum_j S_j}
 
-    :py:attr:`HR_RMS`:
+    :attr:`HR_RMS`:
 
     .. math::
         \Omega = \sqrt{\frac{\sum_j \omega_j^2 S_j}{\sum_j S_j}}
 
-    :py:attr:`FC_RMS`:
+    :attr:`FC_RMS`:
 
     .. math::
         \Omega = \sqrt{\frac{\sum_j \omega_j^2 d^\text{FC}_j}{\sum_j d^\text{FC}_j}}
 
-    Should be used with :py:attr:`ExPES.SINGLE_ES_FREQ` because it makes sense
+    Should be used with :attr:`ExPES.SINGLE_ES_FREQ` because it makes sense
     when we get only one Omega_eff for the excited state (this single
     effective frequency should be computed beforehand)
 
-    :py:attr:`ONED_FREQ`:
+    :attr:`ONED_FREQ`:
 
     .. math::
         \Omega = \frac{(\Delta Q^T D \Delta Q)}{{\Delta Q}^2}
@@ -100,12 +100,12 @@ class _ExPES(Enum):
 class ExPES:
     """Mode of approximation of the ES PES curvature.
 
-    :py:attr:`ISO_SCALE`: We suppose eigenvectors are the same, but the frequencies are
+    :attr:`ISO_SCALE`: We suppose eigenvectors are the same, but the frequencies are
     scaled by a constant factor.
 
-    :py:attr:`SINGLE_ES_FREQ`: We suppose all modes have the same frequency (that should be provided).
+    :attr:`SINGLE_ES_FREQ`: We suppose all modes have the same frequency (that should be provided).
 
-    :py:attr:`FULL_ND`: (Not implemented) We know the frequency of each ES mode.
+    :attr:`FULL_ND`: (Not implemented) We know the frequency of each ES mode.
     """
 
     ISO_SCALE: "ExPES"
@@ -164,7 +164,7 @@ def spectrum(
     :param bias: ignore low energy vibrations under bias in eV
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
     :param load_phonons: a function that takes mode_source and produce a list of phonons. By default expect an mode_source.
-    :returns: (energy_array, intensity_array)
+    :returns: :code:`(energy_array, intensity_array)`
     """
 
     if e_max is None:
@@ -219,7 +219,7 @@ def plot_spectral_function(
     :param disp: standard deviation of the gaussians in background in meV.
     :param mpl_params: dictionary of kw parameters for pyplot.plot.
     :param mask: a mask used in other computations to show on the plot.
-    :returns: (figure, (ax_FC, ax_S))
+    :returns: :code:`(figure, (ax_FC, ax_S))`
     """
     from matplotlib import pyplot as plt
 
@@ -324,7 +324,7 @@ def compute_spectrum_soft(
     :param result_store: a dictionary to store some intermediate results.
     :param ex_pes: mode of evaluation of the ES PES curvature.
     :param correct_zpe: correct the ZPL to take the zero point energy into account.
-    :returns: (energy_array, intensity_array)
+    :returns: :code:`(energy_array, intensity_array)`
     """
 
     if result_store is None:
@@ -471,14 +471,14 @@ def compute_spectrum_width_ah(
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param resolution_e: energy resolution in eV
     :param bias: ignore low energy vibrations under bias in eV
-    :param window_fn: windowing function in the form provided by numpy (see numpy.hamming)
+    :param window_fn: windowing function in the form provided by numpy (see :func:`numpy.hamming`)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
     :param shape: ZPL line shape.
     :param omega_eff_type: mode of evaluation of effective frequency.
     :param result_store: a dictionary to store some intermediate results.
     :param ex_pes: mode of evaluation of the ES PES curvature.
     :param correct_zpe: correct the ZPL to take the zero point energy into account.
-    :returns: (energy_array, intensity_array)
+    :returns: :code:`(energy_array, intensity_array)`
     """
 
     if result_store is None:
@@ -568,16 +568,18 @@ def compute_spectrum(
     :param phonons: list of modes
     :param delta_R: displacement in A
     :param zpl: zero phonon line energy in eV
-    :param fwhm: zpl lineshape full width at half maximum in eV or None
-      if fwhm is None: the raw spectrum is not convoluted with a line shape
-      if fwhm < 0: the spectrum is convoluted with a lorentizan line shape
-      if fwhm > 0: the spectrum is convoluted with a gaussian line shape
+    :param fwhm: ZPL lineshape full width at half maximum in eV or None
+
+        - if :code:`fwhm is None`: the raw spectrum is not convoluted with a line shape
+        - if :code:`fwhm < 0`: the spectrum is convoluted with a lorentizan line shape
+        - if :code:`fwhm > 0`: the spectrum is convoluted with a gaussian line shape
+
     :param e_max: max energy in eV (should be at least > 2*zpl)
     :param resolution_e: energy resolution in eV
     :param bias: ignore low energy vibrations under bias in eV
     :param window_fn: windowing function in the form provided by numpy (see numpy.hamming)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of the pre convolution gaussian
-    :returns: (energy_array, intensity_array)
+    :returns: :code:`(energy_array, intensity_array)`
     """
 
     if fwhm is None:
@@ -637,11 +639,11 @@ def compute_spectrum(
 
 
 def compute_delta_R(poscar_gs, poscar_es):
-    """Return $\\Delta R$ in A.
+    """Return :math:`\\Delta R` in A.
 
     :param poscar_gs: path to ground state positions file.
     :param poscar_es: path to excited state positions file.
-    :return: a np.array of (n, 3) shape where n is the number of atoms.
+    :returns: a :code:`numpy.ndarray((n, 3))` where `n` is the number of atoms.
     """
 
     pos1, lattice1 = load_poscar_latt(poscar_gs)
@@ -675,7 +677,7 @@ def _get_s_t_raw(t, freqs, hrs):
 def _window(data, fn=np.hamming):
     """Apply a windowing function to the data.
 
-    Use hylight.multi_phonons.rect for as a dummy window.
+    Use :func:`hylight.multi_phonons.rect` for as a dummy window.
     """
     n = len(data)
     return data * fn(n)
@@ -696,7 +698,7 @@ def hr_spectrum(phonons, delta_R, n_points=5000, disp=1):
 
 
 def _stick_smooth_spectrum(phonons, delta_R, height, n_points, disp=1):
-    """
+    """Plot a spectra of Dirac's peaks with a smoothed background.
 
     :param phonons: list of phonons
     :param delta_R: displacement in A
@@ -734,25 +736,25 @@ def rect(n):
 
 
 def sigma_hybrid(T, S, e_phonon, e_phonon_e):
-    """Compute the width of the ZPL for the ExPES.SINGLE_ES_FREQ mode."""
+    """Compute the width of the ZPL for the :attr:`ExPES.SINGLE_ES_FREQ` mode."""
     return np.sqrt(
         np.sum([sigma(T, S_i, e_i, e_phonon_e) ** 2 for S_i, e_i in zip(S, e_phonon)])
     )
 
 
 def duschinsky(phonons_a, phonons_b):
-    r"""Dushinsky matrix from b to a $S_{a \\gets b}$."""
+    r"""Dushinsky matrix from b to a :math:`S_{a \\gets b}`."""
     return rot_c_to_v(phonons_a) @ rot_c_to_v(phonons_b).transpose()
 
 
 def sigma_full_nd(T, delta_R, modes_gs, modes_es, mask=None):
-    """Compute the width of the ZPL for the ExPES.FULL_ND mode.
+    """Compute the width of the ZPL for the :attr:`ExPES.FULL_ND` mode.
 
     :param T: temperature in K.
     :param delta_R: distorsion in A.
     :param modes_gs: list of Modes of the ground state.
     :param modes_es: list of Modes of the excited state.
-    :returns: np.array with only the width for the modes that are real in ground state.
+    :returns: :class:`numpy.ndarray` with only the width for the modes that are real in ground state.
     """
     Dush_gs_to_es = duschinsky(modes_es, modes_gs)
 
@@ -807,7 +809,7 @@ def effective_phonon_energy(omega_eff_type, hrs, es, masses, delta_R=None):
     :param masses: The array of atomic masses in atomic mass unit.
     :param delta_R: The displacement between GS and ES in A.
         It is only required if omega_eff_type is ONED_FREQ.
-    :return: The effective energy in eV.
+    :returns: The effective energy in eV.
     """
 
     _es = es * eV_in_J
@@ -841,8 +843,8 @@ def dynmatshow(dynmat, blocks=None):
     """Plot the dynamical matrix.
 
     :param dynmat: numpy array representing the dynamical matrice in SI.
-    :param blocks: (optional) a list of coloured blocks in the form `(label,
-        number_of_atoms, color)`.
+    :param blocks: (optional, None) a list of coloured blocks in the form
+        :code:`(label, number_of_atoms, color)`.
     """
     from matplotlib.patches import Patch
     from matplotlib.colors import LinearSegmentedColormap
@@ -899,7 +901,7 @@ class Mask:
         """Create a mask that reject modes of energy between 0 and `bias`.
 
         :param bias: minimum of accepted energy (eV)
-        :return: a fresh instance of `Mask`.
+        :returns: a fresh instance of `Mask`.
         """
         if bias > 0:
             return cls([(0, bias * eV_in_J)])
@@ -934,7 +936,7 @@ class Mask:
         """Add a graphical representation of the mask to a plot.
 
         :param ax: a matplotlib `Axes` object.
-        :param unit: the unit of energy to use (ex: :py:attr:`hylight.constant.eV_in_J` if the plot uses eV)
+        :param unit: the unit of energy to use (ex: :attr:`hylight.constant.eV_in_J` if the plot uses eV)
         :returns: a function that must be called without arguments after resizing the plot.
         """
         from matplotlib.patches import Rectangle

@@ -27,10 +27,11 @@ cm1_in_meV = cm1_in_J / eV_in_J * 1000
 def load_phonons(path):
     """Load phonons from a CRYSTAL17 logfile.
 
-    :returns: (phonons, pops, masses)
-        phonons: list of hylight.mode.Mode instances
-        pops: population for each atom species
-        masses: list of SI masses
+    :returns: :code:`(phonons, pops, masses)`
+
+        - *phonons*: list of hylight.mode.Mode instances
+        - *pops*: population for each atom species
+        - *masses*: list of SI masses
     """
 
     phonons = []

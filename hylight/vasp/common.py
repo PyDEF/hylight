@@ -80,8 +80,10 @@ class Poscar(Struct):
         the file.
 
         :param path: path to the file to write
-        :param cartesian: if True, write the file in cartesian representation,
-            if False, write in fractional representation
+        :param cartesian:
+
+            - if True, write the file in cartesian representation,
+            - if False, write in fractional representation
         """
         with open(path, "w+") as out:
             species = [(n, self.species[n]) for n in self._species_names]

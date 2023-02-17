@@ -238,8 +238,11 @@ the file.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>path</strong> – path to the file to write</p></li>
-<li><p><strong>cartesian</strong> – if True, write the file in cartesian representation,
-if False, write in fractional representation</p></li>
+<li><p><strong>cartesian</strong> – <ul>
+<li><p>if True, write the file in cartesian representation,</p></li>
+<li><p>if False, write in fractional representation</p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -255,15 +258,21 @@ if False, write in fractional representation</p></li>
 <dt class="sig sig-object py" id="hylight.vasp.loader.load_phonons">
 <span class="sig-prename descclassname"><span class="pre">hylight.vasp.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.vasp.loader.load_phonons" title="Permalink to this definition">#</a></dt>
 <dd><p>Load phonons from a OUTCAR.</p>
-<p>Remark: This function is a bit heavy because of text parsing. You may want
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is a bit heavy because of text parsing. You may want
 to use hyligh-modes to parse one for all the file and later load that
-preparsed file using npz.load_phonons instead.</p>
+preparsed file using <a class="reference internal" href="hylight.html#hylight.npz.load_phonons" title="hylight.npz.load_phonons"><code class="xref py py-func docutils literal notranslate"><span class="pre">hylight.npz.load_phonons()</span></code></a> instead.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(phonons, pops, masses)
-phonons: list of hylight.mode.Mode instances
-pops: population for each atom species
-masses: list of SI masses</p>
+<dd class="field-odd"><p><p><code class="code docutils literal notranslate"><span class="pre">(phonons,</span> <span class="pre">pops,</span> <span class="pre">masses)</span></code></p>
+<ul class="simple">
+<li><p><em>phonons</em>: list of <a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">hylight.mode.Mode</span></code></a> instances</p></li>
+<li><p><em>pops</em>: population for each atom species</p></li>
+<li><p><em>masses</em>: list of SI masses</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -274,7 +283,7 @@ masses: list of SI masses</p>
 <dd><p>Read the positions from a POSCAR.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a np.ndarray((natoms, 3), dtype=float)</p>
+<dd class="field-odd"><p>a <code class="code docutils literal notranslate"><span class="pre">numpy.ndarray((natoms,</span> <span class="pre">3),</span> <span class="pre">dtype=float)</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -285,9 +294,12 @@ masses: list of SI masses</p>
 <dd><p>Read the positions and the lattice parameters from a POSCAR.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a (np.ndarray((natoms, 3), dtype=float), nd.array((3, 3), dtype=float))
-first element is the set of positions
-second element is the lattice parameters</p>
+<dd class="field-odd"><p><p>a <code class="code docutils literal notranslate"><span class="pre">(np.ndarray((natoms,</span> <span class="pre">3),</span> <span class="pre">dtype=float),</span> <span class="pre">nd.array((3,</span> <span class="pre">3),</span> <span class="pre">dtype=float))</span></code></p>
+<ul class="simple">
+<li><p>first element is the set of positions</p></li>
+<li><p>second element is the lattice parameters</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -313,10 +325,13 @@ to read outcar</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(mu, pes_left, pes_right)
-mu: the effective mass in kg
-pes_left: a Poscar instance representing the left displacement
-pes_right: a Poscar instance representing the right displacement</p>
+<dd class="field-even"><p><p><code class="code docutils literal notranslate"><span class="pre">(mu,</span> <span class="pre">pes_left,</span> <span class="pre">pes_right)</span></code></p>
+<ul class="simple">
+<li><p>mu: the effective mass in kg</p></li>
+<li><p>pes_left: a Poscar instance representing the left displacement</p></li>
+<li><p>pes_right: a Poscar instance representing the right displacement</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -352,6 +367,9 @@ pes_right: a Poscar instance representing the right displacement</p>
               </a>
           </div>
           <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, PyDEF development team
+            </div>
             This document is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

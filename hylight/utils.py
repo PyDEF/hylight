@@ -64,13 +64,15 @@ def gen_translat(lattice: np.ndarray):
 def measure_fwhm(x, y):
     """Measure the full width at half maximum of a given spectrum.
 
-    Warning: It may fail if there are more than one band that reach half
-    maximum in the array. In this case you may want to use select_interval to
-    make a window around a single band.
+    .. warning::
+
+        It may fail if there are more than one band that reach half
+        maximum in the array. In this case you may want to use
+        select_interval to make a window around a single band.
 
     :param x: the energy array
     :param y: the intensity array
-    :return: FWHM in the same unit as x.
+    :returns: FWHM in the same unit as x.
     """
     mx = np.max(y)
 
@@ -87,9 +89,9 @@ def select_interval(x, y, emin, emax, normalize=False, npoints=None):
     :param emax: higher bound for the window
     :param normalize: if true, the result y array is normalized
     :param npoints: if an integer, the result arrays will be
-        interpolated to contains exactly npoints linearly distributed between emin
-        and emax.
-    :return: (windowed_x, windowed_y)
+        interpolated to contains exactly npoints linearly distributed
+        between emin and emax.
+    :return: :code:`(windowed_x, windowed_y)`
     """
     slice_ = (x > emin) * (x < emax)
     xs, ys = x[slice_], y[slice_] / (np.max(y[slice_]) if normalize else 1.0)
@@ -123,8 +125,9 @@ def gaussian(e, sigma, standard=True):
     :param e: mean
     :param sigma: standard deviation
     :param standard:
-        if True the curve is normalized to have an area of 1
-        if False the curve is normalized to have a maximum of 1
+
+        - if True the curve is normalized to have an area of 1
+        - if False the curve is normalized to have a maximum of 1
     """
     if standard:
         return np.exp(-(e**2) / (2 * sigma**2)) / (sigma * np.sqrt(2 * np.pi))

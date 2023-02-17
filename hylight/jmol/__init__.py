@@ -40,7 +40,15 @@ def write_jmol_options(f, opts):
     """Write options in the form of a JMol script.
 
     :param f: a file like object.
-    :param opts: a set of options (see export).
+    :param opts: a dictionary of options
+
+        - *unitcell*: lattice vectors as a 3x3 matrix where vectors are in rows.
+        - *bonds*: a list of :code:`(sp_a, sp_b, min_dist, max_dist)` where species
+            names are strings of names of species and `*_dist` are interatomic distances
+            in Angstrom.
+        - *atom_colors*: a list of (sp, color) where sp is the name of a
+            species and color is the name of a color or an HTML hex code (example
+            :code:`"#FF0000"` for pure red).
     """
     if "unitcell" in opts:
         print(
@@ -78,13 +86,7 @@ def export(dest, mode, compression=ZIP_DEFLATED, **opts):
     :param dest: path to the JMol zip file.
     :param mode: the mode to export.
     :param compression: (optional) zipfile compression algorithm.
-    :keyword unitcell: lattice vectors as a 3x3 matrix where vectors are in rows.
-    :keyword bonds: a list of `(sp_a, sp_b, min_dist, max_dist)` where species
-        names are strings of names of species and `*_dist` are interatomic distances
-        in Angstrom.
-    :keyword atom_colors: a list of (sp, color) where sp is the name of a
-        species and color is the name of a color or an HTML hex code (example
-        "#FF0000" for pure red).
+    :param \\**opts: see :func:`write_jmol_options`
     """
     with ZipFile(dest, mode="w", compression=compression) as ar:
         ar.writestr("JmolManifest.txt", manifest.encode("utf8"))
@@ -110,13 +112,7 @@ def export_disp(dest, struct, disp, compression=ZIP_DEFLATED, **opts):
     :param struct: the reference position (a :py:class:`hylight.struct.Struct` instance).
     :param disp: an array of displacements.
     :param compression: (optional) zipfile compression algorithm.
-    :keyword unitcell: lattice vectors as a 3x3 matrix where vectors are in rows.
-    :keyword bonds: a list of `(sp_a, sp_b, min_dist, max_dist)` where species
-        names are strings of names of species and `*_dist` are interatomic distances
-        in Angstrom.
-    :keyword atom_colors: a list of (sp, color) where sp is the name of a
-        species and color is the name of a color or an HTML hex code (example
-        "#FF0000" for pure red).
+    :param \\**opts: see :func:`write_jmol_options`
     """
     with ZipFile(dest, mode="w", compression=compression) as ar:
         ar.writestr("JmolManifest.txt", manifest.encode("utf8"))

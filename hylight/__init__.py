@@ -1,6 +1,7 @@
 """The Hylight package.
 
-License
+License (GPLv3):
+
     Copyright (C) 2023  PyDEF development team
 
     This program is free software: you can redistribute it and/or modify

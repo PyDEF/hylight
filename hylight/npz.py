@@ -28,7 +28,7 @@ def archive_modes(modes, dest, compress=False):
 
     :param modes: a list of Mode objects.
     :param dest: the path to write the modes to.
-    :return: the data returned by load_phonons.
+    :returns: the data returned by load_phonons.
     """
 
     if isinstance(modes, tuple) and len(modes) == 3 and isinstance(modes[0], list):
@@ -106,8 +106,8 @@ def load_phonons_pickle(source, gz=False):
     with open(source, "rb") as f:
         try:
             label, data = pickle.load(f)
-        except ValueError:
-            raise ValueError("This is not a pickled mode file.")
+        except ValueError as e:
+            raise ValueError("This is not a pickled mode file.") from e
 
     # legacy format
     if label != "hylight-pkl-modes":

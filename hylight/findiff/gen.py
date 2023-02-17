@@ -38,13 +38,13 @@ def save_random_disp(
 
     :param source: reference POSCAR
     :param disp_dest: (optional, ".") directory name or callable that determine
-      the destination of the POSCARs.
+        the destination of the POSCARs.
     :param basis_dest: (optional, "basis.npy") Name of the basis set file. It
-      is a npy file made with numpy's save function.
+        is a npy file made with numpy's save function.
     :param amplitude: (optional, 0.01) amplitude of the displacements in Angstrom.
     :param seed: (optional, 0) random seed to use to generate the displacements.
     :param symm: (optional, False) when True, generate both ref+delta and
-      ref-delta POSCARs for each direction.
+        ref-delta POSCARs for each direction.
     """
     ref = Poscar.from_file(source)
     n, _ = ref.raw.shape
@@ -70,12 +70,12 @@ def save_disp_from_basis(
 
     :param source: reference POSCAR
     :param basis_source: Name of the basis set file. It is a npy file made with
-      numpy's save function. Each row is a direction.
+        numpy's save function. Each row is a direction.
     :param disp_dest: (optional, ".") directory name or callable that determine
-      the destination of the POSCARs.
+        the destination of the POSCARs.
     :param amplitude: (optional, 0.01) amplitude of the displacements in Angstrom.
     :param symm: (optional, False) when True, generate both ref+delta and
-      ref-delta POSCARs for each direction.
+        ref-delta POSCARs for each direction.
     """
     ref = Poscar.from_file(source)
     n, _ = ref.raw.shape
@@ -94,10 +94,10 @@ def save_disp(ref, basis, disp_dest=".", amplitude=0.01, symm=False):
     :param ref: reference Poscar instancce
     :param basis: nupy array where each row is a direction.
     :param disp_dest: (optional, ".") directory name or callable that determine
-      the destination of the POSCARs.
+        the destination of the POSCARs.
     :param amplitude: (optional, 0.01) amplitude of the displacements in Angstrom.
     :param symm: (optional, False) when True, generate both ref+delta and
-      ref-delta POSCARs for each direction.
+        ref-delta POSCARs for each direction.
     """
     assert isinstance(ref, Poscar)
     assert ref.raw.shape[0] * 3 == basis.shape[0] == basis.shape[1]
@@ -121,7 +121,7 @@ def gen_disp(ref, basis, amplitude=0.01, symm=False):
     :param basis: nupy array where each row is a direction.
     :param amplitude: (optional, 0.01) amplitude of the displacements in Angstrom.
     :param symm: (optional, False) when True, generate both ref+delta and
-      ref-delta POSCARs for each direction.
+        ref-delta POSCARs for each direction.
     """
     assert isinstance(ref, Poscar)
     n, _ = ref.raw.shape
@@ -147,7 +147,7 @@ def random_basis(n, seed=0):
 
     :param n: Rank of the basis
     :param seed: (optional, 0) randomness seed.
-    :return: a (n, n) orthonormal numpy array.
+    :returns: a (n, n) orthonormal numpy array.
     """
     rs = RandomState(MT19937(SeedSequence(seed)))
     q, _ = np.linalg.qr(rs.rand(n, n))

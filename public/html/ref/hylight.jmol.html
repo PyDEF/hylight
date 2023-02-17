@@ -217,13 +217,7 @@
 <li><p><strong>dest</strong> – path to the JMol zip file.</p></li>
 <li><p><strong>mode</strong> – the mode to export.</p></li>
 <li><p><strong>compression</strong> – (optional) zipfile compression algorithm.</p></li>
-<li><p><strong>unitcell</strong> – lattice vectors as a 3x3 matrix where vectors are in rows.</p></li>
-<li><p><strong>bonds</strong> – a list of <cite>(sp_a, sp_b, min_dist, max_dist)</cite> where species
-names are strings of names of species and <cite>*_dist</cite> are interatomic distances
-in Angstrom.</p></li>
-<li><p><strong>atom_colors</strong> – a list of (sp, color) where sp is the name of a
-species and color is the name of a color or an HTML hex code (example
-“#FF0000” for pure red).</p></li>
+<li><p><strong>**opts</strong> – see <a class="reference internal" href="#hylight.jmol.write_jmol_options" title="hylight.jmol.write_jmol_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_jmol_options()</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -240,13 +234,7 @@ species and color is the name of a color or an HTML hex code (example
 <li><p><strong>struct</strong> – the reference position (a <a class="reference internal" href="hylight.html#hylight.struct.Struct" title="hylight.struct.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">hylight.struct.Struct</span></code></a> instance).</p></li>
 <li><p><strong>disp</strong> – an array of displacements.</p></li>
 <li><p><strong>compression</strong> – (optional) zipfile compression algorithm.</p></li>
-<li><p><strong>unitcell</strong> – lattice vectors as a 3x3 matrix where vectors are in rows.</p></li>
-<li><p><strong>bonds</strong> – a list of <cite>(sp_a, sp_b, min_dist, max_dist)</cite> where species
-names are strings of names of species and <cite>*_dist</cite> are interatomic distances
-in Angstrom.</p></li>
-<li><p><strong>atom_colors</strong> – a list of (sp, color) where sp is the name of a
-species and color is the name of a color or an HTML hex code (example
-“#FF0000” for pure red).</p></li>
+<li><p><strong>**opts</strong> – see <a class="reference internal" href="#hylight.jmol.write_jmol_options" title="hylight.jmol.write_jmol_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_jmol_options()</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -265,7 +253,23 @@ species and color is the name of a color or an HTML hex code (example
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f</strong> – a file like object.</p></li>
-<li><p><strong>opts</strong> – a set of options (see export).</p></li>
+<li><p><strong>opts</strong> – <p>a dictionary of options</p>
+<ul>
+<li><p><em>unitcell</em>: lattice vectors as a 3x3 matrix where vectors are in rows.</p></li>
+<li><dl class="simple">
+<dt><em>bonds</em>: a list of <code class="code docutils literal notranslate"><span class="pre">(sp_a,</span> <span class="pre">sp_b,</span> <span class="pre">min_dist,</span> <span class="pre">max_dist)</span></code> where species</dt><dd><p>names are strings of names of species and <cite>*_dist</cite> are interatomic distances
+in Angstrom.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><em>atom_colors</em>: a list of (sp, color) where sp is the name of a</dt><dd><p>species and color is the name of a color or an HTML hex code (example
+<code class="code docutils literal notranslate"><span class="pre">&quot;#FF0000&quot;</span></code> for pure red).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -323,6 +327,9 @@ species and color is the name of a color or an HTML hex code (example
               </a>
           </div>
           <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, PyDEF development team
+            </div>
             This document is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

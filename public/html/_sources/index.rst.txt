@@ -41,7 +41,7 @@ Content
    :maxdepth: 3
 
    tutorial/tutorial.ipynb
-   gen/hylight
+   ref/hylight
 
 Indices and tables
 ------------------

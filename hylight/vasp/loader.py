@@ -31,14 +31,16 @@ head_re = re.compile(r"^([ 0-9]{4}) (f  |f/i)= *.* (\d+\.\d+) meV\s")
 def load_phonons(path):
     """Load phonons from a OUTCAR.
 
-    Remark: This function is a bit heavy because of text parsing. You may want
-    to use hyligh-modes to parse one for all the file and later load that
-    preparsed file using npz.load_phonons instead.
+    .. note::
+        This function is a bit heavy because of text parsing. You may want
+        to use hyligh-modes to parse one for all the file and later load that
+        preparsed file using :func:`hylight.npz.load_phonons` instead.
 
-    :returns: (phonons, pops, masses)
-      phonons: list of hylight.mode.Mode instances
-      pops: population for each atom species
-      masses: list of SI masses
+    :returns: :code:`(phonons, pops, masses)`
+
+      - *phonons*: list of :class:`hylight.mode.Mode` instances
+      - *pops*: population for each atom species
+      - *masses*: list of SI masses
     """
     phonons = []
     pops = []
@@ -112,7 +114,7 @@ def load_phonons(path):
 def load_poscar(path):
     """Read the positions from a POSCAR.
 
-    :returns: a np.ndarray((natoms, 3), dtype=float)
+    :returns: a :code:`numpy.ndarray((natoms, 3), dtype=float)`
     """
     return Poscar.from_file(path).raw
 
@@ -120,9 +122,10 @@ def load_poscar(path):
 def load_poscar_latt(path):
     """Read the positions and the lattice parameters from a POSCAR.
 
-    :returns: a (np.ndarray((natoms, 3), dtype=float), nd.array((3, 3), dtype=float))
-      first element is the set of positions
-      second element is the lattice parameters
+    :returns: a :code:`(np.ndarray((natoms, 3), dtype=float), nd.array((3, 3), dtype=float))`
+
+        - first element is the set of positions
+        - second element is the lattice parameters
     """
     p = Poscar.from_file(path)
     return p.raw, p.cell_parameters

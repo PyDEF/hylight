@@ -44,7 +44,7 @@ def spectrum(
     :param fc_shift_e: Franck-Condon shift of absobtion in eV
     :param e_phonon_g: Mode energy in ground state in eV
     :param hard_osc: boolean, use the hard oscillator mode:
-      vibration mode has the same energy in GD and ES
+        vibration mode has the same energy in GD and ES
     :param n_points: number of points in the spectrum
     :param e_min: energy lower bound for the spectrum, in eV
     :param e_max: energy higher bound for the spectrum, in eV

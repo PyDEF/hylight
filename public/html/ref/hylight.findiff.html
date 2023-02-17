@@ -235,11 +235,14 @@
 <p>This is an ad hoc parser, so it may fail if the OUTCAR changes a lot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(atoms, ref, pops, masses)
-atoms: list of species names
-pos: positions of atoms
-pops: population for each atom species
-masses: list of SI masses</p>
+<dd class="field-odd"><p><p><code class="code docutils literal notranslate"><span class="pre">(atoms,</span> <span class="pre">ref,</span> <span class="pre">pops,</span> <span class="pre">masses)</span></code></p>
+<ul class="simple">
+<li><p><em>atoms</em>: list of species names</p></li>
+<li><p><em>pos</em>: positions of atoms</p></li>
+<li><p><em>pops</em>: population for each atom species</p></li>
+<li><p><em>masses</em>: list of SI masses</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -260,17 +263,20 @@ of the displacements in the array.</p></li>
 <li><p><strong>amplitude</strong> – amplitude of the displacement, only used if basis_source <em>is not</em> None.</p></li>
 <li><p><strong>nproc</strong> – number of parallel processes used to load the files.</p></li>
 <li><p><strong>symm</strong> – If True, use symmetric differences. OUTCARs <em>must</em> be ordered
-as [+delta_1, -delta_1, +delta_2, -delta_2, …].</p></li>
+as <code class="code docutils literal notranslate"><span class="pre">[+delta_1,</span> <span class="pre">-delta_1,</span> <span class="pre">+delta_2,</span> <span class="pre">-delta_2,</span> <span class="pre">...]</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the same tuple as the load_phonons functions.</p>
 </dd>
 </dl>
-<p>Remark: When using non canonical basis (displacements are not along a
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using non canonical basis (displacements are not along a
 single degree of freedom of a single atom at a time) it may be important to
 provide the basis excplicity because it will avoid important rounding
 errors found in the OUTCAR.</p>
+</div>
 </dd></dl>
 
 </section>
@@ -423,6 +429,9 @@ ref-delta POSCARs for each direction.</p></li>
               </a>
           </div>
           <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, PyDEF development team
+            </div>
             This document is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

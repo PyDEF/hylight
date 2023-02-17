@@ -32,19 +32,21 @@ def process_phonons(
     :param outputs: list of OUTCAR paths corresponding to the finite displacements.
     :param ref_output: path to non displaced OUTCAR.
     :param basis_source: read a displacement basis from a path. The file is a
-      npy file from numpy's save. If None, the basis is built from the
-      displacements. If not None, the order of outputs *must* match the order
-      of the displacements in the array.
+        npy file from numpy's save. If None, the basis is built from the
+        displacements. If not None, the order of outputs *must* match the order
+        of the displacements in the array.
     :param amplitude: amplitude of the displacement, only used if basis_source *is not* None.
     :param nproc: number of parallel processes used to load the files.
     :param symm: If True, use symmetric differences. OUTCARs *must* be ordered
-      as [+delta_1, -delta_1, +delta_2, -delta_2, ...].
+        as :code:`[+delta_1, -delta_1, +delta_2, -delta_2, ...]`.
     :returns: the same tuple as the load_phonons functions.
 
-    Remark: When using non canonical basis (displacements are not along a
-    single degree of freedom of a single atom at a time) it may be important to
-    provide the basis excplicity because it will avoid important rounding
-    errors found in the OUTCAR.
+    .. note::
+
+        When using non canonical basis (displacements are not along a
+        single degree of freedom of a single atom at a time) it may be important to
+        provide the basis excplicity because it will avoid important rounding
+        errors found in the OUTCAR.
     """
     lattice, atoms, _, pops, masses = get_ref_info(ref_output)
 
@@ -249,11 +251,12 @@ def get_ref_info(path):
 
     This is an ad hoc parser, so it may fail if the OUTCAR changes a lot.
 
-    :returns: (atoms, ref, pops, masses)
-        atoms: list of species names
-        pos: positions of atoms
-        pops: population for each atom species
-        masses: list of SI masses
+    :returns: :code:`(atoms, ref, pops, masses)`
+
+        - *atoms*: list of species names
+        - *pos*: positions of atoms
+        - *pops*: population for each atom species
+        - *masses*: list of SI masses
     """
     if path.endswith(".xml"):
         raise ValueError("vasprun.xml is not supported for the reference file.")
@@ -342,8 +345,8 @@ def dropwhile_err(pred, it, else_err):
 
     try:
         first = next(rest)
-    except StopIteration:
-        raise else_err
+    except StopIteration as e:
+        raise else_err from e
     else:
         yield first
 

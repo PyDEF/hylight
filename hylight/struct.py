@@ -31,10 +31,13 @@ class Struct:
         See also :py:class:`hylight.vasp.common.Poscar`.
 
         :param cell_parameters: a 3x3 np.array with lattice vectors in line
-        :param species: a dict[str, np.array] where the key is the name of the
+        :param species: a `dict[str, numpy.ndarray]` where the key is the name of the
           species and the array list positions.
-          WARNING: Positions are in cartesian representation, not in fractional
-          representation. Unit is Angstrom.
+
+          .. warning::
+
+            Positions are in cartesian representation, not in fractional
+            representation. Unit is Angstrom.
         """
         self.cell_parameters = cell_parameters
         self.species = species

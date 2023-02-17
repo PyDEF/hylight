@@ -12,12 +12,15 @@ BUILDDIR      = ../public
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
+regen: wipe gen
+	true
+
 gen:
-	sphinx-apidoc --ext-autodoc --ext-mathjax -o gen ../hylight '../hylight/cli/*'
-	rm gen/modules.rst
+	sphinx-apidoc --ext-autodoc --ext-mathjax -o ref ../hylight '../hylight/cli/*'
+	rm ref/modules.rst
 
 wipe: clean
-	rm -f gen/*
+	rm -f ref/*
 
 html: gen
 
