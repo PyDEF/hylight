@@ -16,8 +16,7 @@ regen: wipe gen
 	true
 
 gen:
-	sphinx-apidoc --ext-autodoc
-	--ext-mathjax -o ref ../hylight '../hylight/cli/*'
+	sphinx-apidoc --ext-autodoc --ext-mathjax -o ref ../hylight '../hylight/cli/*'
 	rm ref/modules.rst
 
 wipe: clean
