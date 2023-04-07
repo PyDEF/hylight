@@ -948,7 +948,7 @@ class Mask:
             rects.append(p)
 
         def resize():
-            (_, h) = ax.transAxes.transform([(0, 1)])
+            (_, h) = ax.transAxes.transform((0, 1))
             for r in rects:
                 r.set(height=h)
 

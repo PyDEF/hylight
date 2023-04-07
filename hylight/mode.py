@@ -89,19 +89,19 @@ class Mode:
 
         traj = []
         for i in range(n):
-            coords = self.ref + np.sin(two_pi * i / n) * amplitude * self.delta
+            coords = self.ref + np.sin(two_pi * i / n) * amplitude * self.delta / np.sqrt(atomic_mass)
             traj.append(Atoms(self.atoms, coords))
 
         return traj
 
-    def to_jmol(self, **opts):
+    def to_jmol(self, dest, **opts):
         """Write a mode into a Jmol file.
 
         See :py:func:`hylight.jmol.export` for the parameters.
         """
         from .jmol import export
 
-        return export(self, **opts)
+        return export(dest, self, **opts)
 
 
 def rot_c_to_v(phonons):

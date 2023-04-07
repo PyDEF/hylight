@@ -85,7 +85,7 @@ def load_phonons(path):
 
         head = next(log).strip()
         c = 0
-        while "FREQ" in head:
+        while head.startswith("FREQ"):
             freqs = map(float, head.strip().split()[1:])
             next(log)
             ats = []
@@ -130,7 +130,7 @@ def load_phonons(path):
                     Mode(names, c, f >= 0, abs(f) * cm1_in_meV, pos, eigenvec, masses)
                 )
             next(log)
-            head = next(log)
+            head = next(log).strip()
 
     pops = [sum(1 for _ in s) for (_, s) in groupby(names)]
     return phonons, pops, masses
