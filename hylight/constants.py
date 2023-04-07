@@ -37,6 +37,8 @@ kb: float = 1.38064852e-23  # J.K-1 Boltzmann constant
 
 kb_eV: float = kb / eV_in_J  # eV.K-1
 
+eV1_in_nm: float = h_c * 1e9 / eV_in_J
+
 sigma_to_fwhm: float = 2.3548200450309493  # 2 * sqrt(2 * log(2))
 
 inv_four_pi_eps: float = 8.987_551_784e9  # SI
