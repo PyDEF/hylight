@@ -108,6 +108,8 @@ import os
 from argparse import ArgumentParser
 from contextlib import contextmanager
 from functools import wraps
+from statistics import mean, stdev, variance
+from time import perf_counter
 
 
 _debug = os.environ.get("DEBUG", False) == "1"
@@ -237,6 +239,8 @@ def error_catch():
 
     Context manager to provide cleaner errors when building a script around a
     function that can raise.
+    If the environment variable DEBUG is set to "yes", this does nothing in
+    order to let the exception crash the program and show the traceback.
     """
     if _debug:
         yield
@@ -295,6 +299,9 @@ def positional(name, default=_not_a_value, **kwargs):
 def rest(name, **kwargs):
     """Add a catch-all parameter for the end of the parameter list.
 
+    If no default value is provided, it expect at least one parameter.
+    If a default value is provided, it will produce the default value
+    if no parameter match.
     The name is used as the metavar and must not start with a dash.
     kwargs are passed to ArgumentParser.add_argument
     """
@@ -329,3 +336,94 @@ def optional(*names, **kwargs):
         )
 
     return add
+
+
+class PerfCounterCollec:
+    """A collection of perfomance counter.
+
+    A simple facility to time sections of a program.
+
+    Example:
+
+        pc = PerfCounterCollec()
+
+        with pc.foo:
+            # do some stuff
+
+        with pc.bar:
+            # do other stuff
+
+        print(pc.summary())
+
+        # foo: 0.65344 s
+        # bar: 1.32645 s
+    """
+
+    def __init__(self, format="{name}: {c.total:.05f} s"):
+        self.counters = {}
+        self.fmt = format
+
+    def __getattr__(self, name):
+        return self.counters.setdefault(name, PerfCounter())
+
+    def collect(self):
+        for name, counter in self.counters.items():
+            yield (name, counter)
+
+    def summary(self, format=None):
+        lines = []
+
+        if format is None:
+            fmt = self.fmt
+        else:
+            fmt = format
+
+        for name, counter in self.counters.items():
+            lines.append(fmt.format(name=name, c=counter))
+
+        return "\n".join(lines)
+
+
+class PerfCounter:
+    """An individual counter
+
+    Use it as a context manager.
+    Each time it is entered, it start a new counter.
+    Each time it is exited, it add the elapsed time of the last counter to the total.
+    You can also access basic statistics (number of slices, mean and standard deviation).
+    """
+
+    def __init__(self):
+        self.slices = []
+        self.opened = []
+
+    def __enter__(self):
+        self.opened.append(perf_counter())
+
+    def __exit__(self, *args):
+        self.slices.append(perf_counter() - self.opened.pop())
+
+    @property
+    def total(self):
+        "Total time spent under this counter."
+        return sum(self.slices)
+
+    @property
+    def slice_number(self):
+        "Number of separate slices added to this counter."
+        return len(self.slices)
+
+    @property
+    def mean(self):
+        "Mean time spent in a single slice."
+        return mean(self.slices)
+
+    @property
+    def stdev(self):
+        "Standard deviation of time spent in a slice."
+        return stdev(self.slices)
+
+    @property
+    def variance(self):
+        "Variance of time spent in a slice."
+        return variance(self.slices)
