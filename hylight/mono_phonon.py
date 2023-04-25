@@ -18,67 +18,31 @@ import logging
 
 import numpy as np
 
-from .constants import kb_eV
 from .utils import gaussian
 
 
 logger = logging.getLogger("hylight")
 
 
-def spectrum(
-    e_zpl,
-    T,
-    fc_shift_g,
-    fc_shift_e,
-    e_phonon_g,
-    hard_osc=False,
-    n_points=5000,
-    e_min=0,
-    e_max=5,
-):
-    """Compute a spectrum from a single vibrational mode and some energetic terms.
-
-    :param e_zpl: energy of the zero phonon line, in eV
-    :param T: temperature in K
-    :param fc_shift_g: Franck-Condon shift of emmission in eV
-    :param fc_shift_e: Franck-Condon shift of absobtion in eV
-    :param e_phonon_g: Mode energy in ground state in eV
-    :param hard_osc: boolean, use the hard oscillator mode:
-        vibration mode has the same energy in GD and ES
-    :param n_points: number of points in the spectrum
-    :param e_min: energy lower bound for the spectrum, in eV
-    :param e_max: energy higher bound for the spectrum, in eV
-    """
-
-    e = np.linspace(e_min, e_max, n_points)
-
-    if hard_osc:
-        stokes_shift = fc_shift_e + fc_shift_g
-        S = 0.5 * stokes_shift / e_phonon_g
-        sig = sigma(T, S, e_phonon_g, e_phonon_g)
-    else:
-        e_phonon_e = e_phonon_g * np.sqrt(fc_shift_e / fc_shift_g)
-        S = fc_shift_g / e_phonon_g
-        sig = sigma(T, S, e_phonon_g, e_phonon_e)
-
-    return compute_spectrum(e, e_zpl, S, sig, e_phonon_e)
-
-
 def compute_spectrum(
-    e,
     e_zpl,
     S,
     sig,
     e_phonon_g,
+    e=None,
 ):
     """Compute a spectrum from 1D model with experimental like inputs
 
-    :param e: a numpy array of energies to compute the spectrum at
     :param e_zpl: energy of the zero phonon line, in eV
     :param S: the emission Huang-Rhys factor
     :param sig: the lineshape standard deviation
     :e_phonon_g: the ground state phonon energy
+    :param e: (optional, None) a numpy array of energies to compute the spectrum at
+      if ommited, an array ranging from 0 to 3*e_zpl will be created.
     """
+
+    if e is None:
+        e = np.arange(0, 3 * e_zpl, 1e-3)
 
     sp = np.zeros(e.shape)
 
@@ -103,19 +67,6 @@ def compute_spectrum(
         sp / np.max(sp),
         [[c / np.max(sp) for c in details]],
     )
-
-
-def sigma(T, S_em, e_phonon_g, e_phonon_e):
-    """Temperature dependant standard deviation of the lineshape.
-
-    :param T: temperature in K
-    :param S_em: emmission Huang-Rhys factor
-    :param e_phonon_g: energy of the GS PES vibration (eV)
-    :param e_phonon_e: energy of the ES PES vibration (eV)
-    """
-    coth = 1.0 / np.tanh(e_phonon_e / (2 * kb_eV * T)) if T > 0.0 else 1.0
-
-    return np.sqrt(S_em * e_phonon_g**3 / e_phonon_e * coth)
 
 
 def huang_rhys(stokes_shift, e_phonon):
