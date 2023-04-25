@@ -253,7 +253,7 @@ def make_line_shape(t, sigma_si, shape):
         sigma_freq = two_pi * sigma_si / h_si
         return np.sqrt(2) * np.array(gaussian(t, 1 / sigma_freq), dtype=complex)
     else:
-        raise ValueError(f"Unimplemented or unkown lineshape {shape}.")
+        raise ValueError(f"Unimplemented or unknown lineshape {shape}.")
 
 
 def compute_delta_R(poscar_gs, poscar_es):
