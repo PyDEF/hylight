@@ -28,6 +28,7 @@ import numpy as np
 
 from ..constants import THz_in_meV
 from ..mode import Mode
+from ..typing import NDArray
 
 import yaml
 
@@ -35,17 +36,6 @@ try:  # Use CLoader if possible, it is much faster
     from yaml import CLoader as Loader
 except ImportError:
     from yaml import Loader
-
-
-try:  # numpy.typing is a feature of Numpy 1.20
-    from numpy.typing import NDArray
-except ImportError:
-    from typing import Generic, TypeVar
-
-    T = TypeVar("T")
-
-    class NDArray(Generic[T]):
-        pass
 
 
 def load_phonons(dir_: str) -> tuple[list[Mode], list[int], list[float]]:
@@ -90,7 +80,7 @@ def load_phonons_bandyaml(bandy: str) -> tuple[list[Mode], list[int], list[float
     with open(bandy) as f:
         raw = yaml.load(f, Loader)
 
-    struct = Struct.from_yaml_cell(raw)
+    struct = PPStruct.from_yaml_cell(raw)
     return _load_phonons_bandyaml(struct, raw)
 
 
@@ -108,18 +98,18 @@ def load_phonons_qpointsyaml(
     return _load_phonons_qpointsyaml(struct, qpyaml)
 
 
-def get_struct(phyaml: str) -> Struct:
+def get_struct(phyaml: str) -> PPStruct:
     if not isfile(phyaml):
         raise FileNotFoundError("Missing file phonopy.yaml")
 
     with open(phyaml) as f:
         raw = yaml.load(f, Loader)
 
-    return Struct.from_yaml_cell(raw["supercell"])
+    return PPStruct.from_yaml_cell(raw["supercell"])
 
 
 def _load_phonons_bandsh5(
-    struct: Struct, path: str, op
+    struct: PPStruct, path: str, op
 ) -> tuple[list[Mode], list[int], list[float]]:
     import h5py
 
@@ -143,7 +133,7 @@ def _load_phonons_bandsh5(
 
 
 def _load_phonons_qpointsh5(
-    struct: Struct, path: str, op
+    struct: PPStruct, path: str, op
 ) -> tuple[list[Mode], list[int], list[float]]:
     import h5py
 
@@ -164,7 +154,7 @@ def _load_phonons_qpointsh5(
 
 
 def _load_phonons_h5(
-    struct: Struct, qp: dict, ev: list[NDArray], fr: list[float]
+    struct: PPStruct, qp: dict, ev: list[NDArray], fr: list[float]
 ) -> tuple[list[Mode], list[int], list[float]]:
     n = len(struct.atoms) * 3
 
@@ -188,7 +178,7 @@ def _load_phonons_h5(
 
 
 def _load_phonons_bandyaml(
-    struct: Struct, raw: dict
+    struct: PPStruct, raw: dict
 ) -> tuple[list[Mode], list[int], list[float]]:
     raw_ph = raw["phonon"][0]
     # TODO actually find the Gamma point
@@ -197,7 +187,7 @@ def _load_phonons_bandyaml(
 
 
 def _load_phonons_qpointsyaml(
-    struct: Struct, path: str
+    struct: PPStruct, path: str
 ) -> tuple[list[Mode], list[int], list[float]]:
     with open(path) as f:
         raw = yaml.load(f, Loader)
@@ -239,7 +229,7 @@ def _load_phonons_yaml(struct, point) -> tuple[list[Mode], list[int], list[float
 
 
 @dataclass
-class Struct:
+class PPStruct:
     pops: list[int]
     lattice: NDArray[float]
     masses: list[float]
@@ -247,7 +237,7 @@ class Struct:
     ref: NDArray[float]
 
     @classmethod
-    def from_yaml_cell(cls, cell: dict) -> "Struct":
+    def from_yaml_cell(cls, cell: dict) -> "PPStruct":
         lattice = np.array(cell["lattice"])
         masses = [p["mass"] for p in cell["points"]]
         atoms = [p["symbol"] for p in cell["points"]]

@@ -38,6 +38,8 @@ class Struct:
 
             Positions are in cartesian representation, not in fractional
             representation. Unit is Angstrom.
+        :param species_names: (optional, None) list of species names specifying in wich order
+          the positions are found in the raw representation.
         """
         self.cell_parameters = cell_parameters
         self.species = species
@@ -48,6 +50,11 @@ class Struct:
             )
         else:
             self._species_names = list(species_names)
+
+    @property
+    def species_names(self):
+        "Names of species in the same order as found in the raw positions."
+        return self._species_names.copy()
 
     @property
     def atoms(self):
