@@ -2,13 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight.vasp package" href="hylight.vasp.html" /><link rel="prev" title="hylight.jmol package" href="hylight.jmol.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 5.3.0 and Furo 2023.05.20 -->
         <title>hylight.phonopy package - Hylight 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=e6660623a769aa55fea372102b9bf3151b292993" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -160,7 +160,7 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">BaZrO3:Ti study</a></li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="hylight.html">hylight package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="hylight.html">hylight package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of hylight package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html">hylight.crystal package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html">hylight.findiff package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html">hylight.jmol package</a></li>
@@ -212,44 +212,44 @@
 <p>Module to load phonons frequencies and eigenvectors from phonopy output files.</p>
 <p>It always uses PyYAML, but it can also need h5py to read hdf5 files.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="hylight.phonopy.loader.Struct">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">Struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pops</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[int]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'NDArray[float]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[float]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[str]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'NDArray[float]'</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.phonopy.loader.Struct" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">PPStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pops</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[int]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'FArray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[float]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[str]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'FArray'</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.phonopy.loader.PPStruct" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="hylight.phonopy.loader.Struct.atoms">
-<span class="sig-name descname"><span class="pre">atoms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.Struct.atoms" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.atoms">
+<span class="sig-name descname"><span class="pre">atoms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.atoms" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="hylight.phonopy.loader.Struct.from_yaml_cell">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.phonopy.loader.Struct" title="hylight.phonopy.loader.Struct"><span class="pre">Struct</span></a></span></span><a class="headerlink" href="#hylight.phonopy.loader.Struct.from_yaml_cell" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.from_yaml_cell">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.phonopy.loader.PPStruct" title="hylight.phonopy.loader.PPStruct"><span class="pre">PPStruct</span></a></span></span><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.from_yaml_cell" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="hylight.phonopy.loader.Struct.lattice">
-<span class="sig-name descname"><span class="pre">lattice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.Struct.lattice" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.lattice">
+<span class="sig-name descname"><span class="pre">lattice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.lattice" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="hylight.phonopy.loader.Struct.masses">
-<span class="sig-name descname"><span class="pre">masses</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.Struct.masses" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.masses">
+<span class="sig-name descname"><span class="pre">masses</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.masses" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="hylight.phonopy.loader.Struct.pops">
-<span class="sig-name descname"><span class="pre">pops</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.Struct.pops" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.pops">
+<span class="sig-name descname"><span class="pre">pops</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.pops" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="hylight.phonopy.loader.Struct.ref">
-<span class="sig-name descname"><span class="pre">ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.Struct.ref" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.ref">
+<span class="sig-name descname"><span class="pre">ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.ref" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.get_struct">
-<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">get_struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phyaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.phonopy.loader.Struct" title="hylight.phonopy.loader.Struct"><span class="pre">Struct</span></a></span></span><a class="headerlink" href="#hylight.phonopy.loader.get_struct" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">get_struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phyaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.phonopy.loader.PPStruct" title="hylight.phonopy.loader.PPStruct"><span class="pre">PPStruct</span></a></span></span><a class="headerlink" href="#hylight.phonopy.loader.get_struct" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -347,13 +347,13 @@
 <li><a class="reference internal" href="#">hylight.phonopy package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-hylight.phonopy.loader">hylight.phonopy.loader module</a><ul>
-<li><a class="reference internal" href="#hylight.phonopy.loader.Struct"><code class="docutils literal notranslate"><span class="pre">Struct</span></code></a><ul>
-<li><a class="reference internal" href="#hylight.phonopy.loader.Struct.atoms"><code class="docutils literal notranslate"><span class="pre">Struct.atoms</span></code></a></li>
-<li><a class="reference internal" href="#hylight.phonopy.loader.Struct.from_yaml_cell"><code class="docutils literal notranslate"><span class="pre">Struct.from_yaml_cell()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.phonopy.loader.Struct.lattice"><code class="docutils literal notranslate"><span class="pre">Struct.lattice</span></code></a></li>
-<li><a class="reference internal" href="#hylight.phonopy.loader.Struct.masses"><code class="docutils literal notranslate"><span class="pre">Struct.masses</span></code></a></li>
-<li><a class="reference internal" href="#hylight.phonopy.loader.Struct.pops"><code class="docutils literal notranslate"><span class="pre">Struct.pops</span></code></a></li>
-<li><a class="reference internal" href="#hylight.phonopy.loader.Struct.ref"><code class="docutils literal notranslate"><span class="pre">Struct.ref</span></code></a></li>
+<li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct"><code class="docutils literal notranslate"><span class="pre">PPStruct</span></code></a><ul>
+<li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct.atoms"><code class="docutils literal notranslate"><span class="pre">PPStruct.atoms</span></code></a></li>
+<li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct.from_yaml_cell"><code class="docutils literal notranslate"><span class="pre">PPStruct.from_yaml_cell()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct.lattice"><code class="docutils literal notranslate"><span class="pre">PPStruct.lattice</span></code></a></li>
+<li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct.masses"><code class="docutils literal notranslate"><span class="pre">PPStruct.masses</span></code></a></li>
+<li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct.pops"><code class="docutils literal notranslate"><span class="pre">PPStruct.pops</span></code></a></li>
+<li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct.ref"><code class="docutils literal notranslate"><span class="pre">PPStruct.ref</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#hylight.phonopy.loader.get_struct"><code class="docutils literal notranslate"><span class="pre">get_struct()</span></code></a></li>

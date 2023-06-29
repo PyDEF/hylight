@@ -24,6 +24,14 @@ hylight.constants module
    :undoc-members:
    :show-inheritance:
 
+hylight.guess\_width module
+---------------------------
+
+.. automodule:: hylight.guess_width
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 hylight.loader module
 ---------------------
 
@@ -68,6 +76,14 @@ hylight.struct module
 ---------------------
 
 .. automodule:: hylight.struct
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+hylight.typing module
+---------------------
+
+.. automodule:: hylight.typing
    :members:
    :undoc-members:
    :show-inheritance:
