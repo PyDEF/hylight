@@ -73,8 +73,48 @@ class Poscar(Struct):
 
             return Poscar(params, species, species_names=labels)
 
+    def to_stream(self, out, cartesian=True):
+        """Write a POSCAR content to a stream.
+
+        The property system_name may be set to change the comment at the top of
+        the file.
+
+        :param path: path to the file to write
+        :param cartesian:
+
+            - if True, write the file in cartesian representation,
+            - if False, write in fractional representation
+        """
+        species = [(n, self.species[n]) for n in self._species_names]
+
+        out.write(f"{self.system_name}\n")
+        out.write("1.0\n")
+        np.savetxt(
+            out, self.lattice, "%15.12f", delimiter="\t", newline="\n"
+        )
+
+        out.write(" ".join(f"{name:6}" for name, _lst in species))
+        out.write("\n")
+        out.write(" ".join(f"{len(lst):6}" for _name, lst in species))
+        out.write("\n")
+
+        if cartesian:
+            out.write("Cartesian\n")
+            for _name, lst in species:
+                for pos in lst:
+                    out.write("  ".join(f"{x:.8f}" for x in pos))
+                    out.write("\n")
+        else:
+            out.write("Direct\n")
+            inv_params = np.linalg.inv(self.lattice)
+            for _name, lst in species:
+                for pos in lst:
+                    d_pos = pos.dot(inv_params)
+                    out.write("  ".join(f"{x:.8f}" for x in d_pos))
+                    out.write("\n")
+
     def to_file(self, path="POSCAR", cartesian=True):
-        """Write a POSCAR file
+        """Write to a POSCAR file.
 
         The property system_name may be set to change the comment at the top of
         the file.
@@ -86,30 +126,4 @@ class Poscar(Struct):
             - if False, write in fractional representation
         """
         with open(path, "w+") as out:
-            species = [(n, self.species[n]) for n in self._species_names]
-
-            out.write(f"{self.system_name}\n")
-            out.write("1.0\n")
-            np.savetxt(
-                out, self.cell_parameters, "%15.12f", delimiter="\t", newline="\n"
-            )
-
-            out.write(" ".join(f"{name:6}" for name, _lst in species))
-            out.write("\n")
-            out.write(" ".join(f"{len(lst):6}" for _name, lst in species))
-            out.write("\n")
-
-            if cartesian:
-                out.write("Cartesian\n")
-                for _name, lst in species:
-                    for pos in lst:
-                        out.write("  ".join(f"{x:.8f}" for x in pos))
-                        out.write("\n")
-            else:
-                out.write("Direct\n")
-                inv_params = np.linalg.inv(self.cell_parameters)
-                for _name, lst in species:
-                    for pos in lst:
-                        d_pos = pos.dot(inv_params)
-                        out.write("  ".join(f"{x:.8f}" for x in d_pos))
-                        out.write("\n")
+            self.to_stream(out, cartesian=cartesian)

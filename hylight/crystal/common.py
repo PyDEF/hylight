@@ -23,7 +23,7 @@ from ..struct import Struct
 class CrystalOut(Struct):
     @classmethod
     def from_file(cls, filename):
-        """Load a POSCAR file
+        """Read a structure from a CRYSTAL log file
 
         :param filename: path to the file to read
         :returns: a Poscar object.

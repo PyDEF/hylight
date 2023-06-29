@@ -14,6 +14,8 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+import re
+
 import numpy as np
 from scipy.interpolate import interp1d
 
@@ -25,6 +27,7 @@ def make_cell(val):
     :returns: a function c
 
     Example:
+    --------
         >>> c = make_cell(42)
         >>> c()
         42
@@ -107,16 +110,13 @@ def select_interval(x, y, emin, emax, normalize=False, npoints=None):
 
 def periodic_diff(lattice, ref, disp):
     "Compute the displacement between ref and disp, accounting for periodic conditions."
-    dp = (disp - ref).reshape((1, -1, 3))
-    t = np.array(list(gen_translat(lattice))).reshape((27, 1, 3))
-    d = dp - t
+    dp = ref - disp
 
-    # norms is an array of length of delta
-    norms = np.linalg.norm(d, axis=2)  # shape = (27, n)
-    best_translat = np.argmin(norms, axis=0)  # shape = (n,)
+    dfrac = dp @ np.linalg.inv(lattice)
 
-    n = d.shape[1]
-    return d[best_translat, list(range(n)), :]
+    dfrac -= np.floor_divide(dfrac, 1.0)
+
+    return dfrac @ lattice
 
 
 def gaussian(e, sigma, standard=True):
@@ -133,3 +133,33 @@ def gaussian(e, sigma, standard=True):
         return np.exp(-(e**2) / (2 * sigma**2)) / (sigma * np.sqrt(2 * np.pi))
     else:
         return np.exp(-(e**2) / (2 * sigma**2))
+
+
+def parse_formatted_table(lines, format):
+    """Parse a table of numbers from a list of string with a regex.
+
+    :param lines: a list of string representing the lines of the table
+    :param format: a re.Pattern or a str representing the format of the line
+      It should fullmatch each line or a ValueError exception will be raised.
+      All the groups defined in format will be converted to float64 by numpy.
+    :returns: a np.array of dimension (len(lines), {number_of_groups})
+
+    Example:
+    --------
+        >>> parse_formatted_table(["a=0.56 b=0.8 c=0.9"], "a=(.*) b=(.*) c=(.*)")
+        np.array([[0.56, 0.8, 0.9]])
+
+    """
+    if isinstance(format, re.Pattern):
+        matcher = format
+    else:
+        matcher = re.compile(format)
+    res = []
+    for line in lines:
+        m = matcher.match(line)
+        if m:
+            res.append(m.groups())
+        else:
+            raise ValueError(f"No match for {format!r} with line: {line!r}")
+    assert len(res) >= 1 and all(len(res[0]) == len(r) for r in res)
+    return np.array(res, dtype=float)

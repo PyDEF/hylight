@@ -130,7 +130,7 @@ def diff(opts):
         return
 
     if opts.direct:
-        diff = diff @ np.linalg.inv(poscar_a.cell_parameters)
+        diff = diff @ np.linalg.inv(poscar_a.lattice)
 
     for at, (x, y, z), n in zip(
         (spec(poscar_a, i) for i in range(len(poscar_a.atoms))), diff, norms
@@ -142,10 +142,10 @@ def get_diff(poscar_a, poscar_b):
     if poscar_a.system_name != poscar_b.system_name:
         error("This tool can only compare positions from the same system.")
 
-    elif np.linalg.norm(poscar_a.cell_parameters - poscar_b.cell_parameters) > 1.0e-7:
+    elif np.linalg.norm(poscar_a.lattice - poscar_b.lattice) > 1.0e-7:
         error("This tool can only compare positions in the same cell size.")
 
-    return periodic_diff(poscar_a.cell_parameters, poscar_a.raw, poscar_b.raw)
+    return periodic_diff(poscar_a.lattice, poscar_a.raw, poscar_b.raw)
 
 
 def spec(poscar, sp):

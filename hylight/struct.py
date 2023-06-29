@@ -25,12 +25,12 @@ class Struct:
     Store all the required infos to describe a given set of atomic positions.
     """
 
-    def __init__(self, cell_parameters, species, species_names=None):
+    def __init__(self, lattice, species, species_names=None):
         """Store all informations about a unit cell.
 
         See also :py:class:`hylight.vasp.common.Poscar`.
 
-        :param cell_parameters: a 3x3 np.array with lattice vectors in line
+        :param lattice: a 3x3 np.array with lattice vectors in line
         :param species: a `dict[str, numpy.ndarray]` where the key is the name of the
           species and the array list positions.
 
@@ -41,7 +41,7 @@ class Struct:
         :param species_names: (optional, None) list of species names specifying in wich order
           the positions are found in the raw representation.
         """
-        self.cell_parameters = cell_parameters
+        self.lattice = lattice
         self.species = species
         self._system_name = None
         if species_names is None:
@@ -102,7 +102,7 @@ class Struct:
 
     def copy(self):
         return self.__class__(
-            self.cell_parameters.copy(),
+            self.lattice.copy(),
             {k: a.copy() for k, a in self.species.items()},
             species_names=self._species_names,
         )

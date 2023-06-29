@@ -20,6 +20,7 @@ from itertools import islice
 import numpy as np
 
 from .common import Poscar
+from ..utils import parse_formatted_table
 
 from ..mode import Mode
 
@@ -28,7 +29,7 @@ mass_re = re.compile(r"^\s*POMASS\s+=\s+(\d+\.\d+)\s*;.*$")
 head_re = re.compile(r"^([ 0-9]{4}) (f  |f/i)= *.* (\d+\.\d+) meV\s")
 
 
-def load_phonons(path):
+def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
     """Load phonons from a OUTCAR.
 
     .. note::
@@ -64,8 +65,8 @@ def load_phonons(path):
         else:
             raise ValueError("Unexpected EOF")
 
-        for p, n in zip(pops, names):
-            atoms.extend([n] * p)
+        for p, name in zip(pops, names):
+            atoms.extend([name] * p)
 
         n_atoms = len(atoms)
 
@@ -80,7 +81,6 @@ def load_phonons(path):
                 m = re.fullmatch(fmt, raw)
                 assert m, "OUTCAR is not formatted as expected."
 
-                masses = []
                 for p, mass in zip(pops, m.groups()):
                     masses.extend([float(mass)] * p)
                 break
@@ -88,10 +88,17 @@ def load_phonons(path):
             raise ValueError("Unexpected EOF")
 
         for line in outcar:
+            if "direct lattice vector" in line:
+                break
+
+        lattice = parse_formatted_table([next(outcar), next(outcar), next(outcar)],  "   (.{13})(.{13})(.{13}).*")
+
+        for line in outcar:
             m = head_re.fullmatch(line)
             if "THz" in line and m:
                 line = line.strip()
-                n, im, ener = m.groups()
+                n_, im, ener = m.groups()
+                n = int(n_)
 
                 data = np.array(
                     [line.split() for line in islice(outcar, 1, n_atoms + 1)],
@@ -101,7 +108,7 @@ def load_phonons(path):
                 eigenv = data[:, 3:6]
 
                 phonons.append(
-                    Mode(atoms, n, im == "f  ", float(ener), ref, eigenv, masses)
+                    Mode(lattice, atoms, n, im == "f  ", float(ener), ref, eigenv, masses)
                 )
 
                 n_modes += 1
@@ -128,4 +135,4 @@ def load_poscar_latt(path):
         - second element is the lattice parameters
     """
     p = Poscar.from_file(path)
-    return p.raw, p.cell_parameters
+    return p.raw, p.lattice

@@ -49,6 +49,7 @@ def write_jmol_options(f, opts):
         - *atom_colors*: a list of (sp, color) where sp is the name of a
             species and color is the name of a color or an HTML hex code (example
             :code:`"#FF0000"` for pure red).
+        - *origin*: the origin of the unitcell box (in fractional coordinates)
     """
     if "unitcell" in opts:
         print(
@@ -59,6 +60,9 @@ def write_jmol_options(f, opts):
             "]",
             file=f,
         )
+        origin = opts.get("origin", [0, 0, 0])
+        print("unitcell CENTER", format_v(origin), file=f)
+
     if "bonds" in opts:
         for sp1, sp2, dmin, dmax in opts["bonds"]:
             print(
@@ -80,12 +84,14 @@ def format_v(v):
     return f"{{ {x:0.5f} {y:0.5f} {z:0.5f} }}"
 
 
-def export(dest, mode, compression=ZIP_DEFLATED, **opts):
+def export(dest, mode, *, displacement=True, scale=1.0, compression=ZIP_DEFLATED, **opts):
     """Export a mode to JMol zip format.
 
     :param dest: path to the JMol zip file.
     :param mode: the mode to export.
-    :param compression: (optional) zipfile compression algorithm.
+    :param displacement: (kw only, default True) choose between eigendisplacements and eigenvectors
+    :param scale: (kw only, default 1.0) a scale factor for the displacements/eigenvectors
+    :param compression: (kw only) zipfile compression algorithm.
     :param \\**opts: see :func:`write_jmol_options`
     """
     with ZipFile(dest, mode="w", compression=compression) as ar:
@@ -95,7 +101,12 @@ def export(dest, mode, compression=ZIP_DEFLATED, **opts):
         with io.StringIO() as f:
             print(len(mode.atoms), file=f)
             print(f"Mode {mode.n}", file=f)
-            write_xyz(f, mode.atoms, mode.ref, mode.delta / np.sqrt(atomic_mass))
+
+            if displacement:
+                write_xyz(f, mode.atoms, mode.ref, scale * mode.delta / np.sqrt(atomic_mass))
+            else:
+                write_xyz(f, mode.atoms, mode.ref, scale * mode.eigenvector)
+
             ar.writestr("system.xyz", f.getvalue().encode("utf8"))
 
         with io.StringIO() as f:
@@ -105,7 +116,7 @@ def export(dest, mode, compression=ZIP_DEFLATED, **opts):
             ar.writestr("system.spt", f.getvalue().encode("utf8"))
 
 
-def export_disp(dest, struct, disp, compression=ZIP_DEFLATED, **opts):
+def export_disp(dest, struct, disp, *, compression=ZIP_DEFLATED, **opts):
     """Export a difference between two positions to JMol zip format.
 
     :param dest: path to the JMol zip file.

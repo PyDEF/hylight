@@ -18,9 +18,16 @@ import pickle
 import os
 
 import numpy as np
+import logging
 
 from .mode import Mode
 from .constants import atomic_mass, eV_in_J
+
+
+log = logging.getLogger("hylight")
+
+
+CURRENT_VERSION = 1
 
 
 def archive_modes(modes, dest, compress=False):
@@ -30,11 +37,12 @@ def archive_modes(modes, dest, compress=False):
     :param dest: the path to write the modes to.
     :returns: the data returned by load_phonons.
     """
-
     if isinstance(modes, tuple) and len(modes) == 3 and isinstance(modes[0], list):
         ph, _, _ = modes
     elif isinstance(modes, list) and isinstance(modes[0], Mode):
         ph = modes
+    else:
+        raise ValueError(f"Don't know what to do whith the modes={modes}")
 
     if not ph:
         raise ValueError("There are no modes to be stored.")
@@ -62,8 +70,13 @@ def archive_modes(modes, dest, compress=False):
         eigenvectors[i, :, :] = m.eigenvector
 
     with open(dest, mode="wb") as f:
+        if ph[0].lattice is None:
+            raise ValueError("Mode lattice parameters can no longer be ommited.")
+
         save(
             f,
+            lattice=ph[0].lattice,
+            hylight_npz_version=CURRENT_VERSION,
             atoms=np.array([s.encode("ascii") for s in ph[0].atoms]),
             masses=ph[0].masses / atomic_mass,
             ref=ph[0].ref,
@@ -77,14 +90,19 @@ def load_phonons(source):
 
     _, ext = os.path.splitext(source)
 
-    if ext == ".npz":
-        return load_phonons_npz(source)
-    else:
-        return load_phonons_pickle(source)
+    return load_phonons_npz(source)
 
 
 def load_phonons_npz(source):
     with np.load(source) as f:
+        version = f.get("hylight_npz_version", 0)
+
+        if version < CURRENT_VERSION:
+            log.warning(
+                f"File {source} is written in format version {version}."
+                " Consider recreating it with current version of the code."
+            )
+
         atoms = [blob.decode("ascii") for blob in f["atoms"]]
 
         # The [:] is used to force the read and convert to a numpy array.
@@ -93,27 +111,14 @@ def load_phonons_npz(source):
         vecs = f["eigenvectors"]
         enes = f["energies"]
 
+        lattice = f["lattice"] if version >= 1 else None
+
         phonons = []
 
         for i, (v, e) in enumerate(zip(vecs, enes)):
-            phonons.append(Mode(atoms, i, e >= 0, abs(e), ref, v[:], masses))
+            phonons.append(Mode(lattice, atoms, i, e >= 0, abs(e), ref, v[:], masses))
 
     return (phonons, *pops_and_masses(phonons))
-
-
-def load_phonons_pickle(source, gz=False):
-    """Load modes from a pickled file."""
-    with open(source, "rb") as f:
-        try:
-            label, data = pickle.load(f)
-        except ValueError as e:
-            raise ValueError("This is not a pickled mode file.") from e
-
-    # legacy format
-    if label != "hylight-pkl-modes":
-        raise ValueError("This is not a pickled mode file.")
-
-    return data
 
 
 def pops_and_masses(modes):

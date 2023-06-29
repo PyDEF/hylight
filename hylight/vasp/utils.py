@@ -19,8 +19,8 @@ from copy import deepcopy as copy
 import numpy as np
 
 from ..constants import atomic_mass
-from ..multi_phonons import compute_delta_R, Mask
-from ..mode import get_energies
+from ..multi_phonons import compute_delta_R
+from ..mode import get_energies, Mask
 
 from ..loader import load_phonons
 from .common import Poscar

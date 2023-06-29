@@ -18,7 +18,7 @@ from enum import Enum
 import numpy as np
 from scipy import fft
 
-from .mode import get_energies, get_HR_factors, rot_c_to_v
+from .mode import get_energies, get_HR_factors, rot_c_to_v, same_cell
 from .loader import load_phonons
 from .vasp.loader import load_poscar_latt
 from .constants import (
@@ -161,7 +161,7 @@ def compute_spectrum(
     :param e_max: (optional, :code:`2.5*e_zpl`) max energy in eV (should be at greater than :code:`2*zpl`)
     :param resolution_e: (optional, :code:`1e-3`) energy resolution in eV
     :param load_phonons: a function to read phonons from files.
-    :param mask: a :class:`Mask` instance to select modes base on frequencies
+    :param mask: a :class:`.mode.Mask` instance to select modes base on frequencies
     :param shape: the lineshape (a :class:`LineShape` instance)
     :param pre_convolve: (float, optional, None) if not None, standard deviation of a pre convolution gaussian
     :param window_fn: windowing function in the form provided by numpy (see :func:`numpy.hamming`)
@@ -182,6 +182,34 @@ def compute_spectrum(
     if isinstance(delta_R, tuple):
         pos_gs, pos_es = delta_R
         delta_R = compute_delta_R(pos_gs, pos_es)
+
+        pos_gs, lattice_gs = load_poscar_latt(pos_gs)
+
+        warn = None
+        warn_bad = None
+
+        for ph in phonons:
+            d = np.linalg.norm(periodic_diff(lattice_gs, pos_gs, ph.ref), axis=1)
+
+            if np.max(d) > 1e-2:
+                md = np.max(d)
+                i0 = np.argmax(d)
+                warn_bad = (ph.n, i0, md)
+            elif np.max(d) > 1e-3:
+                md = np.max(d)
+                i0 = np.argmax(d)
+                warn = (ph.n, i0, md)
+
+        if warn_bad is not None:
+            n, i0, md = warn_bad
+            logger.error(f"Mode {ph.n} has a reference position very far from GS position. (atom {i0} moved by {md} A)")
+        elif warn is not None:
+            n, i0, md = warn
+            logger.warning(f"Mode {n} has a reference position somewhat far from GS position. (atom {i0} moved by {md})")
+    else:
+        logger.warning(
+            "Make sure that delta_R and phonons are described in the same cell."
+        )
 
     if fwhm is None or fwhm == 0.0:
         sigma_si = None
@@ -275,21 +303,32 @@ def compute_delta_R(poscar_gs, poscar_es):
 
 def _get_s_t_raw(t, freqs, hrs):
     # Fourier transform of individual S_i \delta {(\nu - \nu_i)}
-    try:
-        # This can create a huge array if freqs is too big
-        # but it let numpy handle everything so it is really fast
-        s_i_t = hrs.reshape((1, -1)) * np.exp(
-            -1.0j * two_pi * freqs.reshape((1, -1)) * t.reshape((-1, 1))
-        )
-    except MemoryError:
+
+    def slow():
         # Slower less memory intensive solution
         s_t = np.zeros(t.shape, dtype=complex)
         for hr, fr in zip(hrs, freqs):
             s_t += hr * np.exp(-1.0j * two_pi * fr * t)
         return s_t
+
+    def fast():
+        # This can create a huge array if freqs is too big
+        # but it let numpy handle everything so it is really fast
+        return hrs.reshape((1, -1)) * np.exp(
+            -1.0j * two_pi * freqs.reshape((1, -1)) * t.reshape((-1, 1))
+        )
+
+    if len(freqs) * len(t) > 100e6:
+        # above 100 million coefficients don't even try
+        return slow()
     else:
-        # sum over the modes:
-        return np.sum(s_i_t, axis=1)
+        try:
+            s_i_t = fast()
+        except MemoryError:
+            return slow()
+        else:
+            # sum over the modes:
+            return np.sum(s_i_t, axis=1)
 
 
 def _window(data, fn=np.hamming):
@@ -422,68 +461,3 @@ def dynmatshow(dynmat, blocks=None):
     cb.ax.set_ylabel("Dynamical matrix (eV . A$^{-2}$ . m$_p^{-1}$)")
 
     return fig, im
-
-
-class Mask:
-    "An energy based mask for the set of modes."
-
-    def __init__(self, intervals):
-        self.intervals = intervals
-
-    @classmethod
-    def from_bias(cls, bias):
-        """Create a mask that reject modes of energy between 0 and `bias`.
-
-        :param bias: minimum of accepted energy (eV)
-        :returns: a fresh instance of `Mask`.
-        """
-        if bias > 0:
-            return cls([(0, bias * eV_in_J)])
-        else:
-            return cls([])
-
-    def add_interval(self, interval):
-        "Add a new interval to the mask."
-        assert (
-            isinstance(interval, tuple) and len(tuple) == 2
-        ), "interval must be a tuple of two values."
-        self.intervals.append(interval)
-
-    def as_bool(self, ener):
-        "Convert to a boolean `np.ndarray` based on `ener`."
-        bmask = np.ones(ener.shape, dtype=bool)
-
-        for bot, top in self.intervals:
-            bmask &= (ener < bot) | (ener > top)
-
-        return bmask
-
-    def accept(self, value):
-        "Return True if value is not under the mask."
-        return not any(bot <= value <= top for bot, top in self.intervals)
-
-    def reject(self, value):
-        "Return True if `value` is under the mask."
-        return any(bot <= value <= top for bot, top in self.intervals)
-
-    def plot(self, ax, unit):
-        """Add a graphical representation of the mask to a plot.
-
-        :param ax: a matplotlib `Axes` object.
-        :param unit: the unit of energy to use (ex: :attr:`hylight.constant.eV_in_J` if the plot uses eV)
-        :returns: a function that must be called without arguments after resizing the plot.
-        """
-        from matplotlib.patches import Rectangle
-
-        rects = []
-        for bot, top in self.intervals:
-            p = Rectangle((bot / unit, 0), (top - bot) / unit, 0, facecolor="grey")
-            ax.add_patch(p)
-            rects.append(p)
-
-        def resize():
-            (_, h) = ax.transAxes.transform((0, 1))
-            for r in rects:
-                r.set(height=h)
-
-        return resize

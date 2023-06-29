@@ -24,7 +24,7 @@ from ..mode import Mode
 cm1_in_meV = cm1_in_J / eV_in_J * 1000
 
 
-def load_phonons(path):
+def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
     """Load phonons from a CRYSTAL17 logfile.
 
     :returns: :code:`(phonons, pops, masses)`
@@ -35,10 +35,21 @@ def load_phonons(path):
     """
 
     phonons = []
-    masses = []
-    names = []
+    masses: list[float] = []
+    names: list[str] = []
 
     with open(path) as log:
+        for line in log:
+            if "DIRECT LATTICE VECTORS CARTESIAN COMPONENTS (ANGSTROM)" in line:
+                break
+
+
+        #         X                    Y                    Z
+        next(log)
+        # Collect the three lines and convert to floats
+        lattice_ = [next(log).split() for _ in range(3)]
+        lattice = np.array(lattice_, dtype=float)
+
         for line in log:
             if "CARTESIAN COORDINATES - PRIMITIVE CELL" in line:
                 break
@@ -50,15 +61,15 @@ def load_phonons(path):
         next(log)
         next(log)  # noqa: E702
 
-        pos = []
+        pos_ = []
         for line in log:
             l = line.strip()  # noqa: E741
             if l:
-                pos.append(l.split()[3:])
+                pos_.append(l.split()[3:])
             else:
                 break
 
-        pos = np.array(pos, dtype=float)
+        pos = np.array(pos_, dtype=float)
 
         for line in log:
             if "ATOMS ISOTOPIC MASS" in line:
@@ -127,7 +138,7 @@ def load_phonons(path):
                 # - eigenvec: normalized to 1
                 # - masses: atomic masses
                 phonons.append(
-                    Mode(names, c, f >= 0, abs(f) * cm1_in_meV, pos, eigenvec, masses)
+                    Mode(lattice, names, c, f >= 0, abs(f) * cm1_in_meV, pos, eigenvec, masses)
                 )
             next(log)
             head = next(log).strip()

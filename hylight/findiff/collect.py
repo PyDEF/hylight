@@ -152,6 +152,7 @@ def process_phonons(
     return (
         [
             Mode(
+                lattice,
                 atoms,
                 i,
                 e2 >= 0,  # e2 < 0 => imaginary frequency

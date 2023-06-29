@@ -23,19 +23,22 @@ from os.path import isfile, join
 from itertools import groupby
 import gzip
 from dataclasses import dataclass
+from contextlib import suppress
 
 import numpy as np
 
 from ..constants import THz_in_meV
 from ..mode import Mode
-from ..typing import NDArray
+from ..typing import FArray, Type
 
 import yaml
 
-try:  # Use CLoader if possible, it is much faster
+from yaml import Loader
+
+with suppress(ImportError):
+    # Use CLoader if possible, it is much faster.
+    # This will make a huge difference when loading eigenvectors.
     from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
 
 
 def load_phonons(dir_: str) -> tuple[list[Mode], list[int], list[float]]:
@@ -154,7 +157,7 @@ def _load_phonons_qpointsh5(
 
 
 def _load_phonons_h5(
-    struct: PPStruct, qp: dict, ev: list[NDArray], fr: list[float]
+    struct: PPStruct, qp: dict, ev: list[FArray], fr: list[float]
 ) -> tuple[list[Mode], list[int], list[float]]:
     n = len(struct.atoms) * 3
 
@@ -163,6 +166,7 @@ def _load_phonons_h5(
         assert v.shape == (n,), f"Wrong shape {v.shape}"
         phonons.append(
             Mode(
+                struct.lattice,
                 struct.atoms,
                 i,
                 f >= 0,
@@ -215,6 +219,7 @@ def _load_phonons_yaml(struct, point) -> tuple[list[Mode], list[int], list[float
 
         phonons.append(
             Mode(
+                struct.lattice,
                 struct.atoms,
                 i,
                 f >= 0,
@@ -231,10 +236,10 @@ def _load_phonons_yaml(struct, point) -> tuple[list[Mode], list[int], list[float
 @dataclass
 class PPStruct:
     pops: list[int]
-    lattice: NDArray[float]
+    lattice: FArray
     masses: list[float]
     atoms: list[str]
-    ref: NDArray[float]
+    ref: FArray
 
     @classmethod
     def from_yaml_cell(cls, cell: dict) -> "PPStruct":

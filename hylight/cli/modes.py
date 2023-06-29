@@ -21,7 +21,7 @@ import os.path as op
 import gzip
 from itertools import cycle
 
-from .script_utils import MultiCmd, positional, optional, error_catch
+from .script_utils import MultiCmd, positional, optional, error_catch, flag
 from ..npz import archive_modes, load_phonons
 from ..constants import eV_in_J, cm1_in_J
 
@@ -30,119 +30,46 @@ cmd = MultiCmd(description=__doc__)
 
 
 @cmd.subcmd(
-    positional("SOURCE", help="path to the OUTCAR."),
+    positional("SOURCE", help="path to an input file."),
     positional("DEST", help="path of the destionation file.", default=None),
+    positional("PHONOPY_YAML", help="path to the phonopy.yaml file if needed.", default=None),
+    optional("--from", "-f", dest="from_", default="auto", help="Input format."),
+    optional("--with-lattice", "-l", default=None, help="Reference POSCAR for the lattice."),
+    optional("--tol", "-t", default=1e-6, type=float, help="Numerical tolerance to lattice vector mismatch (used with --with-lattice)."),
 )
-def vasp(opts):
-    """Convert a VASP OUTCAR to a Hylight archive."""
+def convert(opts):
+    """Convert a set of modes from an upstream software to a Hylight archive.
+
+    Supported formats include "auto", "crystal", "npz", "phonopy" and "vasp".
+
+    In "auto" mode, VASP files are recognized if they end with ".vasp" or are named "OUTCAR".
+    CRYSTAL files are recognized if they end with ".log".
+    npz files are recognized if they end with ".npz".
+    Phonopy files are recognized if they are one of "band.hdf5", "band.hdf5.gz",
+    "qpoints.hdf5", "qpoints.hdf5.gz", "qpoints.yaml", "band.yaml".
+
+    In "phonopy" mode, if the file is *not* band.yaml, there should be a
+    "phonopy.yaml" file in the same directory.
+
+    """
+
     if opts.dest is None:
-        dest = opts.source + ".npz"
+        dest = opts.source.lstrip('/') + ".npz"
     else:
         dest = opts.dest
 
-    from ..vasp.loader import load_phonons
-
     with error_catch():
-        modes = load_phonons(opts.source)
+        modes = multi_loader(opts.source, opts.from_, opts.phonopy_yaml)
 
     summary(modes, opts.source)
 
-    with error_catch():
-        archive_modes(modes, dest)
+    if opts.with_lattice:
+        from ..vasp.common import Poscar
 
-    print(f"Wrote {dest}.")
+        p = Poscar.from_file(opts.with_lattice)
 
-    return 0
-
-
-@cmd.subcmd(
-    positional("SOURCE", help="path to the Hylight archive."),
-    positional("DEST", help="path of the destionation file."),
-)
-def hy(opts):
-    """Convert a Hylight archive to another form of Hylight archive.
-
-    Use this to convert from pickle to hdf5 or reverse.
-    The expected format of the input, and the target format are determined from
-    file extensions.
-    .h5 and .hdf5 implies the use of HDF5, everything else implies pickle.
-    You can add a second extension .gz after the first one, to use GZip
-    compression.
-    """
-    from ..vasp.loader import load_phonons
-
-    with error_catch():
-        modes = load_phonons(opts.source)
-
-    summary(modes, opts.source)
-
-    with error_catch():
-        archive_modes(modes, opts.dest)
-
-    print(f"Wrote {opts.dest}")
-
-    return 0
-
-
-@cmd.subcmd(
-    positional("SOURCE", help="path to a phonopy output file."),
-    positional("DEST", help="path of the destionation file.", default=None),
-    positional("PHONOPY_YAML", help="path to the phonopy.yaml file.", default=None),
-)
-def phonopy(opts):
-    """Convert a Phonopy output file into a Hylight archive.
-
-    The Phonopy file can be one of qpoints.hdf5, qpoints.hdf5.gz, band.hdf5,
-    band.hdf5.gz, qpoints.yaml, band.yaml.
-    If the file is *not* band.yaml, there should be a phonopy.yaml file in the
-    same directory.
-    """
-    from ..phonopy.loader import (
-        load_phonons_bandsh5,
-        load_phonons_bandyaml,
-        load_phonons_qpointsh5,
-        load_phonons_qpointsyaml,
-    )
-
-    if opts.dest is None:
-        dest = opts.source + ".npz"
-    else:
-        dest = opts.dest
-
-    source = opts.source
-
-    if op.basename(source) != "band.yaml":
-        if opts.phonopy_yaml is None:
-            phyaml = op.join(op.dirname(source), "phonopy.yaml")
-        else:
-            phyaml = opts.phonopy_yaml
-
-    def load_phonons(_):
-        if op.basename(source) == "qpoints.hdf5":
-            return load_phonons_qpointsh5(source, phyaml)
-
-        elif op.basename(source) == "qpoints.hdf5.gz":
-            return load_phonons_qpointsh5(source, phyaml, op=gzip.open)
-
-        elif op.basename(source) == "band.hdf5":
-            return load_phonons_bandsh5(source, phyaml)
-
-        elif op.basename(source) == "band.hdf5.gz":
-            return load_phonons_bandsh5(source, phyaml, op=gzip.open)
-
-        elif op.basename(source) == "qpoints.yaml":
-            return load_phonons_qpointsyaml(source, phyaml)
-
-        elif op.basename(source) == "band.yaml":
-            return load_phonons_bandyaml(source)
-
-        else:
-            raise FileNotFoundError("No known file to extract modes from.")
-
-    with error_catch():
-        modes = load_phonons(opts.source)
-
-    summary(modes, opts.source)
+        for mode in modes[0]:
+            mode.set_lattice(p.lattice, tol=opts.tol)
 
     with error_catch():
         archive_modes(modes, dest)
@@ -153,29 +80,72 @@ def phonopy(opts):
 
 
 @cmd.subcmd(
-    positional("SOURCE", help="path of the log file."),
-    positional("DEST", help="path of the destionation file.", default=None),
+    positional("SOURCE", help="path to a phonopy output file."),
+    flag("--cartesian", "-c", help="Use cartesian coordinates."),
 )
-def crystal(opts):
-    """Convert a CRYSTAL log file into a Hylight archive."""
-    if opts.dest is None:
-        dest = opts.source + ".npz"
+def show_ref(opts):
+    """Write the reference position to STDOUT using the POSCAR format."""
+
+    from sys import stdout
+    from ..npz import load_phonons
+    from ..vasp.common import Poscar
+
+    modes, _, _ = load_phonons(opts.source)
+
+    m0 = modes[0]
+    p = Poscar(m0.lattice, {"H": m0.ref})
+    p.to_stream(stdout, cartesian=opts.cartesian)
+
+def multi_loader(source, from_, phonopy_yaml):
+    if from_ not in {"vasp", "crystal", "npz", "phonopy", "auto"}:
+        raise ValueError(f"{from_} is not a known input format.")
+
+    if from_ == "vasp" or source.endswith(".vasp") or op.basename(source) == "OUTCAR":
+        from ..vasp.loader import load_phonons
+        return load_phonons(source)
+
+    if from_ == "crystal" or source.endswith(".log"):
+        from ..crystal.loader import load_phonons
+        return load_phonons(source)
+
+    if from_ == "npz" or source.endswith(".npz"):
+        from ..npz import load_phonons
+        return load_phonons(source)
+
+    if phonopy_yaml is None:
+        phyaml = op.join(op.dirname(source), "phonopy.yaml")
     else:
-        dest = opts.dest
+        phyaml = phonopy_yaml
 
-    from ..crystal.loader import load_phonons
+    if op.basename(source) == "qpoints.hdf5":
+        from ..phonopy.loader import load_phonons_qpointsh5
+        return load_phonons_qpointsh5(source, phyaml)
 
-    with error_catch():
-        modes = load_phonons(opts.source)
+    elif op.basename(source) == "qpoints.hdf5.gz":
+        from ..phonopy.loader import load_phonons_qpointsh5
+        return load_phonons_qpointsh5(source, phyaml, op=gzip.open)
 
-    summary(modes, opts.source)
+    elif op.basename(source) == "band.hdf5":
+        from ..phonopy.loader import load_phonons_bandsh5
+        return load_phonons_bandsh5(source, phyaml)
 
-    with error_catch():
-        archive_modes(modes, dest)
+    elif op.basename(source) == "band.hdf5.gz":
+        from ..phonopy.loader import load_phonons_bandsh5
+        return load_phonons_bandsh5(source, phyaml, op=gzip.open)
 
-    print(f"Wrote {dest}.")
+    elif op.basename(source) == "qpoints.yaml":
+        from ..phonopy.loader import load_phonons_qpointsyaml
+        return load_phonons_qpointsyaml(source, phyaml)
 
-    return 0
+    elif op.basename(source) == "band.yaml":
+        from ..phonopy.loader import load_phonons_bandyaml
+        return load_phonons_bandyaml(source)
+
+    elif from_ == "phonopy":
+        raise FileNotFoundError("No known phonopy input found.")
+
+    else:
+        raise ValueError("Could not determine the input format. Please use the --format parameter.")
 
 
 @cmd.subcmd(
@@ -240,7 +210,7 @@ def parse_opts(opts):
         if opts.ref:
             p = Poscar.from_file(opts.ref)
 
-            x_opts["unitcell"] = p.cell_parameters
+            x_opts["unitcell"] = p.lattice
 
     return x_opts
 
