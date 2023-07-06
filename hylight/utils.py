@@ -112,15 +112,13 @@ def periodic_diff(lattice, ref, disp):
     "Compute the displacement between ref and disp, accounting for periodic conditions."
     dp = ref - disp
 
-    dfrac = dp @ np.linalg.inv(lattice)
-
-    dfrac -= np.floor_divide(dfrac, 1.0)
+    dfrac = np.remainder(dp @ np.linalg.inv(lattice) + 0.5, 1.0) - 0.5
 
     return dfrac @ lattice
 
 
 def gaussian(e, sigma, standard=True):
-    """A Gaussian function.
+    """Evaluate a Gaussian function on e.
 
     :param e: mean
     :param sigma: standard deviation
