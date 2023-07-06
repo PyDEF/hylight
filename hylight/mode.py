@@ -171,6 +171,35 @@ def dynamical_matrix(phonons: Iterable[Mode]) -> FArray:
     return Lt.transpose() @ dynamical_matrix_diag @ Lt
 
 
+def modes_from_dynmat(lattice, atoms, masses, ref, dynmat):
+    n, _ = dynmat.shape
+    assert n % 3 == 0
+    n_atoms = n // 3
+    # eigenvalues and eigenvectors, aka square of angular frequencies and normal modes
+    vals, vecs = np.linalg.eigh(dynmat)
+    vecs = vecs.transpose()
+    assert vecs.shape == (n, n)
+
+    # modulus of mode energies in J
+    energies = hbar_si * np.sqrt(np.abs(vals)) / eV_in_J * 1e3
+
+    # eigenvectors reprsented in canonical basis
+    vx = vecs.reshape((n, n_atoms, 3))
+
+    return [
+        Mode(
+            lattice,
+            atoms,
+            i,
+            e2 >= 0,  # e2 < 0 => imaginary frequency
+            e,
+            ref,
+            v.reshape((-1, 3)),
+            masses,
+        )
+        for i, (e2, e, v) in enumerate(zip(vals, energies, vx))
+    ]
+
 class Mask:
     "An energy based mask for the set of modes."
 
@@ -312,3 +341,108 @@ def get_energies(phonons: Iterable[Mode], mask: Optional[Mask]=None) -> FArray:
         )
     else:
         return np.array([ph.energy for ph in phonons if ph.real])
+
+
+def project_on_asr(mat, masses):
+    n, *_ = mat.shape
+    assert mat.shape == (n, n), "Not a square matrix."
+    assert n % 3 == 0, "Matrix size is not 3n."
+
+    basis = np.eye(n)
+
+    masses = [(m * atomic_mass) for m in masses]
+
+    # this is the configurational displacement that correspond to a rigid
+    # displacement of atoms
+    m = np.sqrt(masses / np.sum(masses))
+    basis[0, 0::3] = m
+    basis[1, 1::3] = m
+    basis[2, 2::3] = m
+
+    orthonormalize(basis, n_skip=3)
+
+    # Projector in the adapted basis
+    proj = np.eye(n)
+    proj[0, 0] = proj[1, 1] = proj[2, 2] = 0.0
+
+    return mat @ basis @ proj @ basis.T
+
+
+def generate_basis(seed):
+    """Generate an orthonormal basis with the rows of seed as first rows.
+
+    :param seed: the starting vectors, a :code:`(m, n)` matrix of orthonormal rows.
+        :code:`m = 0` is valid and will create a random basis.
+    :return: a :code:`(n, n)` orthonormal basis where the first :code:`m` rows
+        are the rows of :code:`seed`.
+    """
+
+    assert np.allclose(
+        np.eye(len(seed)), seed @ seed.T
+    ), "Seed is not a set of orthonormal vectors."
+
+    n_seed, n = seed.shape
+    m = np.zeros((n, n))
+
+    m[:n_seed, :] = seed
+
+    for i in range(n_seed, n):
+        prev = m[: i - 1, :]
+
+        res = 1
+        c = np.random.uniform(size=(1, n))
+
+        # poorly conditioned initial condition can lead to numerical errors
+        # in the orthonormalisation.
+        # This loop will ensure that the new vector is mostly orthogonal to all
+        # its predecessor.
+        # It does more iterations for later vectors as one would expect.
+        # It should be less than a 100 iterations in worse case.
+        while not np.allclose(res, 0):
+            res = (c @ prev.T) @ prev
+            c -= res
+            c /= np.linalg.norm(c)
+
+        m[i, :] = c
+
+    # We still need to polish the orthonormalisation to reach machine precision
+    # limit. Fortunatly the initial guess is good enough that the loop in
+    # orthogonalize will only iterate 3 to 5 times even for large matrices
+    orthonormalize(m, n_skip=n_seed)
+
+    return m
+
+
+def orthonormalize(m, n_skip=0):
+    """Ensure that the vectors of m are orthonormal.
+
+    Change the rows from n_seed up inplace to make them orthonormal.
+
+    :param m: the starting vectors
+    :param n_seed: number of first rows to not change.
+        They must be orthonormal already.
+    """
+
+    (n, _) = m.shape
+    assert m.shape == (n, n), "m is not a square matrix"
+
+    if n_skip > 0:
+        s = m[:n_skip, :]
+        assert np.allclose(
+            np.eye(n_skip), s @ s.T
+        ), "Seed is not a set of orthonormal vectors."
+
+    eye = np.eye(n)
+
+    while not np.allclose(eye, m @ m.T):
+        for i in range(n_skip, n):
+            # get the matrix without row i 
+            rest = m[[j for j in range(n) if j != i], :]
+            c = m[i, :]
+            # remove the part of c that is in the subspace of rest
+            c -= (c @ rest.T) @ rest
+            # renormalize
+            c /= np.linalg.norm(c)
+            m[i, :] = c
+
+    return m

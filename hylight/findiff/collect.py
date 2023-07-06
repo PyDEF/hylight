@@ -20,25 +20,35 @@ from itertools import islice, dropwhile, repeat
 from multiprocessing import Pool
 import numpy as np
 from ..utils import periodic_diff
-from ..mode import Mode
-from ..constants import hbar_si, eV_in_J, atomic_mass
+from ..mode import project_on_asr, modes_from_dynmat
+from ..constants import eV_in_J, atomic_mass
 
 
 def process_phonons(
-    outputs, ref_output, basis_source=None, amplitude=0.01, nproc=1, symm=True
+    outputs,
+    ref_output,
+    basis_source=None,
+    amplitude=0.01,
+    nproc=1,
+    symm=True,
+    asr_force=False,
 ):
     """Process a set of OUTCAR files to compute some phonons using Force based finite differences.
 
     :param outputs: list of OUTCAR paths corresponding to the finite displacements.
     :param ref_output: path to non displaced OUTCAR.
-    :param basis_source: read a displacement basis from a path. The file is a
-        npy file from numpy's save. If None, the basis is built from the
-        displacements. If not None, the order of outputs *must* match the order
-        of the displacements in the array.
-    :param amplitude: amplitude of the displacement, only used if basis_source *is not* None.
-    :param nproc: number of parallel processes used to load the files.
-    :param symm: If True, use symmetric differences. OUTCARs *must* be ordered
-        as :code:`[+delta_1, -delta_1, +delta_2, -delta_2, ...]`.
+    :param basis_source: (optional) read a displacement basis from a path. The
+        file is a npy file from numpy's save. If None, the basis is built from
+        the displacements. If not None, the order of outputs *must* match the
+        order of the displacements in the array.
+    :param amplitude: (optional) amplitude of the displacement, only used if
+        basis_source *is not* None.
+    :param nproc: (optional) number of parallel processes used to load the files.
+    :param symm: (optional) If True, use symmetric differences. OUTCARs *must*
+        be ordered as :code:`[+delta_1, -delta_1, +delta_2, -delta_2, ...]`.
+    :param asr_force: (optional, :code:`False`) enforce the accoustic sum rule
+        by projecting the dynamic matrix on the subspace where homogeneous
+        translation of all modes leads to a null frequency.
     :returns: the same tuple as the load_phonons functions.
 
     .. note::
@@ -138,34 +148,13 @@ def process_phonons(
     # dynamical matrix
     dynmat = m12.transpose() @ h @ m12
 
-    # eigenvalues and eigenvectors, aka square of angular frequencies and normal modes
-    vals, vecs = np.linalg.eigh(dynmat)
-    vecs = vecs.transpose()
-    assert vecs.shape == (n, n)
-
-    # modulus of mode energies in J
-    energies = hbar_si * np.sqrt(np.abs(vals)) / eV_in_J * 1e3
-
-    # eigenvectors reprsented in canonical basis
-    vx = vecs.reshape((n, n_atoms, 3))
+    if asr_force:
+        dynmat = project_on_asr(dynmat, masses)
 
     return (
-        [
-            Mode(
-                lattice,
-                atoms,
-                i,
-                e2 >= 0,  # e2 < 0 => imaginary frequency
-                e,
-                ref,
-                v.reshape((-1, 3)),
-                masses,
-            )
-            for i, (e2, e, v) in enumerate(zip(vals, energies, vx))
-        ],
+        modes_from_dynmat(lattice, atoms, masses, ref, dynmat),
         pops,
         masses,
-        # rotate the dynmat back in the canonical basis
         dynmat,
     )
 
@@ -232,7 +221,6 @@ def _get_forces_and_pos(n, path):
 
     else:  # OUTCAR
         with open(path) as outcar:
-
             # advance to the force block
             for line in outcar:
                 if "TOTAL-FORCE (eV/Angst)" in line:

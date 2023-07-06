@@ -23,7 +23,7 @@ from itertools import cycle
 
 from .script_utils import MultiCmd, positional, optional, error_catch, flag
 from ..npz import archive_modes, load_phonons
-from ..constants import eV_in_J, cm1_in_J
+from ..constants import eV_in_J, cm1_in_J, atomic_mass, hbar_si
 
 
 cmd = MultiCmd(description=__doc__)
@@ -36,6 +36,7 @@ cmd = MultiCmd(description=__doc__)
     optional("--from", "-f", dest="from_", default="auto", help="Input format."),
     optional("--with-lattice", "-l", default=None, help="Reference POSCAR for the lattice."),
     optional("--tol", "-t", default=1e-6, type=float, help="Numerical tolerance to lattice vector mismatch (used with --with-lattice)."),
+    flag("--asr", "-A", help="Project the dynmical matrix to enforce accoustic sum rule."),
 )
 def convert(opts):
     """Convert a set of modes from an upstream software to a Hylight archive.
@@ -52,6 +53,7 @@ def convert(opts):
     "phonopy.yaml" file in the same directory.
 
     """
+    import numpy as np
 
     if opts.dest is None:
         dest = opts.source.lstrip('/') + ".npz"
@@ -70,6 +72,21 @@ def convert(opts):
 
         for mode in modes[0]:
             mode.set_lattice(p.lattice, tol=opts.tol)
+
+    if opts.asr:
+        from ..mode import dynamical_matrix, project_on_asr, modes_from_dynmat
+        phonons, pops, masses = modes
+        dmat = dynamical_matrix(phonons)
+        m0 = modes[0][0]
+
+        dmat_proj = project_on_asr(dmat, masses)
+
+        d = np.linalg.norm(dmat - dmat_proj)**0.5 * hbar_si / cm1_in_J
+        print("Distance to original matrix:", d, "cm1")
+
+        phonons = modes_from_dynmat(m0.lattice, m0.atoms, masses, m0.ref, dmat_proj)
+        modes = (phonons, pops, masses)
+
 
     with error_catch():
         archive_modes(modes, dest)

@@ -20,6 +20,7 @@ import numpy as np
 from numpy.random import MT19937
 from numpy.random import RandomState, SeedSequence
 from ..vasp.common import Poscar
+from ..mode import orthonormalize
 
 
 def save_random_disp(
@@ -30,7 +31,7 @@ def save_random_disp(
     seed=0,
     symm=False,
 ):
-    """Produces displaced POSCARs in random directions.
+    """Produce displaced POSCARs in random directions.
 
     Takes a reference position and displaces it into random directions to
     produce a set of positions for finite differences computations.
@@ -62,7 +63,7 @@ def save_disp_from_basis(
     amplitude=0.01,
     symm=False,
 ):
-    """Produces displaced POSCARs from a given set of directions.
+    """Produce displaced POSCARs from a given set of directions.
 
     Takes a reference position and displaces it into directions from
     basis_source to produce a set of positions for finite differences
@@ -85,7 +86,7 @@ def save_disp_from_basis(
 
 
 def save_disp(ref, basis, disp_dest=".", amplitude=0.01, symm=False):
-    """Produces displaced POSCARs from a given set of directions.
+    """Produce displaced POSCARs from a given set of directions.
 
     Takes a reference position and displaces it into directions from
     basis to produce a set of positions for finite differences
@@ -149,6 +150,6 @@ def random_basis(n, seed=0):
     :param seed: (optional, 0) randomness seed.
     :returns: a (n, n) orthonormal numpy array.
     """
-    rs = RandomState(MT19937(SeedSequence(seed)))
-    q, _ = np.linalg.qr(rs.rand(n, n))
-    return q
+    mat = RandomState(MT19937(SeedSequence(seed))).rand(n, n)
+    orthonormalize(mat)
+    return mat
