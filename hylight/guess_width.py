@@ -21,7 +21,7 @@ from scipy import fft
 
 from matplotlib import pyplot as plt
 
-from .mode import get_energies, get_HR_factors, rot_c_to_v
+from .mode import get_energies, get_HR_factors, rot_c_to_v, Mask, dynamical_matrix
 from .loader import load_phonons
 from .constants import atomic_mass, eV_in_J, hbar_si, h_si, kb_eV, sigma_to_fwhm
 from .multi_phonons import (
@@ -37,7 +37,16 @@ import logging
 logger = logging.getLogger("hylight")
 
 
-class OmegaEff(Enum):
+class _OmegaEff(Enum):
+    FC_MEAN = 0
+    HR_MEAN = 1
+    HR_RMS = 2
+    FC_RMS = 3
+    GRAD = 4
+    DISP = 5
+
+
+class OmegaEff:
     r"""Mode of computation of a effective frequency.
 
     :attr:`FC_MEAN`:
@@ -45,7 +54,7 @@ class OmegaEff(Enum):
     .. math::
         \Omega = \frac{\sum_j \omega_j d^\text{FC}_j}{\sum_j d^\text{FC}_j}
 
-    Should be used with :attr:`ExPES.ISO_SCALE` because it is associated with
+    Should be used with :attr:`WidthModel.ONED` because it is associated with
     the idea that all the directions are softened equally in the excited state.
 
     :attr:`HR_MEAN`:
@@ -63,62 +72,67 @@ class OmegaEff(Enum):
     .. math::
         \Omega = \sqrt{\frac{\sum_j \omega_j^2 d^\text{FC}_j}{\sum_j d^\text{FC}_j}}
 
-    Should be used with :attr:`ExPES.SINGLE_ES_FREQ` because it makes sense
+    Should be used with :attr:`WidthModel.SINGLE_ES_FREQ` because it makes sense
     when we get only one Omega_eff for the excited state (this single
     effective frequency should be computed beforehand)
 
-    :attr:`ONED_FREQ`:
+    :attr:`GRAD`:
 
-    .. math::
-        \Omega = \frac{(\Delta Q^T D \Delta Q)}{{\Delta Q}^2}
+    The effective frequency of GS is computed in the direction of the gradiant
+    of GS PES at the ES position.
+    The effective frequency for the ES is provided by the user (and should be computed in the same direction).
+    Should be used with :attr:`WidthModel.ONED`.
 
-    Correspond to the actual curvature in the direction of the displacement.
+    :att:`DISP`:
+
+    The effective frequency of GS is computed in the direction of the displacement.
+    The effective frequency for the ES is provided by the user (and should be computed in the same direction).
+    Should be used with :attr:`WidthModel.ONED`.
+
     """
 
-    FC_MEAN = 0
-    HR_MEAN = 1
-    HR_RMS = 2
-    FC_RMS = 3
-    ONED_FREQ = 4
-
-
-class _ExPES(Enum):
-    ISO_SCALE = 0
-    SINGLE_ES_FREQ = 1
-    FULL_ND = 2
-
-
-class ExPES:
-    """Mode of approximation of the ES PES curvature.
-
-    :attr:`ISO_SCALE`: We suppose eigenvectors are the same, but the frequencies are
-    scaled by a constant factor.
-
-    :attr:`SINGLE_ES_FREQ`: We suppose all modes have the same frequency (that should be provided).
-
-    :attr:`FULL_ND`: (Not implemented) We know the frequency of each ES mode.
-    """
-
-    ISO_SCALE: "ExPES"
-    SINGLE_ES_FREQ: "ExPES"
-    FULL_ND: "ExPES"
+    FC_MEAN: "OmegaEff"
+    FC_RMS: "OmegaEff"
+    HR_MEAN: "OmegaEff"
+    HR_RMS: "OmegaEff"
+    GRAD: "OmegaEff"
+    DISP: "OmegaEff"
 
     def __init__(self, wm):
         self.wm = wm
         self.omega = None
 
     def __eq__(self, other):
-        return isinstance(other, ExPES) and self.wm == other.wm
+        return isinstance(other, OmegaEff) and self.wm == other.wm
 
     def __call__(self, omega=None):
-        new = ExPES(self.wm)
+        new = OmegaEff(self.wm)
         new.omega = omega
         return new
 
 
-ExPES.ISO_SCALE = ExPES(_ExPES.ISO_SCALE)
-ExPES.SINGLE_ES_FREQ = ExPES(_ExPES.SINGLE_ES_FREQ)
-ExPES.FULL_ND = ExPES(_ExPES.FULL_ND)
+OmegaEff.FC_MEAN = OmegaEff(_OmegaEff.FC_MEAN)
+OmegaEff.FC_RMS = OmegaEff(_OmegaEff.FC_RMS)
+OmegaEff.HR_MEAN = OmegaEff(_OmegaEff.HR_MEAN)
+OmegaEff.HR_RMS = OmegaEff(_OmegaEff.HR_RMS)
+OmegaEff.GRAD = OmegaEff(_OmegaEff.GRAD)
+OmegaEff.DISP = OmegaEff(_OmegaEff.DISP)
+
+
+class WidthModel(Enum):
+    """Mode of approximation of the band width.
+
+    :attr:`ONED`: The witdth is computed in a 1D mode for both ES and GS.
+
+    :attr:`SINGLE_ES_FREQ`: We suppose all modes of the ES have the same
+    frequency (that should be provided).
+
+    :attr:`FULL_ND`: (Not implemented) We know the frequency of each ES mode.
+    """
+
+    ONED = 0
+    SINGLE_ES_FREQ = 1
+    FULL_ND = 2
 
 
 def expected_width(
@@ -129,7 +143,7 @@ def expected_width(
     T,
     mask=None,
     omega_eff_type=OmegaEff.FC_MEAN,
-    ex_pes=ExPES.ISO_SCALE,
+    width_model=WidthModel.ONED,
 ):
     """Compute a spectrum without free parameters.
 
@@ -157,10 +171,20 @@ def expected_width(
     dfcg_vib = np.sum(hrs * es)
 
     e_phonon_eff = effective_phonon_energy(
-        omega_eff_type, hrs, es, phonons[0].masses / atomic_mass, delta_R
+        omega_eff_type,
+        hrs,
+        es,
+        phonons[0].masses / atomic_mass,
+        delta_R=delta_R,
+        modes=phonons,
+        mask=mask,
     )
 
-    if ex_pes.omega is None:
+    if omega_eff_type == OmegaEff.GRAD or omega_eff_type == OmegaEff.DISP:
+        e_phonon_eff_e = omega_eff_type.omega
+        alpha = e_phonon_eff_e / e_phonon_eff
+        logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
+    else:
         if fc_shift_gs is None or fc_shift_gs < 0:
             raise ValueError(
                 "fc_shift_gs must not be omited unless an effective frequency for the excited state is provided."
@@ -172,18 +196,11 @@ def expected_width(
         alpha = np.sqrt(fc_shift_es / fc_shift_gs)
         e_phonon_eff_e = e_phonon_eff * alpha
         logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
-    else:
-        e_phonon_eff_e = ex_pes.omega
-        alpha = e_phonon_eff_e / e_phonon_eff
-        logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
 
-    if ex_pes == ExPES.ISO_SCALE:
+    if width_model == WidthModel.ONED:
         sig = sigma(T, S_em, e_phonon_eff, e_phonon_eff_e)
         sig0 = sigma(0, S_em, e_phonon_eff, e_phonon_eff_e)
-    elif ex_pes == ExPES.SINGLE_ES_FREQ:
-        if ex_pes.omega is not None:
-            e_phonon_eff_e = ex_pes.omega
-
+    elif width_model == WidthModel.SINGLE_ES_FREQ:
         sig = sigma_hybrid(T, hrs, es, e_phonon_eff_e)
         sig0 = sigma_hybrid(0, hrs, es, e_phonon_eff_e)
     else:
@@ -202,8 +219,9 @@ def guess_width(
     mask=None,
     shape=LineShape.GAUSSIAN,
     omega_eff_type=OmegaEff.FC_MEAN,
-    ex_pes=ExPES.ISO_SCALE,
+    width_model=WidthModel.ONED,
     window_fn=np.hamming,
+    trial_line_sig=20e-3,
 ):
     """Try to guess the width of the line from a 1D semi-classical model.
 
@@ -229,7 +247,22 @@ def guess_width(
         pos_gs, pos_es = delta_R
         delta_R = compute_delta_R(pos_gs, pos_es)
 
-    e_max = 3
+    _, ex_fwhm = expected_width(
+        phonons,
+        delta_R,
+        fc_shift_gs,
+        fc_shift_es,
+        T,
+        mask=mask,
+        omega_eff_type=omega_eff_type,
+        width_model=width_model,
+    )
+
+    logger.info(f"ex_fwhm = {ex_fwhm} eV")
+
+    expected_sig2 = (ex_fwhm / sigma_to_fwhm) ** 2
+
+    e_max = 8
 
     sample_rate = 2 * e_max * eV_in_J / h_si
 
@@ -252,33 +285,23 @@ def guess_width(
 
     g_t = np.exp(s_t - S)
 
-    trial_line_sig = 20e-3
     trial_line_shape = make_line_shape(t, trial_line_sig * eV_in_J, shape)
 
-    a_t = _window(g_t * trial_line_shape * np.exp(1.0j * t * 3 * eV_in_J / hbar_si), fn=window_fn)
+    a_t = _window(
+        g_t * trial_line_shape * np.exp(1.0j * t * 3 * eV_in_J / hbar_si), fn=window_fn
+    )
 
     e = np.arange(int(floor(-N / 2)), int(floor(N / 2))) * resolution_e
     trial_A = np.abs(fft.fft(a_t))
     trial_A /= integrate(e, trial_A)
     trial_sig2 = variance(e, trial_A)
 
-    _, ex_fwhm = expected_width(
-        phonons,
-        delta_R,
-        fc_shift_gs,
-        fc_shift_es,
-        T,
-        mask=mask,
-        omega_eff_type=omega_eff_type,
-        ex_pes=ex_pes,
-    )
-
-    expected_sig2 = (ex_fwhm / sigma_to_fwhm) ** 2
-
     expected_line_sig2 = expected_sig2 + trial_line_sig**2 - trial_sig2
 
-    if expected_line_sig2 <= 0.:
-        raise ValueError("Guessed line variance is not positive.")
+    if expected_line_sig2 <= 0.0:
+        raise ValueError(
+            f"Guessed line variance is not positive. Expected total width is {expected_sig2**0.5} eV."
+        )
 
     return np.sqrt(expected_line_sig2) * sigma_to_fwhm
 
@@ -360,7 +383,9 @@ def sigma_full_nd(T, delta_R, modes_gs, modes_es, mask=None):
     )
 
 
-def effective_phonon_energy(omega_eff_type, hrs, es, masses, delta_R=None):
+def effective_phonon_energy(
+    omega_eff_type, hrs, es, masses, *, delta_R=None, modes=None, mask=None
+):
     """Compute an effective phonon energy in eV following the strategy of omega_eff_type.
 
     :param omega_eff_type: The mode of evaluation of the effective phonon energy.
@@ -386,7 +411,7 @@ def effective_phonon_energy(omega_eff_type, hrs, es, masses, delta_R=None):
         return np.sqrt(np.sum(fcs * _es) / S_em) / eV_in_J
     elif omega_eff_type == OmegaEff.FC_RMS:
         return np.sqrt(np.sum(fcs * _es * _es) / dfcg_vib) / eV_in_J
-    elif omega_eff_type == OmegaEff.ONED_FREQ:
+    elif omega_eff_type == OmegaEff.DISP:
         if delta_R is None:
             raise ValueError("delta_R is required when using the ONED_FREQ model.")
 
@@ -395,5 +420,39 @@ def effective_phonon_energy(omega_eff_type, hrs, es, masses, delta_R=None):
         ).reshape((-1,))
         delta_Q_2 = delta_Q.dot(delta_Q)
         return (hbar_si * np.sqrt(np.sum(fcs) / delta_Q_2)) / eV_in_J
+    elif omega_eff_type == OmegaEff.GRAD:
+        if modes is None or masses is None or delta_R is None:
+            raise ValueError(
+                "modes, masses and delta_R are all required when using the ONED_FREQ_GRAD model."
+            )
+        grad = gradiant_at(modes, masses, delta_R, mask=mask).reshape((-1, 1))
+        g_dir = grad / np.linalg.norm(grad)
+
+        dynmat = dynamical_matrix(modes)
+
+        [[e_eff]] = (g_dir.T @ dynmat @ g_dir) ** 0.5 * hbar_si / eV_in_J
+
+        return e_eff
 
     raise ValueError("Unknown effective frequency strategy.")
+
+
+def gradiant_at(modes, masses, delta_R, *, mask=None):
+    if mask is None:
+        mask = Mask.from_bias(0)
+
+    phonons = [p for p in modes if p.real]
+
+    m = np.array(masses).reshape((-1, 1))
+    delta_Q = np.sqrt(m) * delta_R
+
+    k = get_energies(phonons, mask=mask) ** 2
+    d = np.array(
+        [np.sum(p.eigenvector * delta_Q) for p in phonons if mask.accept(p.energy)]
+    )
+
+    kd = k * d
+
+    return m ** (-0.5) * np.sum(
+        (np.array([p.eigenvector for p in phonons]) * kd.reshape((-1, 1, 1))), axis=0
+    )
