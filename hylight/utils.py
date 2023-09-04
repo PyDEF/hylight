@@ -117,10 +117,19 @@ def periodic_diff(lattice, ref, disp):
     return dfrac @ lattice
 
 
+def periodic_dist(lattice, ref, disp):
+    "Compute the distance between ref and disp, accounting for periodic conditions."
+    dp = ref - disp
+
+    dfrac = np.remainder(dp @ np.linalg.inv(lattice) + 0.5, 1.0) - 0.5
+
+    return np.linalg.norm(dfrac @ lattice, axis=-1)
+
+
 def gaussian(e, sigma, standard=True):
     """Evaluate a Gaussian function on e.
 
-    :param e: mean
+    :param e: abscissa
     :param sigma: standard deviation
     :param standard:
 

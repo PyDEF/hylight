@@ -23,7 +23,7 @@ eV_in_J: float = 1.602176634e-19
 two_pi: float = 6.283185307179586
 pi: float = 3.141592653589793
 hbar_si: float = h_si / two_pi  # J.s.rad-1
-hbar: float = h_si / two_pi / eV_in_J  # ev.s.rad-1
+hbar: float = h_si / two_pi / eV_in_J  # eV.s.rad-1
 electron_mass: float = 9.1093837015e-31  # kg
 e_si: float = 1.60217663e-19  # C
 

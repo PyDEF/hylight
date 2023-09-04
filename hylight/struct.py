@@ -50,6 +50,32 @@ class Struct:
             )
         else:
             self._species_names = list(species_names)
+            assert len(self._species_names) == len(self.species)
+            assert set(self._species_names) == set(self.species.keys())
+
+    @classmethod
+    def from_mode(cls, mode):
+        positions = mode.ref
+        lattice = mode.lattice
+
+        d = {}
+        names = []
+
+        for i, sp in enumerate(mode.atoms):
+            d.setdefault(sp, []).append(i)
+
+            if not names or sp != names[-1]:
+                names.append(sp)
+
+        if len(names) != len(set(names)):
+            raise ValueError("Non contiguous blocks are not supported.")
+
+        species = {}
+
+        for sp, indices in d.items():
+            species[sp] = positions[indices, :].copy()
+
+        return cls(lattice, species, names)
 
     @property
     def species_names(self):
@@ -106,3 +132,27 @@ class Struct:
             {k: a.copy() for k, a in self.species.items()},
             species_names=self._species_names,
         )
+
+    def sp_at(self, i):
+        j = i
+
+        for sp in self._species_names:
+            if i < len(self.species[sp]):
+                return sp
+            else:
+                i -= len(self.species[sp])
+
+        raise ValueError(f"{j} is not a valid atom index.")
+
+    def get_offset(self, sp):
+        if sp not in self.species:
+            raise ValueError(f"{sp} is not present in this structure.")
+
+        offset = 0
+        for sp_b in self._species_names:
+            if sp_b == sp:
+                return offset
+            else:
+                offset += len(self.species[sp_b])
+
+        raise Exception("Unreachable")

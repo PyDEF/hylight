@@ -60,7 +60,7 @@ def write_jmol_options(f, opts):
             "]",
             file=f,
         )
-        origin = opts.get("origin", [0, 0, 0])
+        origin = opts.get("origin", [0.5, 0.5, 0.5])
         print("unitcell CENTER", format_v(origin), file=f)
 
     if "bonds" in opts:
@@ -103,7 +103,7 @@ def export(dest, mode, *, displacement=True, scale=1.0, compression=ZIP_DEFLATED
             print(f"Mode {mode.n}", file=f)
 
             if displacement:
-                write_xyz(f, mode.atoms, mode.ref, scale * mode.delta / np.sqrt(atomic_mass))
+                write_xyz(f, mode.atoms, mode.ref, scale * mode.delta * np.sqrt(atomic_mass))
             else:
                 write_xyz(f, mode.atoms, mode.ref, scale * mode.eigenvector)
 

@@ -46,6 +46,11 @@ class Poscar(Struct):
             mode = next(f).strip()[0].lower()
 
             species = {}
+
+            if mode == "s":
+                # selective dynamics, skip the line
+                mode = next(f).strip()[0].lower()
+
             if mode == "d":
                 for spec, n in zip(labels, atoms_pop):
                     pos = []

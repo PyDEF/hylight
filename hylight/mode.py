@@ -63,8 +63,8 @@ class Mode:
         self.eigenvector = eigenvector  # vibrational mode eigenvector (norm of 1)
         self.masses = np.array(masses) * atomic_mass
         # vibrational mode eigendisplacement
-        self.delta = np.sqrt(self.masses.reshape((-1, 1))) * eigenvector
-        self.mass = np.linalg.norm(self.delta) ** 2
+        self.delta = np.sqrt(1. / self.masses.reshape((-1, 1))) * eigenvector
+        self.mass = np.sum(np.sum(self.eigenvector**2, axis=1) * self.masses)
 
     def set_lattice(self, lattice: FArray, tol=1e-6) -> None:
         """Change the representation to another lattice.
@@ -90,7 +90,7 @@ class Mode:
         self.delta = self.delta @ np.linalg.inv(self.lattice) @ lattice
         self.ref = self.ref @ np.linalg.inv(self.lattice) @ lattice
         self.lattice = lattice
-        self.eigenvector = self.delta / np.sqrt(self.masses.reshape((-1, 1)))
+        self.eigenvector = self.delta * np.sqrt(self.masses.reshape((-1, 1)))
 
     def project(self, delta_Q: FArray) -> float:
         """Project delta_Q onto the eigenvector."""
@@ -136,7 +136,7 @@ class Mode:
         for i in range(n):
             coords = self.ref + np.sin(
                 two_pi * i / n
-            ) * amplitude * self.delta / np.sqrt(atomic_mass)
+            ) * amplitude * self.delta * np.sqrt(atomic_mass)
             traj.append(Atoms(self.atoms, coords))
 
         return traj
@@ -149,6 +149,71 @@ class Mode:
         from .jmol import export
 
         return export(dest, self, **opts)
+
+    def participation_ratio(self):
+        r"""Fraction of atoms active in the mode.
+
+        R J Bell et al 1970 J. Phys. C: Solid State Phys. 3 2111
+        https://doi.org/10.1088/0022-3719/3/10/013
+
+        It is equal to :math:`M_1^2 / (M_2 M_0)` where
+
+        .. math::
+
+            M_n = \sum_\alpha {m_\alpha {||\eta_\alpha||}^2}^n
+
+        where :math:`\eta_\alpha` is the contribution of atom :math:`\alpha` to
+        eigendisplacement :math:`\eta`.
+
+        But :math:`M_0 = N` by definition and :math:`M_1 = 1` because the eigenvectors are normalized.
+
+        .. Note::
+
+            :math:`M_n` = :code:`np.sum(self.energies()**n)`
+        """
+
+        return 1.0 / (np.sum(np.sum(self.eigenvector**2, axis=1)**2) * len(self.eigenvector))
+
+    def per_species_n_eff(self, sp):
+        "Number of active atoms for a given species."
+        block = self.eigenvector[np.array(self.atoms) == sp, :]
+
+        if block.size == 0:
+            raise ValueError(f"{sp} is absent from this structure.")
+
+        if block.size == 1:
+            raise ValueError(f"There is only one {sp}, participation ratio is always one.")
+
+        return np.sum(block**2)**2 / np.sum(np.sum(block**2, axis=1)**2)
+
+    def per_species_pr(self, sp):
+        "Participation ratio for a given species."
+
+        block = self.eigenvector[np.array(self.atoms) == sp, :]
+
+        if block.size == 0:
+            raise ValueError(f"{sp} is absent from this structure.")
+
+        if block.size == 1:
+            raise ValueError(f"There is only one {sp}, participation ratio is always one.")
+
+        return np.sum(block**2)**2 / (np.sum(np.sum(block**2, axis=1)**2) * len(block))
+
+    def localization_ratio(self):
+        """Quantify the localization of the mode over the supercell.
+
+        See also :func:`participation_ratio`.
+
+        1: fully delocalized
+        >> 1: localized
+        """
+
+        return np.sum(np.sum(self.eigenvector**2, axis=1)**2) * len(self.eigenvector)
+
+    def energies(self):
+        "Return the energy participation of each atom to the mode."
+
+        return np.sum(self.eigenvector**2, axis=1)
 
 
 def rot_c_to_v(phonons: Iterable[Mode]) -> FArray:
@@ -436,7 +501,7 @@ def orthonormalize(m, n_skip=0):
 
     while not np.allclose(eye, m @ m.T):
         for i in range(n_skip, n):
-            # get the matrix without row i 
+            # get the matrix without row i
             rest = m[[j for j in range(n) if j != i], :]
             c = m[i, :]
             # remove the part of c that is in the subspace of rest
