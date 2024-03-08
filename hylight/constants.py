@@ -27,7 +27,7 @@ hbar: float = h_si / two_pi / eV_in_J  # eV.s.rad-1
 electron_mass: float = 9.1093837015e-31  # kg
 e_si: float = 1.60217663e-19  # C
 
-atomic_mass: float = 1.67e-27  # kg
+atomic_mass: float = 1.660539066605e-27  # kg
 
 THz_in_meV: float = 4.135667696923859
 

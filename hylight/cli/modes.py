@@ -107,11 +107,29 @@ def show_ref(opts):
     from ..npz import load_phonons
     from ..vasp.common import Poscar
 
-    modes, _, _ = load_phonons(opts.source)
+    modes, *_ = load_phonons(opts.source)
 
     m0 = modes[0]
-    p = Poscar(m0.lattice, {"H": m0.ref})
+
+    species = []
+    species.append(m0.atoms[0])
+
+    for sp in m0.atoms[1:]:
+        if sp != species[-1]:
+            species.append(sp)
+
+    offset = 0
+    raw = m0.ref
+    positions = {}
+
+    for sp in species:
+        n = modes[0].atoms.count(sp)
+        positions[sp] = raw[offset:offset+n]
+        offset += n
+
+    p = Poscar(m0.lattice, positions, species)
     p.to_stream(stdout, cartesian=opts.cartesian)
+
 
 def multi_loader(source, from_, phonopy_yaml):
     if from_ not in {"vasp", "crystal", "npz", "phonopy", "auto"}:

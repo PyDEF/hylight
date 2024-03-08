@@ -94,16 +94,20 @@ def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
         lattice = parse_formatted_table([next(outcar), next(outcar), next(outcar)],  "   (.{13})(.{13})(.{13}).*")
 
         for line in outcar:
-            m = head_re.fullmatch(line)
-            if "THz" in line and m:
+            if "THz" in line[30:]:
+                m = head_re.fullmatch(line)
+                if not m:
+                    continue
                 line = line.strip()
                 n_, im, ener = m.groups()
                 n = int(n_)
 
-                data = np.array(
-                    [line.split() for line in islice(outcar, 1, n_atoms + 1)],
-                    dtype=float,
-                )
+                raw_array = list(islice(outcar, 1, n_atoms + 1))
+                try:
+                    data = np.array([line.split() for line in raw_array], dtype=float)
+                except ValueError:
+                    data = parse_formatted_table(raw_array,  "^    (.{10})(.{10})(.{10}) (.{12})(.{12})(.{12})  \n")
+
                 ref = data[:, 0:3]
                 eigenv = data[:, 3:6]
 

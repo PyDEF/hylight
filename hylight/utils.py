@@ -161,12 +161,15 @@ def parse_formatted_table(lines, format):
         matcher = format
     else:
         matcher = re.compile(format)
+
     res = []
     for line in lines:
         m = matcher.match(line)
-        if m:
-            res.append(m.groups())
-        else:
+
+        if not m:
             raise ValueError(f"No match for {format!r} with line: {line!r}")
+
+        res.append(m.groups())
+
     assert len(res) >= 1 and all(len(res[0]) == len(r) for r in res)
     return np.array(res, dtype=float)

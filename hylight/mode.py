@@ -19,7 +19,7 @@ import logging
 
 import numpy as np
 
-from .constants import eV_in_J, atomic_mass, hbar_si, two_pi
+from .constants import eV_in_J, atomic_mass, hbar_si, two_pi, cm1_in_J
 from .typing import FArray, BArray
 
 
@@ -65,6 +65,22 @@ class Mode:
         # vibrational mode eigendisplacement
         self.delta = np.sqrt(1. / self.masses.reshape((-1, 1))) * eigenvector
         self.mass = np.sum(np.sum(self.eigenvector**2, axis=1) * self.masses)
+
+    @property
+    def energy_si(self):
+        return self.energy
+
+    @property
+    def energy_eV(self):
+        return self.energy / eV_in_J
+
+    @property
+    def energy_meV(self):
+        return self.energy / eV_in_J * 1e3
+
+    @property
+    def energy_cm1(self):
+        return self.energy / cm1_in_J
 
     def set_lattice(self, lattice: FArray, tol=1e-6) -> None:
         """Change the representation to another lattice.

@@ -29,6 +29,7 @@ from .constants import (
     sigma_to_fwhm,
     hbar_si,
     atomic_mass,
+    kb,
 )
 from .utils import periodic_diff, gaussian
 
@@ -145,6 +146,7 @@ def compute_spectrum(
     pre_convolve=None,
     load_phonons=load_phonons,
     window_fn=np.hamming,
+    T=0,
 ):
     """Compute a luminescence spectrum with the time-dependant formulation with an arbitrary linewidth.
 
@@ -169,7 +171,7 @@ def compute_spectrum(
     """
 
     if e_max is None:
-        e_max = zpl * 2.5
+        e_max = zpl * 3.
 
     if e_max < 2 * zpl:
         raise ValueError(
@@ -191,21 +193,25 @@ def compute_spectrum(
         for ph in phonons:
             d = np.linalg.norm(periodic_diff(lattice_gs, pos_gs, ph.ref), axis=1)
 
-            if np.max(d) > 1e-2:
+            if np.max(d) > 5e-2:
                 md = np.max(d)
                 i0 = np.argmax(d)
                 warn_bad = (ph.n, i0, md)
-            elif np.max(d) > 1e-3:
+            elif np.max(d) > 5e-3:
                 md = np.max(d)
                 i0 = np.argmax(d)
                 warn = (ph.n, i0, md)
 
         if warn_bad is not None:
             n, i0, md = warn_bad
-            logger.error(f"Mode {ph.n} has a reference position very far from GS position. (atom {i0} moved by {md} A)")
+            logger.error(
+                f"Mode {ph.n} has a reference position very far from GS position. (atom {i0+1} moved by {md} A)"
+            )
         elif warn is not None:
             n, i0, md = warn
-            logger.warning(f"Mode {n} has a reference position somewhat far from GS position. (atom {i0} moved by {md})")
+            logger.warning(
+                f"Mode {n} has a reference position somewhat far from GS position. (atom {i0+1} moved by {md})"
+            )
     else:
         logger.warning(
             "Make sure that delta_R and phonons are described in the same cell."
@@ -238,6 +244,9 @@ def compute_spectrum(
 
     s_t = _get_s_t_raw(t, freqs, hrs)
 
+    if T > 0:
+        s_t += _get_c_t_raw(T, t, freqs, hrs)
+
     if pre_convolve is not None:
         sigma_freq = pre_convolve * eV_in_J / h_si / sigma_to_fwhm
         g = gaussian(t, 1 / (two_pi * sigma_freq))
@@ -252,9 +261,9 @@ def compute_spectrum(
 
     a_t = _window(g_t * line_shape, fn=window_fn)
 
-    e = np.arange(0, N) * resolution_e
     A = fft.fft(a_t)
 
+    e = np.arange(0, N) * resolution_e
     I = np.abs(e**3 * A)  # noqa: E741
 
     return e, I / np.max(I)
@@ -319,7 +328,7 @@ def _get_s_t_raw(t, freqs, hrs):
         )
 
     if len(freqs) * len(t) > 100e6:
-        # above 100 million coefficients don't even try
+        # above 100 million coefficients, don't even try
         return slow()
     else:
         try:
@@ -329,6 +338,39 @@ def _get_s_t_raw(t, freqs, hrs):
         else:
             # sum over the modes:
             return np.sum(s_i_t, axis=1)
+
+
+def _get_c_t_raw(T, t, freqs, hrs):
+    # Bose-Einstein statistics
+    occs = 1.0 / (np.exp(freqs * h_si / (T * kb)) - 1.0)
+
+    def slow():
+        # Slower less memory intensive solution
+        c_t = np.zeros(t.shape, dtype=float)
+        for occ, hr, fr in zip(occs, hrs, freqs):
+            c_t += 2.0 * occ * hr * (np.cos(two_pi * fr * t) - 1)
+        return c_t
+
+    def fast():
+        # This can create a huge array if freqs is too big
+        # but it let numpy handle everything so it is really fast
+        return (
+            2.0
+            * (occs * hrs).reshape((1, -1))
+            * (np.cos(two_pi * freqs.reshape((1, -1)) * t.reshape((-1, 1))) - 1)
+        )
+
+    if len(freqs) * len(t) > 100e6:
+        # above 100 million coefficients, don't even try
+        return slow()
+    else:
+        try:
+            c_i_t = fast()
+        except MemoryError:
+            return slow()
+        else:
+            # sum over the modes:
+            return np.sum(c_i_t, axis=1)
 
 
 def _window(data, fn=np.hamming):
