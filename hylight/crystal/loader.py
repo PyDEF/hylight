@@ -1,19 +1,7 @@
-"Read vibrational modes from CRYSTAL log."
-# License:
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""Read vibrational modes from CRYSTAL log.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 import numpy as np
 
 from itertools import groupby
@@ -42,7 +30,6 @@ def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
         for line in log:
             if "DIRECT LATTICE VECTORS CARTESIAN COMPONENTS (ANGSTROM)" in line:
                 break
-
 
         #         X                    Y                    Z
         next(log)
@@ -138,7 +125,16 @@ def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
                 # - eigenvec: normalized to 1
                 # - masses: atomic masses
                 phonons.append(
-                    Mode(lattice, names, c, f >= 0, abs(f) * cm1_in_meV, pos, eigenvec, masses)
+                    Mode(
+                        lattice,
+                        names,
+                        c,
+                        f >= 0,
+                        abs(f) * cm1_in_meV,
+                        pos,
+                        eigenvec,
+                        masses,
+                    )
                 )
             next(log)
             head = next(log).strip()
@@ -148,4 +144,5 @@ def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
 
 
 def normalize(name):
+    "Normalize an atom name (e.g. ZR -> Zr)."
     return name[0].upper() + name[1:].lower()

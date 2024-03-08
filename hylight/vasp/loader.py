@@ -1,19 +1,7 @@
-"Read vibrational modes from VASP files."
-# License:
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""Read vibrational modes from VASP files.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 import re
 from itertools import islice
 
@@ -91,7 +79,9 @@ def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
             if "direct lattice vector" in line:
                 break
 
-        lattice = parse_formatted_table([next(outcar), next(outcar), next(outcar)],  "   (.{13})(.{13})(.{13}).*")
+        lattice = parse_formatted_table(
+            [next(outcar), next(outcar), next(outcar)], "   (.{13})(.{13})(.{13}).*"
+        )
 
         for line in outcar:
             if "THz" in line[30:]:
@@ -106,13 +96,18 @@ def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
                 try:
                     data = np.array([line.split() for line in raw_array], dtype=float)
                 except ValueError:
-                    data = parse_formatted_table(raw_array,  "^    (.{10})(.{10})(.{10}) (.{12})(.{12})(.{12})  \n")
+                    data = parse_formatted_table(
+                        raw_array,
+                        "^    (.{10})(.{10})(.{10}) (.{12})(.{12})(.{12})  \n",
+                    )
 
                 ref = data[:, 0:3]
                 eigenv = data[:, 3:6]
 
                 phonons.append(
-                    Mode(lattice, atoms, n, im == "f  ", float(ener), ref, eigenv, masses)
+                    Mode(
+                        lattice, atoms, n, im == "f  ", float(ener), ref, eigenv, masses
+                    )
                 )
 
                 n_modes += 1

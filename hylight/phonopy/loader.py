@@ -2,46 +2,47 @@
 
 It always uses PyYAML, but it can also need h5py to read hdf5 files.
 """
-# License:
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 from __future__ import annotations
 
 from os.path import isfile, join
 from itertools import groupby
 import gzip
 from dataclasses import dataclass
-from contextlib import suppress
 
 import numpy as np
 
 from ..constants import THz_in_meV
 from ..mode import Mode
-from ..typing import FArray, Type
+from ..typing import FArray
 
 import yaml
 
-from yaml import Loader
 
-with suppress(ImportError):
+try:
     # Use CLoader if possible, it is much faster.
     # This will make a huge difference when loading eigenvectors.
     from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
 
 
 def load_phonons(dir_: str) -> tuple[list[Mode], list[int], list[float]]:
+    """Load vibrational modes from phonopy output files.
+
+    This function takes the directory where the files are stored and tries to detect the right file to process.
+
+    .. seealso::
+
+        * :func:`load_phonons_qpointsh5`
+        * :func:`load_phonons_bandsh5`
+        * :func:`load_phonons_qpointsyaml`
+        * :func:`load_phonons_bandyaml`
+
+    :param dir_: directory containing phonopy output files
+    :return: (modes, frequencies, eigenvectors) tuple
+    """
     if isfile(join(dir_, "qpoints.hdf5")):
         return load_phonons_qpointsh5(
             join(dir_, "qpoints.hdf5"), join(dir_, "phonopy.yaml")
@@ -75,11 +76,22 @@ def load_phonons(dir_: str) -> tuple[list[Mode], list[int], list[float]]:
 def load_phonons_bandsh5(
     bandh5: str, phyaml: str, op=open
 ) -> tuple[list[Mode], list[int], list[float]]:
+    """Load vibrational modes from phonopy HDF5 output files.
+
+    :param bandh5: path to band.hdf5 or band.hdf5.gz file
+    :param op: (optional, open) open function, pass :func:`gzip.open` when dealing with compressed file.
+    :return: (modes, frequencies, eigenvectors) tuple
+    """
     struct = get_struct(phyaml)
     return _load_phonons_bandsh5(struct, bandh5, op)
 
 
 def load_phonons_bandyaml(bandy: str) -> tuple[list[Mode], list[int], list[float]]:
+    """Load vibrational modes from phonopy YAML output files.
+
+    :param bandy: path to band.yaml file
+    :return: (modes, frequencies, eigenvectors) tuple
+    """
     with open(bandy) as f:
         raw = yaml.load(f, Loader)
 
@@ -90,6 +102,13 @@ def load_phonons_bandyaml(bandy: str) -> tuple[list[Mode], list[int], list[float
 def load_phonons_qpointsh5(
     qph5: str, phyaml: str, op=open
 ) -> tuple[list[Mode], list[int], list[float]]:
+    """Load vibrational modes from phonopy HDF5 output files.
+
+    :param qph5: path to qpoints.hdf5 or qpoints.hdf5.gz file
+    :param phyaml: path to phonopy.yaml file
+    :param op: (optional, open) open function, pass :func:`gzip.open` when dealing with compressed file.
+    :return: (modes, frequencies, eigenvectors) tuple
+    """
     struct = get_struct(phyaml)
     return _load_phonons_qpointsh5(struct, qph5, op)
 
@@ -97,11 +116,18 @@ def load_phonons_qpointsh5(
 def load_phonons_qpointsyaml(
     qpyaml: str, phyaml: str
 ) -> tuple[list[Mode], list[int], list[float]]:
+    """Load vibrational modes from phonopy YAML output files.
+
+    :param qpyaml: path to qpoints.yaml file
+    :param phyaml: path to phonopy.yaml file
+    :return: (modes, frequencies, eigenvectors) tuple
+    """
     struct = get_struct(phyaml)
     return _load_phonons_qpointsyaml(struct, qpyaml)
 
 
 def get_struct(phyaml: str) -> PPStruct:
+    "Get a structure from the phonopy.yaml file."
     if not isfile(phyaml):
         raise FileNotFoundError("Missing file phonopy.yaml")
 
@@ -114,6 +140,7 @@ def get_struct(phyaml: str) -> PPStruct:
 def _load_phonons_bandsh5(
     struct: PPStruct, path: str, op
 ) -> tuple[list[Mode], list[int], list[float]]:
+    # helper function for load_phonons_bandsh5
     import h5py
 
     with h5py.File(op(path, mode="rb")) as f:
@@ -138,6 +165,7 @@ def _load_phonons_bandsh5(
 def _load_phonons_qpointsh5(
     struct: PPStruct, path: str, op
 ) -> tuple[list[Mode], list[int], list[float]]:
+    # helper function for load_phonons_qpointsh5
     import h5py
 
     with h5py.File(op(path, mode="rb")) as f:
@@ -159,6 +187,7 @@ def _load_phonons_qpointsh5(
 def _load_phonons_h5(
     struct: PPStruct, qp: dict, ev: list[FArray], fr: list[float]
 ) -> tuple[list[Mode], list[int], list[float]]:
+    # helper function for _load_phonons_bandsh5 and _load_phonons_qpointsh5
     n = len(struct.atoms) * 3
 
     phonons = []
@@ -184,6 +213,7 @@ def _load_phonons_h5(
 def _load_phonons_bandyaml(
     struct: PPStruct, raw: dict
 ) -> tuple[list[Mode], list[int], list[float]]:
+    # helper function for load_phonons_bandyaml
     raw_ph = raw["phonon"][0]
     # TODO actually find the Gamma point
     point = raw_ph["band"]
@@ -193,6 +223,7 @@ def _load_phonons_bandyaml(
 def _load_phonons_qpointsyaml(
     struct: PPStruct, path: str
 ) -> tuple[list[Mode], list[int], list[float]]:
+    # helper function for load_phonons_qpointsyaml
     with open(path) as f:
         raw = yaml.load(f, Loader)
 
@@ -207,6 +238,7 @@ def _load_phonons_qpointsyaml(
 
 
 def _load_phonons_yaml(struct, point) -> tuple[list[Mode], list[int], list[float]]:
+    # helper function for _load_phonons_bandyaml and _load_phonons_qpointsyaml
     n = len(struct.atoms)
     phonons = []
     for i, ph in enumerate(point):
@@ -235,6 +267,7 @@ def _load_phonons_yaml(struct, point) -> tuple[list[Mode], list[int], list[float
 
 @dataclass
 class PPStruct:
+    "Crystal structure as described by phonopy."
     pops: list[int]
     lattice: FArray
     masses: list[float]
@@ -243,6 +276,7 @@ class PPStruct:
 
     @classmethod
     def from_yaml_cell(cls, cell: dict) -> "PPStruct":
+        """Create a PPStruct from a cell dictionary found in phonopy files."""
         lattice = np.array(cell["lattice"])
         masses = [p["mass"] for p in cell["points"]]
         atoms = [p["symbol"] for p in cell["points"]]

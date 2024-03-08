@@ -1,25 +1,11 @@
-"Semi classical guess of linewidth."
-# License
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""Semi classical guess of linewidth.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 from enum import Enum
 from math import floor
 import numpy as np
 from scipy import fft
-
-from matplotlib import pyplot as plt
 
 from .mode import get_energies, get_HR_factors, rot_c_to_v, Mask, dynamical_matrix
 from .loader import load_phonons
@@ -83,7 +69,7 @@ class OmegaEff:
     The effective frequency for the ES is provided by the user (and should be computed in the same direction).
     Should be used with :attr:`WidthModel.ONED`.
 
-    :att:`DISP`:
+    :attr:`DISP`:
 
     The effective frequency of GS is computed in the direction of the displacement.
     The effective frequency for the ES is provided by the user (and should be computed in the same direction).
@@ -438,6 +424,14 @@ def effective_phonon_energy(
 
 
 def gradiant_at(modes, masses, delta_R, *, mask=None):
+    """Compute the gradient of the PES at the position of delta_R.
+
+    :param modes: list of modes
+    :param masses: list of atomic masses
+    :param delta_R: displacement of each atoms in A
+    :param mask: (optional, None) a :class:`hylight.mode.Mask` used to discard irrelevant modes
+    :returns: the gradient of the PES at the position of delta_R
+    """
     if mask is None:
         mask = Mask.from_bias(0)
 

@@ -1,19 +1,7 @@
-"Common utilities to read and write VASP files."
-# License:
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""Common utilities to read and write VASP files.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 import numpy as np
 
 from ..utils import InputError
@@ -21,6 +9,8 @@ from ..struct import Struct
 
 
 class Poscar(Struct):
+    """A crystal cell from a VASP POSCAR file."""
+
     @classmethod
     def from_file(cls, filename):
         """Load a POSCAR file
@@ -94,9 +84,7 @@ class Poscar(Struct):
 
         out.write(f"{self.system_name}\n")
         out.write("1.0\n")
-        np.savetxt(
-            out, self.lattice, "%15.12f", delimiter="\t", newline="\n"
-        )
+        np.savetxt(out, self.lattice, "%15.12f", delimiter="\t", newline="\n")
 
         out.write(" ".join(f"{name:6}" for name, _lst in species))
         out.write("\n")

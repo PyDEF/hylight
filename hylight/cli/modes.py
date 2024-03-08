@@ -1,21 +1,9 @@
 """Read a file containing vibrational modes and store them into a fast-read file.
 
-License
-    Copyright (C) 2023  PyDEF development team
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+Licensed under the EUPL
 """
+
 import os
 import os.path as op
 import gzip
@@ -23,7 +11,7 @@ from itertools import cycle
 
 from .script_utils import MultiCmd, positional, optional, error_catch, flag
 from ..npz import archive_modes, load_phonons
-from ..constants import eV_in_J, cm1_in_J, atomic_mass, hbar_si
+from ..constants import eV_in_J, cm1_in_J, hbar_si
 
 
 cmd = MultiCmd(description=__doc__)
@@ -32,11 +20,23 @@ cmd = MultiCmd(description=__doc__)
 @cmd.subcmd(
     positional("SOURCE", help="path to an input file."),
     positional("DEST", help="path of the destionation file.", default=None),
-    positional("PHONOPY_YAML", help="path to the phonopy.yaml file if needed.", default=None),
+    positional(
+        "PHONOPY_YAML", help="path to the phonopy.yaml file if needed.", default=None
+    ),
     optional("--from", "-f", dest="from_", default="auto", help="Input format."),
-    optional("--with-lattice", "-l", default=None, help="Reference POSCAR for the lattice."),
-    optional("--tol", "-t", default=1e-6, type=float, help="Numerical tolerance to lattice vector mismatch (used with --with-lattice)."),
-    flag("--asr", "-A", help="Project the dynmical matrix to enforce accoustic sum rule."),
+    optional(
+        "--with-lattice", "-l", default=None, help="Reference POSCAR for the lattice."
+    ),
+    optional(
+        "--tol",
+        "-t",
+        default=1e-6,
+        type=float,
+        help="Numerical tolerance to lattice vector mismatch (used with --with-lattice).",
+    ),
+    flag(
+        "--asr", "-A", help="Project the dynmical matrix to enforce accoustic sum rule."
+    ),
 )
 def convert(opts):
     """Convert a set of modes from an upstream software to a Hylight archive.
@@ -56,7 +56,7 @@ def convert(opts):
     import numpy as np
 
     if opts.dest is None:
-        dest = opts.source.lstrip('/') + ".npz"
+        dest = opts.source.lstrip("/") + ".npz"
     else:
         dest = opts.dest
 
@@ -75,18 +75,18 @@ def convert(opts):
 
     if opts.asr:
         from ..mode import dynamical_matrix, project_on_asr, modes_from_dynmat
+
         phonons, pops, masses = modes
         dmat = dynamical_matrix(phonons)
         m0 = modes[0][0]
 
         dmat_proj = project_on_asr(dmat, masses)
 
-        d = np.linalg.norm(dmat - dmat_proj)**0.5 * hbar_si / cm1_in_J
+        d = np.linalg.norm(dmat - dmat_proj) ** 0.5 * hbar_si / cm1_in_J
         print("Distance to original matrix:", d, "cm1")
 
         phonons = modes_from_dynmat(m0.lattice, m0.atoms, masses, m0.ref, dmat_proj)
         modes = (phonons, pops, masses)
-
 
     with error_catch():
         archive_modes(modes, dest)
@@ -101,8 +101,7 @@ def convert(opts):
     flag("--cartesian", "-c", help="Use cartesian coordinates."),
 )
 def show_ref(opts):
-    """Write the reference position to STDOUT using the POSCAR format."""
-
+    "Write the reference position to STDOUT using the POSCAR format."
     from sys import stdout
     from ..npz import load_phonons
     from ..vasp.common import Poscar
@@ -124,7 +123,7 @@ def show_ref(opts):
 
     for sp in species:
         n = modes[0].atoms.count(sp)
-        positions[sp] = raw[offset:offset+n]
+        positions[sp] = raw[offset : offset + n]
         offset += n
 
     p = Poscar(m0.lattice, positions, species)
@@ -132,19 +131,23 @@ def show_ref(opts):
 
 
 def multi_loader(source, from_, phonopy_yaml):
+    "Load phonons from a file, detecting the format."
     if from_ not in {"vasp", "crystal", "npz", "phonopy", "auto"}:
         raise ValueError(f"{from_} is not a known input format.")
 
     if from_ == "vasp" or source.endswith(".vasp") or op.basename(source) == "OUTCAR":
         from ..vasp.loader import load_phonons
+
         return load_phonons(source)
 
     if from_ == "crystal" or source.endswith(".log"):
         from ..crystal.loader import load_phonons
+
         return load_phonons(source)
 
     if from_ == "npz" or source.endswith(".npz"):
         from ..npz import load_phonons
+
         return load_phonons(source)
 
     if phonopy_yaml is None:
@@ -154,33 +157,41 @@ def multi_loader(source, from_, phonopy_yaml):
 
     if op.basename(source) == "qpoints.hdf5":
         from ..phonopy.loader import load_phonons_qpointsh5
+
         return load_phonons_qpointsh5(source, phyaml)
 
     elif op.basename(source) == "qpoints.hdf5.gz":
         from ..phonopy.loader import load_phonons_qpointsh5
+
         return load_phonons_qpointsh5(source, phyaml, op=gzip.open)
 
     elif op.basename(source) == "band.hdf5":
         from ..phonopy.loader import load_phonons_bandsh5
+
         return load_phonons_bandsh5(source, phyaml)
 
     elif op.basename(source) == "band.hdf5.gz":
         from ..phonopy.loader import load_phonons_bandsh5
+
         return load_phonons_bandsh5(source, phyaml, op=gzip.open)
 
     elif op.basename(source) == "qpoints.yaml":
         from ..phonopy.loader import load_phonons_qpointsyaml
+
         return load_phonons_qpointsyaml(source, phyaml)
 
     elif op.basename(source) == "band.yaml":
         from ..phonopy.loader import load_phonons_bandyaml
+
         return load_phonons_bandyaml(source)
 
     elif from_ == "phonopy":
         raise FileNotFoundError("No known phonopy input found.")
 
     else:
-        raise ValueError("Could not determine the input format. Please use the --format parameter.")
+        raise ValueError(
+            "Could not determine the input format. Please use the --format parameter."
+        )
 
 
 @cmd.subcmd(
@@ -220,12 +231,14 @@ def jmol(opts):
 
 
 def mode_summary(mode):
+    "Make a short summary of the mode."
     print("Index:", mode.n)
     print("Real:", "yes" if mode.real else "no")
     print("Energy (meV):", round(mode.energy * 1000 / eV_in_J, 2))
 
 
 def parse_opts(opts):
+    "Convert from script options to jmol module options."
     x_opts = {}
 
     if opts.bond:
@@ -318,5 +331,6 @@ def show(opts):
 
 
 def summary(data, src):
+    "Make a summary of the set of modes."
     modes, _, _ = data
     print(f"Loaded {len(modes)} modes from {src}.")

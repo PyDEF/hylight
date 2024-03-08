@@ -1,21 +1,10 @@
-"A generic representation of a crystal cell."
-# License
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""A generic representation of a crystal cell.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 import numpy as np
 
+from .mode import Mode
 from .constants import electronegativity
 
 
@@ -54,12 +43,13 @@ class Struct:
             assert set(self._species_names) == set(self.species.keys())
 
     @classmethod
-    def from_mode(cls, mode):
+    def from_mode(cls, mode: Mode) -> "Struct":
+        """Extract the cell from a :class:`hylight.mode.Mode`."""
         positions = mode.ref
         lattice = mode.lattice
 
-        d = {}
-        names = []
+        d: dict[str, list[int]] = {}
+        names: list[str] = []
 
         for i, sp in enumerate(mode.atoms):
             d.setdefault(sp, []).append(i)
@@ -126,7 +116,8 @@ class Struct:
     def system_name(self, val):
         self._system_name = val if val is None else str(val)
 
-    def copy(self):
+    def copy(self) -> "Struct":
+        """Return a copy of the structure."""
         return self.__class__(
             self.lattice.copy(),
             {k: a.copy() for k, a in self.species.items()},
@@ -134,6 +125,11 @@ class Struct:
         )
 
     def sp_at(self, i):
+        """Return the name of the species at the given index.
+
+        :param i: the index of the atom.
+        :returns: the name of the species.
+        """
         j = i
 
         for sp in self._species_names:
@@ -145,6 +141,7 @@ class Struct:
         raise ValueError(f"{j} is not a valid atom index.")
 
     def get_offset(self, sp):
+        "Return the index offset of the given species block in :attr:`raw`."
         if sp not in self.species:
             raise ValueError(f"{sp} is not present in this structure.")
 
@@ -155,4 +152,5 @@ class Struct:
             else:
                 offset += len(self.species[sp_b])
 
+        # the condition to reach this is caught in the first if
         raise Exception("Unreachable")

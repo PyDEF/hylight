@@ -1,8 +1,3 @@
-.. Hylight documentation master file, created by
-   sphinx-quickstart on Fri Dec  9 13:42:59 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 The Hylight Package
 ===================
 
@@ -26,13 +21,16 @@ Licenses
 ````````
 
 Hylight is written and maintained by the PyDEF team.
-The source code for Hylight is distributed under the GPLv3_ license.
+The source code for Hylight is distributed under the EUPL_ license.
+This is a non viral copyleft license, to be compared to MPL, but, unlike the
+MPL it is available in all official languages of the EU, including authors own
+language, french.
 This documentation is distributed under CC-BY_ license.
 
 Citing Hylight
 ``````````````
 
-If you ever use Hylight for a published scientific work, we would ask you to cite the related paper [Hylight]_.
+If you ever use Hylight for a published scientific work, we ask that you cite the related paper [Hylight]_.
 
 Content
 -------
@@ -58,4 +56,4 @@ Indices and tables
 .. _tutorial: ./tutorial.html
 .. _reference: ./gen/hylight.html
 .. _CC-BY: https://creativecommons.org/licenses/by/4.0/
-.. _GPLv3: https://www.gnu.org/licenses/gpl-3.0.html
+.. _EUPL: https://commission.europa.eu/content/european-union-public-licence_en

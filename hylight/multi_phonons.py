@@ -1,24 +1,12 @@
-"Simulation of spectra in nD model."
-# License
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""Simulation of spectra in nD model.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 from enum import Enum
 import numpy as np
 from scipy import fft
 
-from .mode import get_energies, get_HR_factors, rot_c_to_v, same_cell
+from .mode import get_energies, get_HR_factors, rot_c_to_v
 from .loader import load_phonons
 from .vasp.loader import load_poscar_latt
 from .constants import (
@@ -171,7 +159,7 @@ def compute_spectrum(
     """
 
     if e_max is None:
-        e_max = zpl * 3.
+        e_max = zpl * 3.0
 
     if e_max < 2 * zpl:
         raise ValueError(
@@ -383,6 +371,7 @@ def _window(data, fn=np.hamming):
 
 
 def fc_spectrum(phonons, delta_R, n_points=5000, disp=1):
+    "Build arrays for plotting a spectrum energy spectral function."
     f, s, dirac_s = _stick_smooth_spectrum(
         phonons, delta_R, lambda hr, e: hr * e, n_points, disp=disp
     )
@@ -391,6 +380,7 @@ def fc_spectrum(phonons, delta_R, n_points=5000, disp=1):
 
 
 def hr_spectrum(phonons, delta_R, n_points=5000, disp=1):
+    "Build arrays for plotting a spectrum phonon spectral function."
     return _stick_smooth_spectrum(
         phonons, delta_R, lambda hr, _e: hr, n_points, disp=disp
     )
@@ -430,7 +420,7 @@ def _stick_smooth_spectrum(phonons, delta_R, height, n_points, disp=1):
 
 
 def rect(n):
-    """A dummy windowing function that works like numpy.hamming, but as no effect on data."""
+    "A dummy windowing function that works like numpy.hamming, but as no effect on data."
     return np.ones((n,))
 
 

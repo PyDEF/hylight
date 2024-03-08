@@ -1,16 +1,16 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight package" href="../ref/hylight.html" /><link rel="prev" title="The Hylight Package" href="../index.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>BaZrO3:Ti study - Hylight 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
     
     
 
@@ -144,7 +144,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
@@ -160,7 +160,7 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">BaZrO3:Ti study</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../ref/hylight.html">hylight package</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ref/hylight.html">hylight package</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of hylight package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ref/hylight.crystal.html">hylight.crystal package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ref/hylight.findiff.html">hylight.findiff package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ref/hylight.jmol.html">hylight.jmol package</a></li>
@@ -203,7 +203,7 @@
         </div>
         <article role="main">
           <section class="tex2jax_ignore mathjax_ignore" id="bazro3-ti-study">
-<h1>BaZrO3:Ti study<a class="headerlink" href="#bazro3-ti-study" title="Permalink to this heading">#</a></h1>
+<h1>BaZrO3:Ti study<a class="headerlink" href="#bazro3-ti-study" title="Link to this heading">#</a></h1>
 <p>Here are some utility functions and import that will be used throughout the study.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -217,8 +217,9 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">hylight.constants</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="n">eV1_in_nm</span> <span class="o">=</span> <span class="n">h_c</span> <span class="o">/</span> <span class="n">eV_in_J</span> <span class="o">*</span> <span class="mf">1e9</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>  <span class="c1"># setting the logging level to INFO</span>
 </pre></div>
 </div>
 </div>
@@ -285,9 +286,9 @@ Wrote<span class="w"> </span>OUTCAR.npz.
 </pre></div>
 </div>
 <section id="vibronic-luminescence-spectrum">
-<h2>Vibronic luminescence spectrum<a class="headerlink" href="#vibronic-luminescence-spectrum" title="Permalink to this heading">#</a></h2>
+<h2>Vibronic luminescence spectrum<a class="headerlink" href="#vibronic-luminescence-spectrum" title="Link to this heading">#</a></h2>
 <section id="electronic-and-vibrational-parameters">
-<h3>Electronic and vibrational parameters<a class="headerlink" href="#electronic-and-vibrational-parameters" title="Permalink to this heading">#</a></h3>
+<h3>Electronic and vibrational parameters<a class="headerlink" href="#electronic-and-vibrational-parameters" title="Link to this heading">#</a></h3>
 <p>Here we declare the inputs that will be used later.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -302,19 +303,19 @@ Wrote<span class="w"> </span>OUTCAR.npz.
 <span class="n">poscar_es</span> <span class="o">=</span> <span class="s2">&quot;POSCAR_ES&quot;</span>  <span class="c1"># R_E</span>
 <span class="n">T</span> <span class="o">=</span> <span class="mi">300</span>  <span class="c1"># measure temperature (K)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Adiabatic energy difference: </span><span class="si">{</span><span class="n">e_adia</span><span class="si">:</span><span class="s2">.3</span><span class="si">}</span><span class="s2"> eV&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Adiabatic energy difference: </span><span class="si">{</span><span class="n">e_adia</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2"> eV&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adiabatic energy difference: 2.98 eV
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adiabatic energy difference: 2.978 eV
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="simulating-the-spectrum">
-<h3>Simulating the spectrum<a class="headerlink" href="#simulating-the-spectrum" title="Permalink to this heading">#</a></h3>
+<h3>Simulating the spectrum<a class="headerlink" href="#simulating-the-spectrum" title="Link to this heading">#</a></h3>
 <p>Here we load the experimental data that will be used for comparision with the simulation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -344,36 +345,51 @@ Wrote<span class="w"> </span>OUTCAR.npz.
 
 <span class="n">ax_fc</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$d_{FC,j}$ (meV)&quot;</span><span class="p">)</span>
 <span class="n">ax_s</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$S_j$ (A. U.)&quot;</span><span class="p">)</span>
-
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/485d84719aa9d729d7b899f0f15ff65ce14ffa347a68ef3ee96ba1dfd6b2eff1.png" src="../_images/485d84719aa9d729d7b899f0f15ff65ce14ffa347a68ef3ee96ba1dfd6b2eff1.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>File OUTCAR.npz is written in format version 0. Consider recreating it with current version of the code.
+</pre></div>
+</div>
+<img alt="../_images/e5b1b67162aa224c6a663ede9d820b45e383ea7584245a8229f93e9249a7e446.png" src="../_images/e5b1b67162aa224c6a663ede9d820b45e383ea7584245a8229f93e9249a7e446.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hylight.guess_width</span> <span class="kn">import</span> <span class="n">guess_width</span><span class="p">,</span> <span class="n">OmegaEff</span><span class="p">,</span> <span class="n">ExPES</span>
+
+<span class="n">width</span> <span class="o">=</span> <span class="n">guess_width</span><span class="p">(</span><span class="n">outcar</span><span class="p">,</span> <span class="p">(</span><span class="n">poscar_gs</span><span class="p">,</span> <span class="n">poscar_es</span><span class="p">),</span> <span class="n">fc_shift_gs</span><span class="p">,</span> <span class="n">fc_shift_es</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">omega_eff_type</span><span class="o">=</span><span class="n">OmegaEff</span><span class="o">.</span><span class="n">FC_MEAN</span><span class="p">,</span> <span class="n">ex_pes</span><span class="o">=</span><span class="n">ExPES</span><span class="o">.</span><span class="n">ISO_SCALE</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Guessed line FWHM = </span><span class="si">{</span><span class="n">width</span><span class="o">*</span><span class="mf">1e3</span><span class="si">:</span><span class="s2">0.1f</span><span class="si">}</span><span class="s2"> meV&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">hylight.guess_width</span> <span class="kn">import</span> <span class="n">guess_width</span><span class="p">,</span> <span class="n">OmegaEff</span><span class="p">,</span> <span class="n">ExPES</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">width</span> <span class="o">=</span> <span class="n">guess_width</span><span class="p">(</span><span class="n">outcar</span><span class="p">,</span> <span class="p">(</span><span class="n">poscar_gs</span><span class="p">,</span> <span class="n">poscar_es</span><span class="p">),</span> <span class="n">fc_shift_gs</span><span class="p">,</span> <span class="n">fc_shift_es</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">omega_eff_type</span><span class="o">=</span><span class="n">OmegaEff</span><span class="o">.</span><span class="n">FC_MEAN</span><span class="p">,</span> <span class="n">ex_pes</span><span class="o">=</span><span class="n">ExPES</span><span class="o">.</span><span class="n">ISO_SCALE</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Guessed line FWHM = </span><span class="si">{</span><span class="n">width</span><span class="o">*</span><span class="mf">1e3</span><span class="si">:</span><span class="s2">0.1f</span><span class="si">}</span><span class="s2"> meV&quot;</span><span class="p">)</span>
+
+<span class="ne">ImportError</span>: cannot import name &#39;ExPES&#39; from &#39;hylight.guess_width&#39; (/home/theo/.local/share/hatch/env/virtual/hylight/pWfKuxou/hylight/lib/python3.11/site-packages/hylight/guess_width.py)
+</pre></div>
+</div>
 </div>
 </div>
 <p>We simulate the spectrum using the Mode Independant scaling approximation for the ES PES.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hylight.multi_phonons</span> <span class="kn">import</span> <span class="n">spectrum</span><span class="p">,</span> <span class="n">ExPES</span><span class="p">,</span> <span class="n">OmegaEff</span>
-<span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hylight.multi_phonons</span> <span class="kn">import</span> <span class="n">compute_spectrum</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>  <span class="c1"># setting the logging level to INFO</span>
-
-<span class="n">e</span><span class="p">,</span> <span class="n">sp</span> <span class="o">=</span> <span class="n">spectrum</span><span class="p">(</span>  <span class="c1"># simulate the spectrum</span>
+<span class="n">e</span><span class="p">,</span> <span class="n">sp</span> <span class="o">=</span> <span class="n">compute_spectrum</span><span class="p">(</span>  <span class="c1"># simulate the spectrum</span>
     <span class="n">outcar</span><span class="p">,</span>
-    <span class="n">poscar_gs</span><span class="p">,</span>
-    <span class="n">poscar_es</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">poscar_gs</span><span class="p">,</span> <span class="n">poscar_es</span><span class="p">),</span>
     <span class="n">e_adia</span><span class="p">,</span>
-    <span class="n">T</span><span class="p">,</span>
-    <span class="n">fc_shift_gs</span><span class="p">,</span>
-    <span class="n">fc_shift_es</span><span class="p">,</span>
-    <span class="n">ex_pes</span><span class="o">=</span><span class="n">ExPES</span><span class="o">.</span><span class="n">ISO_SCALE</span><span class="p">,</span>
-    <span class="n">omega_eff_type</span><span class="o">=</span><span class="n">OmegaEff</span><span class="o">.</span><span class="n">FC_MEAN</span><span class="p">,</span>
+    <span class="n">width</span><span class="p">,</span>
 <span class="p">)</span>
-
-<span class="n">sp</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span>  <span class="c1"># normalize the spectrum</span>
 
 <span class="n">_</span><span class="p">,</span> <span class="n">max_th</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>  <span class="c1"># extract the maximum of emission energy</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computed maximum of emission: </span><span class="si">{</span><span class="n">max_th</span><span class="si">:</span><span class="s2">.3</span><span class="si">}</span><span class="s2"> eV&quot;</span><span class="p">)</span>
@@ -381,17 +397,9 @@ Wrote<span class="w"> </span>OUTCAR.npz.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>d_fc^e,v = 0.15494048765687785
-omega_gs = 59.3441936353856 meV 478.64320119276204 cm-1
-omega_es = 36.58255313775182 meV 295.0581896729496 cm-1
-S_em = 10.055832452822724
-d_fc^g,v = 0.407730650836752
-FWHM 723.172263202136 meV
-FWHM 0K 564.4130957462941 meV
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using a Gaussian line shape.
-Computed maximum of emission: 2.71 eV
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total Huang-Rhys factor 10.055832452822724.
+Using a Gaussian line shape.
+Computed maximum of emission: 2.7 eV
 </pre></div>
 </div>
 </div>
@@ -415,15 +423,14 @@ Computed maximum of emission: 2.71 eV
 <span class="n">secax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">secondary_xaxis</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">functions</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">eV1_in_nm</span> <span class="o">/</span> <span class="n">x</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">eV1_in_nm</span> <span class="o">/</span> <span class="n">x</span><span class="p">))</span>
 <span class="n">secax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;$\lambda$ (nm)&quot;</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">leg</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;bzo_spectra.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f54087e29b0&gt;
-</pre></div>
-</div>
-<img alt="../_images/69e030d357e9f1ac038646268df968282b242e38b85ae30791ca0d53dd226133.png" src="../_images/69e030d357e9f1ac038646268df968282b242e38b85ae30791ca0d53dd226133.png" />
+<img alt="../_images/6030d40e51202f9fad60c6b9ed3ce3febc45e0278405ae4d2725aa3671c6c9dc.png" src="../_images/6030d40e51202f9fad60c6b9ed3ce3febc45e0278405ae4d2725aa3671c6c9dc.png" />
 </div>
 </div>
 </section>
@@ -464,7 +471,7 @@ Computed maximum of emission: 2.71 eV
           </div>
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, PyDEF development team
+                Copyright &#169; 2024, The PyDEF team
             </div>
             This document is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
@@ -508,13 +515,10 @@ Computed maximum of emission: 2.71 eV
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+</div><script src="../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}, "svg": {"fontCache": "global"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>

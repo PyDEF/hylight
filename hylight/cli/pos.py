@@ -1,20 +1,7 @@
 """A set of useful tools to manipulate VASP's POSCAR files.
 
-License:
-    Copyright (C) 2023  PyDEF development team
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+Licensed under the EUPL
 """
 from .script_utils import (
     MultiCmd,
@@ -139,6 +126,7 @@ def diff(opts):
 
 
 def get_diff(poscar_a, poscar_b):
+    "Return a displacement array from one structure to another."
     if poscar_a.system_name != poscar_b.system_name:
         error("This tool can only compare positions from the same system.")
 
@@ -149,6 +137,12 @@ def get_diff(poscar_a, poscar_b):
 
 
 def spec(poscar, sp):
+    """Return the name of the atom at the given index.
+
+    :param poscar: a :class:`hylight.struct.Struct` object.
+    :param sp: the index of the atom.
+    :returns: the name of the atom in the form `Cl3` (output index is 1 based)
+    """
     i = sp
     for n in poscar._species_names:
         if i < len(poscar.species[n]):
@@ -160,7 +154,7 @@ def spec(poscar, sp):
 
 
 def is_hex_code(code):
-    "Predicate to identify HTML like hexadecimal color codes."
+    "Predicate to identify HTML-like hexadecimal color codes."
     return (
         len(code) in {7, 4}
         and code[0] == "#"

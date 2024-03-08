@@ -1,16 +1,16 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight package" href="../ref/hylight.html" /><link rel="prev" title="The Hylight Package" href="../index.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2023.05.20 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>BaZrO3:Ti study - Hylight 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=e6660623a769aa55fea372102b9bf3151b292993" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
     
     
 
@@ -144,7 +144,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
@@ -203,7 +203,7 @@
         </div>
         <article role="main">
           <section class="tex2jax_ignore mathjax_ignore" id="bazro3-ti-study">
-<h1>BaZrO3:Ti study<a class="headerlink" href="#bazro3-ti-study" title="Permalink to this heading">#</a></h1>
+<h1>BaZrO3:Ti study<a class="headerlink" href="#bazro3-ti-study" title="Link to this heading">#</a></h1>
 <p>Here are some utility functions and import that will be used throughout the study.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -286,9 +286,9 @@ Wrote<span class="w"> </span>OUTCAR.npz.
 </pre></div>
 </div>
 <section id="vibronic-luminescence-spectrum">
-<h2>Vibronic luminescence spectrum<a class="headerlink" href="#vibronic-luminescence-spectrum" title="Permalink to this heading">#</a></h2>
+<h2>Vibronic luminescence spectrum<a class="headerlink" href="#vibronic-luminescence-spectrum" title="Link to this heading">#</a></h2>
 <section id="electronic-and-vibrational-parameters">
-<h3>Electronic and vibrational parameters<a class="headerlink" href="#electronic-and-vibrational-parameters" title="Permalink to this heading">#</a></h3>
+<h3>Electronic and vibrational parameters<a class="headerlink" href="#electronic-and-vibrational-parameters" title="Link to this heading">#</a></h3>
 <p>Here we declare the inputs that will be used later.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -315,7 +315,7 @@ Wrote<span class="w"> </span>OUTCAR.npz.
 </div>
 </section>
 <section id="simulating-the-spectrum">
-<h3>Simulating the spectrum<a class="headerlink" href="#simulating-the-spectrum" title="Permalink to this heading">#</a></h3>
+<h3>Simulating the spectrum<a class="headerlink" href="#simulating-the-spectrum" title="Link to this heading">#</a></h3>
 <p>Here we load the experimental data that will be used for comparision with the simulation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -354,7 +354,7 @@ Wrote<span class="w"> </span>OUTCAR.npz.
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>File OUTCAR.npz is written in format version 0. Consider recreating it with current version of the code.
 </pre></div>
 </div>
-<img alt="../_images/da88712c644a465cc3c1f580eef3cea1cfef1da9fb4465bd338ddc1272a15720.png" src="../_images/da88712c644a465cc3c1f580eef3cea1cfef1da9fb4465bd338ddc1272a15720.png" />
+<img alt="../_images/e5b1b67162aa224c6a663ede9d820b45e383ea7584245a8229f93e9249a7e446.png" src="../_images/e5b1b67162aa224c6a663ede9d820b45e383ea7584245a8229f93e9249a7e446.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -367,11 +367,14 @@ Wrote<span class="w"> </span>OUTCAR.npz.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>File OUTCAR.npz is written in format version 0. Consider recreating it with current version of the code.
-Using a Gaussian line shape.
-S = 233908.86997498848
-d_fc^e,v = 3442.7062082645475
-Guessed line FWHM = 112761.1 meV
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">hylight.guess_width</span> <span class="kn">import</span> <span class="n">guess_width</span><span class="p">,</span> <span class="n">OmegaEff</span><span class="p">,</span> <span class="n">ExPES</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">width</span> <span class="o">=</span> <span class="n">guess_width</span><span class="p">(</span><span class="n">outcar</span><span class="p">,</span> <span class="p">(</span><span class="n">poscar_gs</span><span class="p">,</span> <span class="n">poscar_es</span><span class="p">),</span> <span class="n">fc_shift_gs</span><span class="p">,</span> <span class="n">fc_shift_es</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">omega_eff_type</span><span class="o">=</span><span class="n">OmegaEff</span><span class="o">.</span><span class="n">FC_MEAN</span><span class="p">,</span> <span class="n">ex_pes</span><span class="o">=</span><span class="n">ExPES</span><span class="o">.</span><span class="n">ISO_SCALE</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Guessed line FWHM = </span><span class="si">{</span><span class="n">width</span><span class="o">*</span><span class="mf">1e3</span><span class="si">:</span><span class="s2">0.1f</span><span class="si">}</span><span class="s2"> meV&quot;</span><span class="p">)</span>
+
+<span class="ne">ImportError</span>: cannot import name &#39;ExPES&#39; from &#39;hylight.guess_width&#39; (/home/theo/.local/share/hatch/env/virtual/hylight/pWfKuxou/hylight/lib/python3.11/site-packages/hylight/guess_width.py)
 </pre></div>
 </div>
 </div>
@@ -394,13 +397,9 @@ Guessed line FWHM = 112761.1 meV
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>File OUTCAR.npz is written in format version 0. Consider recreating it with current version of the code.
-Mode 119 has a reference position very far from GS position. (atom 12 moved by 14.67739797342241 A)
-Total Huang-Rhys factor 233908.86997498848.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using a Gaussian line shape.
-Computed maximum of emission: 7.44 eV
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total Huang-Rhys factor 10.055832452822724.
+Using a Gaussian line shape.
+Computed maximum of emission: 2.7 eV
 </pre></div>
 </div>
 </div>
@@ -431,7 +430,7 @@ Computed maximum of emission: 7.44 eV
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6013e54b6b43914f146f9ad4fbc7e1ed44846e07937d54371f69ac66faf7bf48.png" src="../_images/6013e54b6b43914f146f9ad4fbc7e1ed44846e07937d54371f69ac66faf7bf48.png" />
+<img alt="../_images/6030d40e51202f9fad60c6b9ed3ce3febc45e0278405ae4d2725aa3671c6c9dc.png" src="../_images/6030d40e51202f9fad60c6b9ed3ce3febc45e0278405ae4d2725aa3671c6c9dc.png" />
 </div>
 </div>
 </section>
@@ -472,7 +471,7 @@ Computed maximum of emission: 7.44 eV
           </div>
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, PyDEF development team
+                Copyright &#169; 2024, The PyDEF team
             </div>
             This document is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
@@ -516,13 +515,10 @@ Computed maximum of emission: 7.44 eV
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+</div><script src="../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}, "svg": {"fontCache": "global"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>

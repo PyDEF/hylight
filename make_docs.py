@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""Generate the documentation for Hylight.
+
+Usage:
+    hatch shell
+    ./make_docs.py
+    exit
+"""
 from shutil import copytree, rmtree, copy
 from pathlib import Path
 from sphinx.ext.apidoc import main as sphinx_apidoc
@@ -19,6 +26,7 @@ Path("docs_src/ref/modules.rst").unlink()
 
 # Build the static content
 sphinx_build(["-M", "html", "./docs_src", "./public"])
+sphinx_build(["-M", "latexpdf", "./docs_src", "./public"])
 
 
 src = Path("public/html/")

@@ -1,20 +1,9 @@
-"Serialization of modes to numpy zipped file."
-# License
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import pickle
+"""Serialization of modes to numpy zipped file.
+
+See also :func:`numpy.savez` and :func:`numpy.load`.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 import os
 
 import numpy as np
@@ -88,12 +77,6 @@ def archive_modes(modes, dest, compress=False):
 def load_phonons(source):
     """Load modes from a Hylight archive."""
 
-    _, ext = os.path.splitext(source)
-
-    return load_phonons_npz(source)
-
-
-def load_phonons_npz(source):
     with np.load(source) as f:
         version = f.get("hylight_npz_version", 0)
 

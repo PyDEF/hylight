@@ -1,19 +1,7 @@
-"Write Jmol files."
-# License:
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""Write Jmol files.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 from zipfile import ZIP_DEFLATED, ZipFile
 import io
 
@@ -80,11 +68,14 @@ def write_jmol_options(f, opts):
 
 
 def format_v(v):
+    "Format a vector in Jmol syntax."
     x, y, z = v
     return f"{{ {x:0.5f} {y:0.5f} {z:0.5f} }}"
 
 
-def export(dest, mode, *, displacement=True, scale=1.0, compression=ZIP_DEFLATED, **opts):
+def export(
+    dest, mode, *, displacement=True, scale=1.0, compression=ZIP_DEFLATED, **opts
+):
     """Export a mode to JMol zip format.
 
     :param dest: path to the JMol zip file.
@@ -103,7 +94,9 @@ def export(dest, mode, *, displacement=True, scale=1.0, compression=ZIP_DEFLATED
             print(f"Mode {mode.n}", file=f)
 
             if displacement:
-                write_xyz(f, mode.atoms, mode.ref, scale * mode.delta * np.sqrt(atomic_mass))
+                write_xyz(
+                    f, mode.atoms, mode.ref, scale * mode.delta * np.sqrt(atomic_mass)
+                )
             else:
                 write_xyz(f, mode.atoms, mode.ref, scale * mode.eigenvector)
 

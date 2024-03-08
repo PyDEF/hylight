@@ -1,19 +1,7 @@
-"Vibrational mode and related utilities."
-# License
-#     Copyright (C) 2023  PyDEF development team
-#
-#     This program is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""Vibrational mode and related utilities.
+"""
+# Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
+# Licensed under the EUPL
 from typing import Iterable, Optional, Union
 import logging
 
@@ -63,23 +51,27 @@ class Mode:
         self.eigenvector = eigenvector  # vibrational mode eigenvector (norm of 1)
         self.masses = np.array(masses) * atomic_mass
         # vibrational mode eigendisplacement
-        self.delta = np.sqrt(1. / self.masses.reshape((-1, 1))) * eigenvector
+        self.delta = np.sqrt(1.0 / self.masses.reshape((-1, 1))) * eigenvector
         self.mass = np.sum(np.sum(self.eigenvector**2, axis=1) * self.masses)
 
     @property
     def energy_si(self):
+        "Energy of the mode in J."
         return self.energy
 
     @property
     def energy_eV(self):
+        "Energy of the mode in eV."
         return self.energy / eV_in_J
 
     @property
     def energy_meV(self):
+        "Energy of the mode in meV."
         return self.energy / eV_in_J * 1e3
 
     @property
     def energy_cm1(self):
+        "Energy of the mode in :math:`cm^{-1}`."
         return self.energy / cm1_in_J
 
     def set_lattice(self, lattice: FArray, tol=1e-6) -> None:
@@ -188,22 +180,29 @@ class Mode:
             :math:`M_n` = :code:`np.sum(self.energies()**n)`
         """
 
-        return 1.0 / (np.sum(np.sum(self.eigenvector**2, axis=1)**2) * len(self.eigenvector))
+        return 1.0 / (
+            np.sum(np.sum(self.eigenvector**2, axis=1) ** 2) * len(self.eigenvector)
+        )
 
     def per_species_n_eff(self, sp):
-        "Number of active atoms for a given species."
+        "Compute the number of atoms participating to the mode for a given species."
         block = self.eigenvector[np.array(self.atoms) == sp, :]
 
         if block.size == 0:
             raise ValueError(f"{sp} is absent from this structure.")
 
         if block.size == 1:
-            raise ValueError(f"There is only one {sp}, participation ratio is always one.")
+            raise ValueError(
+                f"There is only one {sp}, participation ratio is always one."
+            )
 
-        return np.sum(block**2)**2 / np.sum(np.sum(block**2, axis=1)**2)
+        return np.sum(block**2) ** 2 / np.sum(np.sum(block**2, axis=1) ** 2)
 
     def per_species_pr(self, sp):
-        "Participation ratio for a given species."
+        """Compute the fraction of atoms participation to the mode for a given species.
+
+        See also :func:`per_species_n_eff`.
+        """
 
         block = self.eigenvector[np.array(self.atoms) == sp, :]
 
@@ -211,9 +210,13 @@ class Mode:
             raise ValueError(f"{sp} is absent from this structure.")
 
         if block.size == 1:
-            raise ValueError(f"There is only one {sp}, participation ratio is always one.")
+            raise ValueError(
+                f"There is only one {sp}, participation ratio is always one."
+            )
 
-        return np.sum(block**2)**2 / (np.sum(np.sum(block**2, axis=1)**2) * len(block))
+        return np.sum(block**2) ** 2 / (
+            np.sum(np.sum(block**2, axis=1) ** 2) * len(block)
+        )
 
     def localization_ratio(self):
         """Quantify the localization of the mode over the supercell.
@@ -224,7 +227,9 @@ class Mode:
         >> 1: localized
         """
 
-        return np.sum(np.sum(self.eigenvector**2, axis=1)**2) * len(self.eigenvector)
+        return np.sum(np.sum(self.eigenvector**2, axis=1) ** 2) * len(
+            self.eigenvector
+        )
 
     def energies(self):
         "Return the energy participation of each atom to the mode."
@@ -253,6 +258,15 @@ def dynamical_matrix(phonons: Iterable[Mode]) -> FArray:
 
 
 def modes_from_dynmat(lattice, atoms, masses, ref, dynmat):
+    """Compute vibrational modes from the dynamical matrix.
+
+    :param lattice: lattice parameters (3 x 3 :class:`numpy.ndarray`)
+    :param atoms: list of atoms
+    :param masses: list of atom masses
+    :param ref: reference position
+    :param dynmat: dynamical matrix
+    :returns: list of :class:`hylight.mode.Mode`
+    """
     n, _ = dynmat.shape
     assert n % 3 == 0
     n_atoms = n // 3
@@ -280,6 +294,7 @@ def modes_from_dynmat(lattice, atoms, masses, ref, dynmat):
         )
         for i, (e2, e, v) in enumerate(zip(vals, energies, vx))
     ]
+
 
 class Mask:
     "An energy based mask for the set of modes."
@@ -347,6 +362,8 @@ class Mask:
 
 
 class CellMismatch:
+    "A falsy value explaining how the cell are not matching."
+
     def __init__(self, reason, details):
         self.reason = reason
         self.details = details
@@ -361,32 +378,45 @@ class CellMismatch:
 def same_cell(cell1: FArray, cell2: FArray, tol=1e-6) -> Union[CellMismatch, bool]:
     "Compare two lattice vectors matrix and return True if they describe the same cell."
 
-    if np.max(np.abs(np.linalg.norm(cell1, axis=1) - np.linalg.norm(cell2, axis=1))) > tol:
-        return CellMismatch("length", np.linalg.norm(cell1, axis=1) - np.linalg.norm(cell2, axis=1))
+    if (
+        np.max(np.abs(np.linalg.norm(cell1, axis=1) - np.linalg.norm(cell2, axis=1)))
+        > tol
+    ):
+        return CellMismatch(
+            "length", np.linalg.norm(cell1, axis=1) - np.linalg.norm(cell2, axis=1)
+        )
 
     a1: FArray
     a1, b1, c1 = cell1
     a2, b2, c2 = cell2
 
-    if np.max(
-        np.abs(
+    if (
+        np.max(
+            np.abs(
+                [
+                    angle(a1, b1) - angle(a2, b2),
+                    angle(b1, c1) - angle(b2, c2),
+                    angle(c1, a1) - angle(c2, a2),
+                ]
+            )
+        )
+        > tol
+    ):
+        return CellMismatch(
+            "length",
             [
                 angle(a1, b1) - angle(a2, b2),
                 angle(b1, c1) - angle(b2, c2),
                 angle(c1, a1) - angle(c2, a2),
-            ]
+            ],
         )
-    ) > tol :
-        return CellMismatch("length", [
-                angle(a1, b1) - angle(a2, b2),
-                angle(b1, c1) - angle(b2, c2),
-                angle(c1, a1) - angle(c2, a2),
-            ])
 
     return True
 
 
 def angle(v1, v2):
+    "Compute the angle in radians between two 3D vectors."
+
     v1 = v1 / np.linalg.norm(v1)
     v2 = v1 / np.linalg.norm(v2)
     return np.arctan2(np.linalg.norm(np.cross(v1, v2)), v1.dot(v2))
@@ -414,7 +444,7 @@ def get_HR_factors(
         return np.array([ph.huang_rhys(delta_R_tot) for ph in phonons if ph.real])
 
 
-def get_energies(phonons: Iterable[Mode], mask: Optional[Mask]=None) -> FArray:
+def get_energies(phonons: Iterable[Mode], mask: Optional[Mask] = None) -> FArray:
     """Return an array of mode energies in SI."""
     if mask:
         return np.array(
@@ -425,6 +455,11 @@ def get_energies(phonons: Iterable[Mode], mask: Optional[Mask]=None) -> FArray:
 
 
 def project_on_asr(mat, masses):
+    """Enforce accoustic sum rule.
+
+    Project the input matrix on the space of ASR abiding matrices and return
+    the projections.
+    """
     n, *_ = mat.shape
     assert mat.shape == (n, n), "Not a square matrix."
     assert n % 3 == 0, "Matrix size is not 3n."

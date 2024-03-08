@@ -1,7 +1,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "Hylight"
-copyright = "2022, PyDEF development team"
+copyright = "2024, The PyDEF team"
 author = "Théo Cavignac"
 
 # The full version, including alpha/beta/rc tags

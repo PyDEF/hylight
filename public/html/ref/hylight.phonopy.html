@@ -1,16 +1,16 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight.vasp package" href="hylight.vasp.html" /><link rel="prev" title="hylight.jmol package" href="hylight.jmol.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2023.05.20 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>hylight.phonopy package - Hylight 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=e6660623a769aa55fea372102b9bf3151b292993" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
     
     
 
@@ -144,7 +144,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
@@ -203,83 +203,152 @@
         </div>
         <article role="main">
           <section id="hylight-phonopy-package">
-<h1>hylight.phonopy package<a class="headerlink" href="#hylight-phonopy-package" title="Permalink to this heading">#</a></h1>
+<h1>hylight.phonopy package<a class="headerlink" href="#hylight-phonopy-package" title="Link to this heading">#</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
 <section id="module-hylight.phonopy.loader">
-<span id="hylight-phonopy-loader-module"></span><h2>hylight.phonopy.loader module<a class="headerlink" href="#module-hylight.phonopy.loader" title="Permalink to this heading">#</a></h2>
+<span id="hylight-phonopy-loader-module"></span><h2>hylight.phonopy.loader module<a class="headerlink" href="#module-hylight.phonopy.loader" title="Link to this heading">#</a></h2>
 <p>Module to load phonons frequencies and eigenvectors from phonopy output files.</p>
 <p>It always uses PyYAML, but it can also need h5py to read hdf5 files.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">PPStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pops</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[int]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'FArray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[float]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'list[str]'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'FArray'</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.phonopy.loader.PPStruct" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">PPStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pops</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.phonopy.loader.PPStruct" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Crystal structure as described by phonopy.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.atoms">
-<span class="sig-name descname"><span class="pre">atoms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.atoms" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">atoms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.atoms" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.from_yaml_cell">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.phonopy.loader.PPStruct" title="hylight.phonopy.loader.PPStruct"><span class="pre">PPStruct</span></a></span></span><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.from_yaml_cell" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.phonopy.loader.PPStruct" title="hylight.phonopy.loader.PPStruct"><span class="pre">PPStruct</span></a></span></span><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.from_yaml_cell" title="Link to this definition">#</a></dt>
+<dd><p>Create a PPStruct from a cell dictionary found in phonopy files.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.lattice">
-<span class="sig-name descname"><span class="pre">lattice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.lattice" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">lattice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.lattice" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.masses">
-<span class="sig-name descname"><span class="pre">masses</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.masses" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">masses</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.masses" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.pops">
-<span class="sig-name descname"><span class="pre">pops</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.pops" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">pops</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.pops" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct.ref">
-<span class="sig-name descname"><span class="pre">ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.ref" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#hylight.phonopy.loader.PPStruct.ref" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.get_struct">
-<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">get_struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phyaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.phonopy.loader.PPStruct" title="hylight.phonopy.loader.PPStruct"><span class="pre">PPStruct</span></a></span></span><a class="headerlink" href="#hylight.phonopy.loader.get_struct" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">get_struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phyaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.phonopy.loader.PPStruct" title="hylight.phonopy.loader.PPStruct"><span class="pre">PPStruct</span></a></span></span><a class="headerlink" href="#hylight.phonopy.loader.get_struct" title="Link to this definition">#</a></dt>
+<dd><p>Get a structure from the phonopy.yaml file.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.load_phonons">
-<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">hylight.mode.Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons" title="Link to this definition">#</a></dt>
+<dd><p>Load vibrational modes from phonopy output files.</p>
+<p>This function takes the directory where the files are stored and tries to detect the right file to process.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#hylight.phonopy.loader.load_phonons_qpointsh5" title="hylight.phonopy.loader.load_phonons_qpointsh5"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_phonons_qpointsh5()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#hylight.phonopy.loader.load_phonons_bandsh5" title="hylight.phonopy.loader.load_phonons_bandsh5"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_phonons_bandsh5()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#hylight.phonopy.loader.load_phonons_qpointsyaml" title="hylight.phonopy.loader.load_phonons_qpointsyaml"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_phonons_qpointsyaml()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#hylight.phonopy.loader.load_phonons_bandyaml" title="hylight.phonopy.loader.load_phonons_bandyaml"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_phonons_bandyaml()</span></code></a></p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dir</strong> – directory containing phonopy output files</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(modes, frequencies, eigenvectors) tuple</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.load_phonons_bandsh5">
-<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons_bandsh5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandh5:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phyaml:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op=&lt;built-in</span> <span class="pre">function</span> <span class="pre">open&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">hylight.mode.Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons_bandsh5" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons_bandsh5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandh5:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phyaml:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op=&lt;built-in</span> <span class="pre">function</span> <span class="pre">open&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons_bandsh5" title="Link to this definition">#</a></dt>
+<dd><p>Load vibrational modes from phonopy HDF5 output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bandh5</strong> – path to band.hdf5 or band.hdf5.gz file</p></li>
+<li><p><strong>op</strong> – (optional, open) open function, pass <code class="xref py py-func docutils literal notranslate"><span class="pre">gzip.open()</span></code> when dealing with compressed file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(modes, frequencies, eigenvectors) tuple</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.load_phonons_bandyaml">
-<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons_bandyaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">hylight.mode.Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons_bandyaml" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons_bandyaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons_bandyaml" title="Link to this definition">#</a></dt>
+<dd><p>Load vibrational modes from phonopy YAML output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bandy</strong> – path to band.yaml file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(modes, frequencies, eigenvectors) tuple</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.load_phonons_qpointsh5">
-<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons_qpointsh5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qph5:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phyaml:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op=&lt;built-in</span> <span class="pre">function</span> <span class="pre">open&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">hylight.mode.Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons_qpointsh5" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons_qpointsh5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qph5:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phyaml:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op=&lt;built-in</span> <span class="pre">function</span> <span class="pre">open&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons_qpointsh5" title="Link to this definition">#</a></dt>
+<dd><p>Load vibrational modes from phonopy HDF5 output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qph5</strong> – path to qpoints.hdf5 or qpoints.hdf5.gz file</p></li>
+<li><p><strong>phyaml</strong> – path to phonopy.yaml file</p></li>
+<li><p><strong>op</strong> – (optional, open) open function, pass <code class="xref py py-func docutils literal notranslate"><span class="pre">gzip.open()</span></code> when dealing with compressed file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(modes, frequencies, eigenvectors) tuple</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.load_phonons_qpointsyaml">
-<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons_qpointsyaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qpyaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phyaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">hylight.mode.Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons_qpointsyaml" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">load_phonons_qpointsyaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qpyaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phyaml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hylight.html#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hylight.phonopy.loader.load_phonons_qpointsyaml" title="Link to this definition">#</a></dt>
+<dd><p>Load vibrational modes from phonopy YAML output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qpyaml</strong> – path to qpoints.yaml file</p></li>
+<li><p><strong>phyaml</strong> – path to phonopy.yaml file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(modes, frequencies, eigenvectors) tuple</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-hylight.phonopy">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hylight.phonopy" title="Permalink to this heading">#</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hylight.phonopy" title="Link to this heading">#</a></h2>
+<p>phonopy related utils.</p>
 </section>
 </section>
 
@@ -317,7 +386,7 @@
           </div>
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, PyDEF development team
+                Copyright &#169; 2024, The PyDEF team
             </div>
             This document is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
@@ -376,12 +445,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+</div><script src="../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     </body>
 </html>
