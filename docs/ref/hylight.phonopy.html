@@ -9,7 +9,7 @@
         <title>hylight.phonopy package - Hylight 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
     
     
@@ -158,8 +158,10 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul class="current">
+  <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">BaZrO3:Ti study</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="hylight.html">hylight package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of hylight package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html">hylight.crystal package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html">hylight.findiff package</a></li>
@@ -202,15 +204,13 @@
           </label>
         </div>
         <article role="main">
-          <section id="hylight-phonopy-package">
-<h1>hylight.phonopy package<a class="headerlink" href="#hylight-phonopy-package" title="Link to this heading">#</a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
-</section>
+          <section id="module-hylight.phonopy">
+<span id="hylight-phonopy-package"></span><h1>hylight.phonopy package<a class="headerlink" href="#module-hylight.phonopy" title="Link to this heading">#</a></h1>
+<p>phonopy related utils.</p>
 <section id="module-hylight.phonopy.loader">
 <span id="hylight-phonopy-loader-module"></span><h2>hylight.phonopy.loader module<a class="headerlink" href="#module-hylight.phonopy.loader" title="Link to this heading">#</a></h2>
 <p>Module to load phonons frequencies and eigenvectors from phonopy output files.</p>
-<p>It always uses PyYAML, but it can also need h5py to read hdf5 files.</p>
+<p>It always uses PyYAML, but it may also need h5py to read hdf5 files.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.phonopy.loader.PPStruct">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.phonopy.loader.</span></span><span class="sig-name descname"><span class="pre">PPStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pops</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.phonopy.loader.PPStruct" title="Link to this definition">#</a></dt>
@@ -346,10 +346,6 @@
 </dd></dl>
 
 </section>
-<section id="module-hylight.phonopy">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hylight.phonopy" title="Link to this heading">#</a></h2>
-<p>phonopy related utils.</p>
-</section>
 </section>
 
         </article>
@@ -414,7 +410,6 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">hylight.phonopy package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-hylight.phonopy.loader">hylight.phonopy.loader module</a><ul>
 <li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct"><code class="docutils literal notranslate"><span class="pre">PPStruct</span></code></a><ul>
 <li><a class="reference internal" href="#hylight.phonopy.loader.PPStruct.atoms"><code class="docutils literal notranslate"><span class="pre">PPStruct.atoms</span></code></a></li>
@@ -433,7 +428,6 @@
 <li><a class="reference internal" href="#hylight.phonopy.loader.load_phonons_qpointsyaml"><code class="docutils literal notranslate"><span class="pre">load_phonons_qpointsyaml()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-hylight.phonopy">Module contents</a></li>
 </ul>
 </li>
 </ul>

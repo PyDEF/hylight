@@ -11,7 +11,7 @@ luminescence of solids based on the results of *ab initio* computations.
 
 You may be interested in reading our first paper using it on the luminescence of |BaZrO3:Ti| [BaZrO3:Ti]_.
 
-To learn how to use Hylight, you can read the tutorial_.
+To learn how to use Hylight, you can read the tutorials_.
 Finally there is a complete reference_ that goes over all individual functions implemented in the package.
 
 Attribution
@@ -32,28 +32,41 @@ Citing Hylight
 
 If you ever use Hylight for a published scientific work, we ask that you cite the related paper [Hylight]_.
 
-Content
--------
+.. _tutorials:
+
+Tutorials
+---------
 
 .. toctree::
    :maxdepth: 3
 
    tutorial/tutorial.ipynb
+
+
+.. _reference:
+
+API reference
+-------------
+
+.. toctree::
+   :maxdepth: 3
+
    ref/hylight
 
-Indices and tables
-------------------
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. only:: html
+
+    Indices and tables
+    ------------------
+
+
+    * :ref:`genindex`
+    * :ref:`modindex`
 
 
 .. |BaZrO3:Ti| replace:: BaZrO\ :sub:`3`:Ti
 .. [Hylight] (Ref comming soon)
 .. [BaZrO3:Ti]
    `Cavignac, T.; Jobic, S.; C. Latouche, J. Chem. Theory Comput., 2022, 18, 12, 7714-7721 <https://www.doi.org/10.1021/acs.jctc.2c00949>`_
-.. _tutorial: ./tutorial.html
-.. _reference: ./gen/hylight.html
 .. _CC-BY: https://creativecommons.org/licenses/by/4.0/
 .. _EUPL: https://commission.europa.eu/content/european-union-public-licence_en

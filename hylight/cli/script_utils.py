@@ -105,24 +105,32 @@ License:
 """
 import sys
 import os
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from contextlib import contextmanager
 from functools import wraps
 from statistics import mean, stdev, variance
 from time import perf_counter
 
+from typing import Callable, List, TypeVar, Optional, Generic
 
-_debug = os.environ.get("DEBUG", False) == "1"
+_debug = os.environ.get("DEBUG", False) in {"1", "yes", "true"}
 
 
-def _default_post(ret):
+T = TypeVar("T")
+ArgSpec = Callable[[ArgumentParser], None]
+
+ScriptWrapper = Callable[[Callable[[Namespace], T]], Callable[[List[str]], T]]
+PostFn = Callable[[T], int]
+
+
+def _default_post(ret: T) -> int:
     if isinstance(ret, int):
         return ret
     else:
         return 0
 
 
-class MultiCmd:
+class MultiCmd(Generic[T]):
     """A CLI with several subcommands.
 
     Build an entrypoint with several subcommands.
@@ -130,51 +138,62 @@ class MultiCmd:
     Call the instance (or its run method) to run the script.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         self.main_parser = ArgumentParser(**kwargs)
         self.sub_parsers = self.main_parser.add_subparsers()
 
-        self._pre = None
-        self._post = _default_post
+        self._pre: Optional[Callable[[Namespace], None]] = None
+        self._post: PostFn[T] = _default_post
 
-    def add(self, option):
+    def add(self, option: ArgSpec):
         "Add a global parameter, common to all subcommands."
         option(self.main_parser)
 
-    def pre(self, f):
+    def pre(self, f: Callable[[Namespace], None]):
         "Register a function to be called on the namespace before the command."
         assert callable(f), "pre applies to functions"
         self._pre = f
         return f
 
-    def post(self, f):
+    def post(self, f: Callable[[T], int]) -> Callable[[T], int]:
         "Register a function to be called on the return value of the command at the end."
         assert callable(f), "post applies to functions"
         self._post = f
         return f
 
-    def __call__(self, *args):
-        return self.run(*args)
+    def __call__(self, argv: Optional[List[str]] = None) -> int:
+        "See :meth:`run`."
+        return self.run(argv=argv)
 
-    def subcmd(self, *args):
+    def subcmd(self, *args: ArgSpec, name: Optional[str] = None) -> ScriptWrapper:
         """Register a new subcommand.
 
         See script.
         """
 
         def decorator(f):
-            parser = self.sub_parsers.add_parser(f.__name__, help=f.__doc__)
+            help_msg = f.__doc__ and f.__doc__.replace("%", "%%")
+            parser = self.sub_parsers.add_parser(name or f.__name__, help=help_msg)
 
             for param in args:
                 param(parser)
 
             parser.set_defaults(handler=f)
 
-            return f
+            @wraps(f)
+            def wrapper(argv: Optional[List[str]] = None):
+                if argv is None:
+                    opts = parser.parse_args()
+                else:
+                    opts = parser.parse_args(argv)
+
+                return f(opts)
+
+            return wrapper
 
         return decorator
 
-    def run(self, argv=None):
+    def run(self, argv: Optional[List[str]] = None) -> int:
         """Execute the script (calling the instance redirect here).
 
         You can explicitly pass a list of string parameters instead of using
@@ -193,13 +212,12 @@ class MultiCmd:
             self.main_parser.print_help()
             exit(1)
 
-        if self._post:
-            return self._post(opts.handler(opts))
-        else:
-            return opts.handler(opts)
+        return self._post(opts.handler(opts))
 
 
-def script(*args, name=None, doc=None):
+def script(
+    *args: ArgSpec, name: Optional[str] = None, doc: Optional[str] = None
+) -> ScriptWrapper:
     """Wrap a function for a script.
 
     Each argument of specify an element of the CLI wrapping the function (see
@@ -208,7 +226,11 @@ def script(*args, name=None, doc=None):
     """
 
     def decorator(f):
-        parser = ArgumentParser(prog=name or f.__name__, description=doc or f.__doc__)
+        if doc is None:
+            doc_ = f.__doc__ and f.__doc__.replace("%", "%%")
+        else:  # doc == "" is valid and cause the description to be empty
+            doc_ = doc.replace("%", "%%")
+        parser = ArgumentParser(prog=name or f.__name__, description=doc_)
 
         for param in args:
             param(parser)
@@ -227,14 +249,14 @@ def script(*args, name=None, doc=None):
     return decorator
 
 
-def error(msg):
+def error(msg: str):
     "Write msg to stderr and exit with -1 return code."
     print(msg, file=sys.stderr)
     exit(-1)
 
 
 @contextmanager
-def error_catch():
+def error_catch(prefix="Error: "):
     """Catch all errors, print them and exit with -1 return code.
 
     Context manager to provide cleaner errors when building a script around a
@@ -248,10 +270,10 @@ def error_catch():
         try:
             yield
         except Exception as e:
-            error(str(e))
+            error(prefix + str(e))
 
 
-def flag(*names, **kwargs):
+def flag(*names: str, **kwargs) -> ArgSpec:
     """Add a flag dashed parameter that always.
 
     You can provide as many aliases as you want but they must all start with a
@@ -259,6 +281,9 @@ def flag(*names, **kwargs):
     The first name provided is the name of Namespace attribute (dash removed).
     The value is always False by default and True if the user provided the flag.
     """
+
+    if "help" in kwargs:
+        kwargs["help"] = kwargs["help"].replace("%", "%%")
 
     def add(parser):
         parser.add_argument(
@@ -273,7 +298,7 @@ def flag(*names, **kwargs):
 _not_a_value = object()
 
 
-def positional(name, default=_not_a_value, **kwargs):
+def positional(name: str, default=_not_a_value, **kwargs) -> ArgSpec:
     """Add a positional parameter.
 
     The name is used as the metavar and must not start with a dash.
@@ -286,6 +311,9 @@ def positional(name, default=_not_a_value, **kwargs):
         kwargs["nargs"] = "?"
         kwargs["default"] = default
 
+    if "help" in kwargs:
+        kwargs["help"] = kwargs["help"].replace("%", "%%")
+
     def add(parser):
         parser.add_argument(
             name.lower(),
@@ -296,7 +324,7 @@ def positional(name, default=_not_a_value, **kwargs):
     return add
 
 
-def rest(name, **kwargs):
+def rest(name: str, **kwargs) -> ArgSpec:
     """Add a catch-all parameter for the end of the parameter list.
 
     If no default value is provided, it expect at least one parameter.
@@ -307,18 +335,21 @@ def rest(name, **kwargs):
     """
     assert not name.startswith("-"), "Please use flag or optional for dash parameters."
 
+    if "help" in kwargs:
+        kwargs["help"] = kwargs["help"].replace("%", "%%")
+
     def add(parser):
         parser.add_argument(
             name.lower(),
             metavar=name,
-            nargs="+",
+            nargs=("*" if "default" in kwargs else "+"),
             **kwargs,
         )
 
     return add
 
 
-def optional(*names, **kwargs):
+def optional(*names: str, **kwargs) -> ArgSpec:
     """Add an optional parameter that uses a dashed trigger.
 
     You can provide as many aliases as you want, but all of them must at least
@@ -328,6 +359,13 @@ def optional(*names, **kwargs):
     assert all(
         n.startswith("-") for n in names
     ), "Either use a single non-dash name or only dash names."
+
+    assert (
+        kwargs.get("type", str) == str or "default" in kwargs
+    ), "You should provide a default value."
+
+    if "help" in kwargs:
+        kwargs["help"] = kwargs["help"].replace("%", "%%")
 
     def add(parser):
         parser.add_argument(
@@ -385,7 +423,7 @@ class PerfCounterCollec:
 
 
 class PerfCounter:
-    """An individual counter
+    """An individual counter.
 
     Use it as a context manager.
     Each time it is entered, it start a new counter.

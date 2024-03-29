@@ -1,8 +1,11 @@
 hylight.vasp package
 ====================
 
-Submodules
-----------
+.. automodule:: hylight.vasp
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 hylight.vasp.common module
 --------------------------
@@ -24,14 +27,6 @@ hylight.vasp.utils module
 -------------------------
 
 .. automodule:: hylight.vasp.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: hylight.vasp
    :members:
    :undoc-members:
    :show-inheritance:

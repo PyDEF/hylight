@@ -1,8 +1,11 @@
 hylight.findiff package
 =======================
 
-Submodules
-----------
+.. automodule:: hylight.findiff
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 hylight.findiff.collect module
 ------------------------------
@@ -16,14 +19,6 @@ hylight.findiff.gen module
 --------------------------
 
 .. automodule:: hylight.findiff.gen
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: hylight.findiff
    :members:
    :undoc-members:
    :show-inheritance:

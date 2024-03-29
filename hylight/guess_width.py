@@ -328,7 +328,7 @@ def sigma_hybrid(T, S, e_phonon, e_phonon_e):
 
 
 def duschinsky(phonons_a, phonons_b):
-    r"""Dushinsky matrix from b to a :math:`S_{a \\gets b}`."""
+    r"""Dushinsky matrix from b to a :math:`S_{a \gets b}`."""
     return rot_c_to_v(phonons_a) @ rot_c_to_v(phonons_b).transpose()
 
 

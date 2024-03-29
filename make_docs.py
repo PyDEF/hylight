@@ -12,21 +12,32 @@ from sphinx.ext.apidoc import main as sphinx_apidoc
 from sphinx.cmd.build import main as sphinx_build
 
 # Regen the API docs
-sphinx_apidoc(
+errcode = sphinx_apidoc(
     [
         "--ext-autodoc",
         "--ext-mathjax",
+        "-M",
+        "-t",
+        "docs_src/_templates/",
         "-o",
         "docs_src/ref",
         "hylight/",
         "hylight/cli/*",
     ]
 )
+if errcode != 0:
+    exit(errcode)
+
 Path("docs_src/ref/modules.rst").unlink()
 
 # Build the static content
-sphinx_build(["-M", "html", "./docs_src", "./public"])
-sphinx_build(["-M", "latexpdf", "./docs_src", "./public"])
+errcode = sphinx_build(["-M", "html", "./docs_src", "./public"])
+if errcode != 0:
+    exit(errcode)
+
+errcode = sphinx_build(["-M", "latexpdf", "./docs_src", "./public"])
+if errcode != 0:
+    exit(errcode)
 
 
 src = Path("public/html/")

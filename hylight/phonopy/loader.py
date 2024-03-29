@@ -1,6 +1,6 @@
 """Module to load phonons frequencies and eigenvectors from phonopy output files.
 
-It always uses PyYAML, but it can also need h5py to read hdf5 files.
+It always uses PyYAML, but it may also need h5py to read hdf5 files.
 """
 # Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
 # Licensed under the EUPL

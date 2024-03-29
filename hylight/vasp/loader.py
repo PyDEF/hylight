@@ -22,7 +22,7 @@ def load_phonons(path: str) -> tuple[list[Mode], list[int], list[float]]:
 
     .. note::
         This function is a bit heavy because of text parsing. You may want
-        to use hyligh-modes to parse one for all the file and later load that
+        to use hyligh-modes to parse the file once and later load that
         preparsed file using :func:`hylight.npz.load_phonons` instead.
 
     :returns: :code:`(phonons, pops, masses)`

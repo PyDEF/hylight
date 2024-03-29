@@ -1,8 +1,10 @@
 hylight package
 ===============
 
-Subpackages
------------
+.. automodule:: hylight
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 .. toctree::
    :maxdepth: 4
@@ -13,8 +15,6 @@ Subpackages
    hylight.phonopy
    hylight.vasp
 
-Submodules
-----------
 
 hylight.constants module
 ------------------------
@@ -92,14 +92,6 @@ hylight.utils module
 --------------------
 
 .. automodule:: hylight.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: hylight
    :members:
    :undoc-members:
    :show-inheritance:

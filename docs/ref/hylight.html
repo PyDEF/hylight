@@ -9,7 +9,7 @@
         <title>hylight package - Hylight 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
     
     
@@ -158,8 +158,10 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul class="current">
+  <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">BaZrO3:Ti study</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">hylight package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of hylight package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html">hylight.crystal package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html">hylight.findiff package</a></li>
@@ -202,14 +204,20 @@
           </label>
         </div>
         <article role="main">
-          <section id="hylight-package">
-<h1>hylight package<a class="headerlink" href="#hylight-package" title="Link to this heading">#</a></h1>
-<section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+          <section id="module-hylight">
+<span id="hylight-package"></span><h1>hylight package<a class="headerlink" href="#module-hylight" title="Link to this heading">#</a></h1>
+<p>The Hylight package.</p>
+<p>Copyright (c) 2024, Théo Cavignac &lt;<a class="reference external" href="mailto:theo&#46;cavignac+dev&#37;&#52;&#48;gmail&#46;com">theo<span>&#46;</span>cavignac+dev<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;, The PyDEF team &lt;<a class="reference external" href="mailto:camille&#46;latouche&#37;&#52;&#48;cnrs-imn&#46;fr">camille<span>&#46;</span>latouche<span>&#64;</span>cnrs-imn<span>&#46;</span>fr</a>&gt;
+Licensed under the EUPL</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hylight.setup_logging">
+<span class="sig-prename descclassname"><span class="pre">hylight.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.setup_logging" title="Link to this definition">#</a></dt>
+<dd><p>Setup module logging.</p>
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="hylight.crystal.html">hylight.crystal package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html#module-hylight.crystal.common">hylight.crystal.common module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hylight.crystal.html#hylight.crystal.common.CrystalOut"><code class="docutils literal notranslate"><span class="pre">CrystalOut</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="hylight.crystal.html#hylight.crystal.common.CrystalOut.from_file"><code class="docutils literal notranslate"><span class="pre">CrystalOut.from_file()</span></code></a></li>
@@ -222,11 +230,9 @@
 <li class="toctree-l3"><a class="reference internal" href="hylight.crystal.html#hylight.crystal.loader.normalize"><code class="docutils literal notranslate"><span class="pre">normalize()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html#module-hylight.crystal">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hylight.findiff.html">hylight.findiff package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html#module-hylight.findiff.collect">hylight.findiff.collect module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hylight.findiff.html#hylight.findiff.collect.dropwhile_err"><code class="docutils literal notranslate"><span class="pre">dropwhile_err()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="hylight.findiff.html#hylight.findiff.collect.get_forces"><code class="docutils literal notranslate"><span class="pre">get_forces()</span></code></a></li>
@@ -243,22 +249,17 @@
 <li class="toctree-l3"><a class="reference internal" href="hylight.findiff.html#hylight.findiff.gen.save_random_disp"><code class="docutils literal notranslate"><span class="pre">save_random_disp()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html#module-hylight.findiff">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hylight.jmol.html">hylight.jmol package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#module-hylight.jmol">Module contents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.export_disp"><code class="docutils literal notranslate"><span class="pre">export_disp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.format_v"><code class="docutils literal notranslate"><span class="pre">format_v()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.write_jmol_options"><code class="docutils literal notranslate"><span class="pre">write_jmol_options()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.write_xyz"><code class="docutils literal notranslate"><span class="pre">write_xyz()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.export_disp"><code class="docutils literal notranslate"><span class="pre">export_disp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.format_v"><code class="docutils literal notranslate"><span class="pre">format_v()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.write_jmol_options"><code class="docutils literal notranslate"><span class="pre">write_jmol_options()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.write_xyz"><code class="docutils literal notranslate"><span class="pre">write_xyz()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hylight.phonopy.html">hylight.phonopy package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hylight.phonopy.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.phonopy.html#module-hylight.phonopy.loader">hylight.phonopy.loader module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hylight.phonopy.html#hylight.phonopy.loader.PPStruct"><code class="docutils literal notranslate"><span class="pre">PPStruct</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="hylight.phonopy.html#hylight.phonopy.loader.PPStruct.atoms"><code class="docutils literal notranslate"><span class="pre">PPStruct.atoms</span></code></a></li>
@@ -277,11 +278,9 @@
 <li class="toctree-l3"><a class="reference internal" href="hylight.phonopy.html#hylight.phonopy.loader.load_phonons_qpointsyaml"><code class="docutils literal notranslate"><span class="pre">load_phonons_qpointsyaml()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="hylight.phonopy.html#module-hylight.phonopy">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hylight.vasp.html">hylight.vasp package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hylight.vasp.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.vasp.html#module-hylight.vasp.common">hylight.vasp.common module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hylight.vasp.html#hylight.vasp.common.Poscar"><code class="docutils literal notranslate"><span class="pre">Poscar</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="hylight.vasp.html#hylight.vasp.common.Poscar.from_file"><code class="docutils literal notranslate"><span class="pre">Poscar.from_file()</span></code></a></li>
@@ -301,15 +300,10 @@
 <li class="toctree-l3"><a class="reference internal" href="hylight.vasp.html#hylight.vasp.utils.make_finite_diff_poscar"><code class="docutils literal notranslate"><span class="pre">make_finite_diff_poscar()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="hylight.vasp.html#module-hylight.vasp">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</section>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
-</section>
 <section id="module-hylight.constants">
 <span id="hylight-constants-module"></span><h2>hylight.constants module<a class="headerlink" href="#module-hylight.constants" title="Link to this heading">#</a></h2>
 <p>A collection of useful physics constants.</p>
@@ -417,7 +411,7 @@ frequency (that should be provided).</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.duschinsky">
 <span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">duschinsky</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phonons_b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.duschinsky" title="Link to this definition">#</a></dt>
-<dd><p>Dushinsky matrix from b to a <span class="math notranslate nohighlight">\(S_{a \\gets b}\)</span>.</p>
+<dd><p>Dushinsky matrix from b to a <span class="math notranslate nohighlight">\(S_{a \gets b}\)</span>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1357,18 +1351,6 @@ between emin and emax.</p></li>
 </dd></dl>
 
 </section>
-<section id="module-hylight">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hylight" title="Link to this heading">#</a></h2>
-<p>The Hylight package.</p>
-<p>Copyright (c) 2024, Théo Cavignac &lt;<a class="reference external" href="mailto:theo&#46;cavignac+dev&#37;&#52;&#48;gmail&#46;com">theo<span>&#46;</span>cavignac+dev<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;, The PyDEF team &lt;<a class="reference external" href="mailto:camille&#46;latouche&#37;&#52;&#48;cnrs-imn&#46;fr">camille<span>&#46;</span>latouche<span>&#64;</span>cnrs-imn<span>&#46;</span>fr</a>&gt;
-Licensed under the EUPL</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="hylight.setup_logging">
-<span class="sig-prename descclassname"><span class="pre">hylight.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.setup_logging" title="Link to this definition">#</a></dt>
-<dd><p>Setup module logging.</p>
-</dd></dl>
-
-</section>
 </section>
 
         </article>
@@ -1433,8 +1415,7 @@ Licensed under the EUPL</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">hylight package</a><ul>
-<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#hylight.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
 <li><a class="reference internal" href="#module-hylight.constants">hylight.constants module</a></li>
 <li><a class="reference internal" href="#module-hylight.guess_width">hylight.guess_width module</a><ul>
 <li><a class="reference internal" href="#hylight.guess_width.OmegaEff"><code class="docutils literal notranslate"><span class="pre">OmegaEff</span></code></a><ul>
@@ -1561,10 +1542,6 @@ Licensed under the EUPL</p>
 <li><a class="reference internal" href="#hylight.utils.periodic_diff"><code class="docutils literal notranslate"><span class="pre">periodic_diff()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.utils.periodic_dist"><code class="docutils literal notranslate"><span class="pre">periodic_dist()</span></code></a></li>
 <li><a class="reference internal" href="#hylight.utils.select_interval"><code class="docutils literal notranslate"><span class="pre">select_interval()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-hylight">Module contents</a><ul>
-<li><a class="reference internal" href="#hylight.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
 </ul>
 </li>
 </ul>
