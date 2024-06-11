@@ -1,5 +1,6 @@
 """Vibrational mode and related utilities.
 """
+
 # Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
 # Licensed under the EUPL
 from typing import Iterable, Optional, Union
@@ -227,9 +228,7 @@ class Mode:
         >> 1: localized
         """
 
-        return np.sum(np.sum(self.eigenvector**2, axis=1) ** 2) * len(
-            self.eigenvector
-        )
+        return np.sum(np.sum(self.eigenvector**2, axis=1) ** 2) * len(self.eigenvector)
 
     def energies(self):
         "Return the energy participation of each atom to the mode."

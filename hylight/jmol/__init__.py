@@ -74,7 +74,15 @@ def format_v(v):
 
 
 def export(
-    dest, mode, *, displacement=True, scale=1.0, compression=ZIP_DEFLATED, offset=None, recenter=True, **opts
+    dest,
+    mode,
+    *,
+    displacement=True,
+    scale=1.0,
+    compression=ZIP_DEFLATED,
+    offset=None,
+    recenter=True,
+    **opts,
 ):
     """Export a mode to JMol zip format.
 

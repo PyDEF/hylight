@@ -1,5 +1,6 @@
 """Semi classical guess of linewidth.
 """
+
 # Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
 # Licensed under the EUPL
 from enum import Enum
@@ -9,7 +10,15 @@ from scipy import fft
 
 from .mode import get_energies, get_HR_factors, rot_c_to_v, Mask, dynamical_matrix
 from .loader import load_phonons
-from .constants import atomic_mass, eV_in_J, hbar_si, h_si, kb_eV, sigma_to_fwhm, cm1_in_J
+from .constants import (
+    atomic_mass,
+    eV_in_J,
+    hbar_si,
+    h_si,
+    kb_eV,
+    sigma_to_fwhm,
+    cm1_in_J,
+)
 from .multi_modes import (
     compute_delta_R,
     _get_s_t_raw,
@@ -186,8 +195,12 @@ def expected_width(
         e_phonon_eff_e = e_phonon_eff * alpha
         logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2} eV")
 
-    logger.info(f"Effective phonon energy (GS) = {e_phonon_eff} eV / {e_phonon_eff * eV_in_cm1} cm1")
-    logger.info(f"Effective phonon energy (ES) = {e_phonon_eff_e} eV / {e_phonon_eff_e * eV_in_cm1} cm1")
+    logger.info(
+        f"Effective phonon energy (GS) = {e_phonon_eff} eV / {e_phonon_eff * eV_in_cm1} cm1"
+    )
+    logger.info(
+        f"Effective phonon energy (ES) = {e_phonon_eff_e} eV / {e_phonon_eff_e * eV_in_cm1} cm1"
+    )
 
     if width_model == WidthModel.ONED:
         sig = sigma(T, S_em, e_phonon_eff, e_phonon_eff_e)

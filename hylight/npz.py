@@ -2,6 +2,7 @@
 
 See also :func:`numpy.savez` and :func:`numpy.load`.
 """
+
 # Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
 # Licensed under the EUPL
 import os

@@ -1,5 +1,6 @@
 """Grab forces from a collection of single point computations and compute hessian.
 """
+
 # Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
 # Licensed under the EUPL
 from warnings import warn
