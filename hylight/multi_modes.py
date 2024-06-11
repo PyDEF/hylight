@@ -68,8 +68,6 @@ def plot_spectral_function(
 
     f, fc, dirac_fc = fc_spectrum(phonons, delta_R, disp=disp)
     f, s, dirac_s = hr_spectrum(phonons, delta_R, disp=disp)
-    fc = s * f
-    dirac_fc = dirac_s * f
 
     if use_cm1:
         f *= 1e-3 * eV_in_J / cm1_in_J
@@ -373,11 +371,11 @@ def _window(data, fn=np.hamming):
 
 def fc_spectrum(phonons, delta_R, n_points=5000, disp=1):
     "Build arrays for plotting a spectrum energy spectral function."
-    f, s, dirac_s = _stick_smooth_spectrum(
+    f, fc, dirac_fc = _stick_smooth_spectrum(
         phonons, delta_R, lambda hr, e: hr * e, n_points, disp=disp
     )
 
-    return f, f * s, f * dirac_s
+    return f, fc, dirac_fc
 
 
 def hr_spectrum(phonons, delta_R, n_points=5000, disp=1):
