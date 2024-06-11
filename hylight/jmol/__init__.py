@@ -91,13 +91,12 @@ def export(
     if opts.get("unitcell", True) is True:
         opts["unitcell"] = mode.lattice
 
-    ref = mode.ref
+    ref = mode.ref.copy()
 
     if offset is not None:
         ref += (offset @ mode.lattice)[np.newaxis, :]
 
     if recenter:
-        print(ref)
         pfrac = np.remainder(ref @ np.linalg.inv(mode.lattice), 1.0)
         ref = pfrac @ mode.lattice
 
@@ -110,12 +109,7 @@ def export(
             print(f"Mode {mode.n}", file=f)
 
             if displacement:
-                write_xyz(
-                    f,
-                    mode.atoms,
-                    ref,
-                    scale * mode.delta * np.sqrt(atomic_mass),
-                )
+                write_xyz(f, mode.atoms, ref, scale * mode.delta * np.sqrt(atomic_mass))
             else:
                 write_xyz(f, ref, ref, scale * mode.eigenvector)
 
@@ -171,7 +165,7 @@ function setupVectors() {
   vector on;
   color vector yellow;
   vector scale 2;
-  vector 0.12;
+  vector 0.08;
 }
 
 function setupBonds() {
