@@ -8,8 +8,8 @@ __version__ = "1.0.0"
 from . import constants  # noqa: F401
 from . import loader  # noqa: F401
 from . import mode  # noqa: F401
-from . import mono_phonon  # noqa: F401
-from . import multi_phonons  # noqa: F401
+from . import mono_mode  # noqa: F401
+from . import multi_modes  # noqa: F401
 
 import logging
 

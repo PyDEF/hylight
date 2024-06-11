@@ -364,7 +364,7 @@ def _get_c_t_raw(T, t, freqs, hrs):
 def _window(data, fn=np.hamming):
     """Apply a windowing function to the data.
 
-    Use :func:`hylight.multi_phonons.rect` for as a dummy window.
+    Use :func:`hylight.multi_modes.rect` for as a dummy window.
     """
     n = len(data)
     return data * fn(n)

@@ -9,8 +9,8 @@ from scipy import fft
 
 from .mode import get_energies, get_HR_factors, rot_c_to_v, Mask, dynamical_matrix
 from .loader import load_phonons
-from .constants import atomic_mass, eV_in_J, hbar_si, h_si, kb_eV, sigma_to_fwhm
-from .multi_phonons import (
+from .constants import atomic_mass, eV_in_J, hbar_si, h_si, kb_eV, sigma_to_fwhm, cm1_in_J
+from .multi_modes import (
     compute_delta_R,
     _get_s_t_raw,
     make_line_shape,
@@ -21,6 +21,8 @@ from .multi_phonons import (
 import logging
 
 logger = logging.getLogger("hylight")
+
+eV_in_cm1 = eV_in_J / cm1_in_J
 
 
 class _OmegaEff(Enum):
@@ -155,6 +157,7 @@ def expected_width(
     S_em = np.sum(hrs)
     logger.info(f"S = {S_em}")
     dfcg_vib = np.sum(hrs * es)
+    logger.info(f"d_fc^g,v = {dfcg_vib} eV")
 
     e_phonon_eff = effective_phonon_energy(
         omega_eff_type,
@@ -181,7 +184,10 @@ def expected_width(
             )
         alpha = np.sqrt(fc_shift_es / fc_shift_gs)
         e_phonon_eff_e = e_phonon_eff * alpha
-        logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2}")
+        logger.info(f"d_fc^e,v = {dfcg_vib * alpha**2} eV")
+
+    logger.info(f"Effective phonon energy (GS) = {e_phonon_eff} eV / {e_phonon_eff * eV_in_cm1} cm1")
+    logger.info(f"Effective phonon energy (ES) = {e_phonon_eff_e} eV / {e_phonon_eff_e * eV_in_cm1} cm1")
 
     if width_model == WidthModel.ONED:
         sig = sigma(T, S_em, e_phonon_eff, e_phonon_eff_e)

@@ -1,5 +1,5 @@
-"""Write Jmol files.
-"""
+"""Write Jmol files."""
+
 # Copyright (c) 2024, Théo Cavignac <theo.cavignac+dev@gmail.com>, The PyDEF team <camille.latouche@cnrs-imn.fr>
 # Licensed under the EUPL
 from zipfile import ZIP_DEFLATED, ZipFile
@@ -74,7 +74,7 @@ def format_v(v):
 
 
 def export(
-    dest, mode, *, displacement=True, scale=1.0, compression=ZIP_DEFLATED, **opts
+    dest, mode, *, displacement=True, scale=1.0, compression=ZIP_DEFLATED, offset=None, recenter=True, **opts
 ):
     """Export a mode to JMol zip format.
 
@@ -83,8 +83,24 @@ def export(
     :param displacement: (kw only, default True) choose between eigendisplacements and eigenvectors
     :param scale: (kw only, default 1.0) a scale factor for the displacements/eigenvectors
     :param compression: (kw only) zipfile compression algorithm.
+    :param offset: (kw only, `np.array([0, 0, 0])`) offset vector (in fractional coordinates) to shift the atoms in the unit cell to have different atoms at the center
+    :param recenter: (kw only, `True`) wether atoms should be moved according to periodic conditions to fit in the unit cell
     :param \\**opts: see :func:`write_jmol_options`
     """
+
+    if opts.get("unitcell", True) is True:
+        opts["unitcell"] = mode.lattice
+
+    ref = mode.ref
+
+    if offset is not None:
+        ref += (offset @ mode.lattice)[np.newaxis, :]
+
+    if recenter:
+        print(ref)
+        pfrac = np.remainder(ref @ np.linalg.inv(mode.lattice), 1.0)
+        ref = pfrac @ mode.lattice
+
     with ZipFile(dest, mode="w", compression=compression) as ar:
         ar.writestr("JmolManifest.txt", manifest.encode("utf8"))
         ar.writestr("state.spt", state.encode("utf8"))
@@ -95,10 +111,13 @@ def export(
 
             if displacement:
                 write_xyz(
-                    f, mode.atoms, mode.ref, scale * mode.delta * np.sqrt(atomic_mass)
+                    f,
+                    mode.atoms,
+                    ref,
+                    scale * mode.delta * np.sqrt(atomic_mass),
                 )
             else:
-                write_xyz(f, mode.atoms, mode.ref, scale * mode.eigenvector)
+                write_xyz(f, ref, ref, scale * mode.eigenvector)
 
             ar.writestr("system.xyz", f.getvalue().encode("utf8"))
 

@@ -268,7 +268,7 @@ def parse_opts(opts):
 )
 def show(opts):
     """Produce a set of figures to vizualize the modes."""
-    from ..multi_phonons import dynmatshow
+    from ..multi_modes import dynmatshow
     from ..mode import dynamical_matrix
     from matplotlib.pyplot import show
 
