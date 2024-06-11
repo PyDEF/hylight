@@ -33,8 +33,8 @@ exit
 - [ ] Commit the documentation and code
 - [ ] Tag the commit with the name of the version `git tag v1.0.0`
 - [ ] Push the commits to GitHub `git push github main`
-- [ ] Push the tags to GitHub `git push github v1.0.0`
-- [ ] Make sure the documentation is properly displayed on the page `http://hylight.github.io/`
+- [ ] Push the tags to GitHub `git push github --tags`
+- [ ] Make sure the documentation is properly displayed on the page `http://pydef.github.io/hylight`
 - [ ] Publish the release to PyPI (see the private wiki of the project).
 ```sh
 hatch build
