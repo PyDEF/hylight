@@ -1,11 +1,8 @@
 hylight.crystal package
 =======================
 
-.. automodule:: hylight.crystal
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
+Submodules
+----------
 
 hylight.crystal.common module
 -----------------------------
@@ -19,6 +16,14 @@ hylight.crystal.loader module
 -----------------------------
 
 .. automodule:: hylight.crystal.loader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: hylight.crystal
    :members:
    :undoc-members:
    :show-inheritance:

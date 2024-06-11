@@ -26,7 +26,8 @@ I also recommend that you regularly check the code for common errors with
 ```sh
 hatch shell
 pip install .[dev,plotting,phonopy,hdf5]
-python ./make_page.py
+cd docs_src && make regen && cd ..  # only if there is new/renamed/removed modules
+python ./make_docs.py
 exit
 ```
 - [ ] Commit the documentation and code

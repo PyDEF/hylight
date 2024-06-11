@@ -1,10 +1,8 @@
 hylight package
 ===============
 
-.. automodule:: hylight
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Subpackages
+-----------
 
 .. toctree::
    :maxdepth: 4
@@ -15,6 +13,8 @@ hylight package
    hylight.phonopy
    hylight.vasp
 
+Submodules
+----------
 
 hylight.constants module
 ------------------------
@@ -48,18 +48,18 @@ hylight.mode module
    :undoc-members:
    :show-inheritance:
 
-hylight.mono\_phonon module
----------------------------
+hylight.mono\_mode module
+-------------------------
 
-.. automodule:: hylight.mono_phonon
+.. automodule:: hylight.mono_mode
    :members:
    :undoc-members:
    :show-inheritance:
 
-hylight.multi\_phonons module
------------------------------
+hylight.multi\_modes module
+---------------------------
 
-.. automodule:: hylight.multi_phonons
+.. automodule:: hylight.multi_modes
    :members:
    :undoc-members:
    :show-inheritance:
@@ -92,6 +92,14 @@ hylight.utils module
 --------------------
 
 .. automodule:: hylight.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: hylight
    :members:
    :undoc-members:
    :show-inheritance:

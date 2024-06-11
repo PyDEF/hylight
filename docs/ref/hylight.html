@@ -3,13 +3,13 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight.crystal package" href="hylight.crystal.html" /><link rel="prev" title="BaZrO3:Ti study" href="../tutorial/tutorial.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="hylight.crystal package" href="hylight.crystal.html" /><link rel="prev" title="Al2O3:Ti study" href="../tutorial/tutorial.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
         <title>hylight package - Hylight 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=387cc868" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
     
     
@@ -69,7 +69,7 @@
   <symbol id="svg-sun" viewBox="0 0 24 24">
     <title>Light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
       <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -84,7 +84,7 @@
   <symbol id="svg-moon" viewBox="0 0 24 24">
     <title>Dark mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
     </svg>
@@ -92,7 +92,7 @@
   <symbol id="svg-sun-half" viewBox="0 0 24 24">
     <title>Auto light/dark mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <circle cx="12" cy="12" r="9" />
       <path d="M13 12h5" />
@@ -100,6 +100,60 @@
       <path d="M13 18h1" />
       <path d="M13 9h4" />
       <path d="M13 6h1" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" /
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
     </svg>
   </symbol>
 </svg>
@@ -159,7 +213,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">BaZrO3:Ti study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">Al<sub>2</sub>O<sub>3</sub>:Ti study</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">hylight package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of hylight package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -204,20 +258,14 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-hylight">
-<span id="hylight-package"></span><h1>hylight package<a class="headerlink" href="#module-hylight" title="Link to this heading">#</a></h1>
-<p>The Hylight package.</p>
-<p>Copyright (c) 2024, Théo Cavignac &lt;<a class="reference external" href="mailto:theo&#46;cavignac+dev&#37;&#52;&#48;gmail&#46;com">theo<span>&#46;</span>cavignac+dev<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;, The PyDEF team &lt;<a class="reference external" href="mailto:camille&#46;latouche&#37;&#52;&#48;cnrs-imn&#46;fr">camille<span>&#46;</span>latouche<span>&#64;</span>cnrs-imn<span>&#46;</span>fr</a>&gt;
-Licensed under the EUPL</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="hylight.setup_logging">
-<span class="sig-prename descclassname"><span class="pre">hylight.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.setup_logging" title="Link to this definition">#</a></dt>
-<dd><p>Setup module logging.</p>
-</dd></dl>
-
+          <section id="hylight-package">
+<h1>hylight package<a class="headerlink" href="#hylight-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="hylight.crystal.html">hylight.crystal package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html#module-hylight.crystal.common">hylight.crystal.common module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hylight.crystal.html#hylight.crystal.common.CrystalOut"><code class="docutils literal notranslate"><span class="pre">CrystalOut</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="hylight.crystal.html#hylight.crystal.common.CrystalOut.from_file"><code class="docutils literal notranslate"><span class="pre">CrystalOut.from_file()</span></code></a></li>
@@ -230,9 +278,11 @@ Licensed under the EUPL</p>
 <li class="toctree-l3"><a class="reference internal" href="hylight.crystal.html#hylight.crystal.loader.normalize"><code class="docutils literal notranslate"><span class="pre">normalize()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.crystal.html#module-hylight.crystal">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hylight.findiff.html">hylight.findiff package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html#module-hylight.findiff.collect">hylight.findiff.collect module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hylight.findiff.html#hylight.findiff.collect.dropwhile_err"><code class="docutils literal notranslate"><span class="pre">dropwhile_err()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="hylight.findiff.html#hylight.findiff.collect.get_forces"><code class="docutils literal notranslate"><span class="pre">get_forces()</span></code></a></li>
@@ -249,17 +299,22 @@ Licensed under the EUPL</p>
 <li class="toctree-l3"><a class="reference internal" href="hylight.findiff.html#hylight.findiff.gen.save_random_disp"><code class="docutils literal notranslate"><span class="pre">save_random_disp()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.findiff.html#module-hylight.findiff">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hylight.jmol.html">hylight.jmol package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.export_disp"><code class="docutils literal notranslate"><span class="pre">export_disp()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.format_v"><code class="docutils literal notranslate"><span class="pre">format_v()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.write_jmol_options"><code class="docutils literal notranslate"><span class="pre">write_jmol_options()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.write_xyz"><code class="docutils literal notranslate"><span class="pre">write_xyz()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.jmol.html#module-hylight.jmol">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.export_disp"><code class="docutils literal notranslate"><span class="pre">export_disp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.format_v"><code class="docutils literal notranslate"><span class="pre">format_v()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.write_jmol_options"><code class="docutils literal notranslate"><span class="pre">write_jmol_options()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hylight.jmol.html#hylight.jmol.write_xyz"><code class="docutils literal notranslate"><span class="pre">write_xyz()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hylight.phonopy.html">hylight.phonopy package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hylight.phonopy.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.phonopy.html#module-hylight.phonopy.loader">hylight.phonopy.loader module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hylight.phonopy.html#hylight.phonopy.loader.PPStruct"><code class="docutils literal notranslate"><span class="pre">PPStruct</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="hylight.phonopy.html#hylight.phonopy.loader.PPStruct.atoms"><code class="docutils literal notranslate"><span class="pre">PPStruct.atoms</span></code></a></li>
@@ -278,9 +333,11 @@ Licensed under the EUPL</p>
 <li class="toctree-l3"><a class="reference internal" href="hylight.phonopy.html#hylight.phonopy.loader.load_phonons_qpointsyaml"><code class="docutils literal notranslate"><span class="pre">load_phonons_qpointsyaml()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.phonopy.html#module-hylight.phonopy">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hylight.vasp.html">hylight.vasp package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hylight.vasp.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hylight.vasp.html#module-hylight.vasp.common">hylight.vasp.common module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hylight.vasp.html#hylight.vasp.common.Poscar"><code class="docutils literal notranslate"><span class="pre">Poscar</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="hylight.vasp.html#hylight.vasp.common.Poscar.from_file"><code class="docutils literal notranslate"><span class="pre">Poscar.from_file()</span></code></a></li>
@@ -300,20 +357,25 @@ Licensed under the EUPL</p>
 <li class="toctree-l3"><a class="reference internal" href="hylight.vasp.html#hylight.vasp.utils.make_finite_diff_poscar"><code class="docutils literal notranslate"><span class="pre">make_finite_diff_poscar()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="hylight.vasp.html#module-hylight.vasp">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
 <section id="module-hylight.constants">
-<span id="hylight-constants-module"></span><h2>hylight.constants module<a class="headerlink" href="#module-hylight.constants" title="Link to this heading">#</a></h2>
+<span id="hylight-constants-module"></span><h2>hylight.constants module<a class="headerlink" href="#module-hylight.constants" title="Link to this heading">¶</a></h2>
 <p>A collection of useful physics constants.</p>
 </section>
 <section id="module-hylight.guess_width">
-<span id="hylight-guess-width-module"></span><h2>hylight.guess_width module<a class="headerlink" href="#module-hylight.guess_width" title="Link to this heading">#</a></h2>
+<span id="hylight-guess-width-module"></span><h2>hylight.guess_width module<a class="headerlink" href="#module-hylight.guess_width" title="Link to this heading">¶</a></h2>
 <p>Semi classical guess of linewidth.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.guess_width.OmegaEff">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">OmegaEff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.OmegaEff" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">OmegaEff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.OmegaEff" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Mode of computation of a effective frequency.</p>
 <p><a class="reference internal" href="#hylight.guess_width.OmegaEff.FC_MEAN" title="hylight.guess_width.OmegaEff.FC_MEAN"><code class="xref py py-attr docutils literal notranslate"><span class="pre">FC_MEAN</span></code></a>:</p>
@@ -352,39 +414,39 @@ The effective frequency for the ES is provided by the user (and should be comput
 Should be used with <a class="reference internal" href="#hylight.guess_width.WidthModel.ONED" title="hylight.guess_width.WidthModel.ONED"><code class="xref py py-attr docutils literal notranslate"><span class="pre">WidthModel.ONED</span></code></a>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.OmegaEff.DISP">
-<span class="sig-name descname"><span class="pre">DISP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.DISP" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">DISP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.DISP" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.OmegaEff.FC_MEAN">
-<span class="sig-name descname"><span class="pre">FC_MEAN</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.FC_MEAN" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">FC_MEAN</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.FC_MEAN" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.OmegaEff.FC_RMS">
-<span class="sig-name descname"><span class="pre">FC_RMS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.FC_RMS" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">FC_RMS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.FC_RMS" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.OmegaEff.GRAD">
-<span class="sig-name descname"><span class="pre">GRAD</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.GRAD" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">GRAD</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.GRAD" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.OmegaEff.HR_MEAN">
-<span class="sig-name descname"><span class="pre">HR_MEAN</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.HR_MEAN" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">HR_MEAN</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.HR_MEAN" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.OmegaEff.HR_RMS">
-<span class="sig-name descname"><span class="pre">HR_RMS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.HR_RMS" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">HR_RMS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hylight.guess_width.OmegaEff" title="hylight.guess_width.OmegaEff"><span class="pre">OmegaEff</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#hylight.guess_width.OmegaEff.HR_RMS" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.guess_width.WidthModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">WidthModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.WidthModel" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">WidthModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.WidthModel" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
 <p>Mode of approximation of the band width.</p>
 <p><a class="reference internal" href="#hylight.guess_width.WidthModel.ONED" title="hylight.guess_width.WidthModel.ONED"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ONED</span></code></a>: The witdth is computed in a 1D mode for both ES and GS.</p>
@@ -393,30 +455,30 @@ frequency (that should be provided).</p>
 <p><a class="reference internal" href="#hylight.guess_width.WidthModel.FULL_ND" title="hylight.guess_width.WidthModel.FULL_ND"><code class="xref py py-attr docutils literal notranslate"><span class="pre">FULL_ND</span></code></a>: (Not implemented) We know the frequency of each ES mode.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.WidthModel.FULL_ND">
-<span class="sig-name descname"><span class="pre">FULL_ND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#hylight.guess_width.WidthModel.FULL_ND" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">FULL_ND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#hylight.guess_width.WidthModel.FULL_ND" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.WidthModel.ONED">
-<span class="sig-name descname"><span class="pre">ONED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#hylight.guess_width.WidthModel.ONED" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ONED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#hylight.guess_width.WidthModel.ONED" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="hylight.guess_width.WidthModel.SINGLE_ES_FREQ">
-<span class="sig-name descname"><span class="pre">SINGLE_ES_FREQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#hylight.guess_width.WidthModel.SINGLE_ES_FREQ" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">SINGLE_ES_FREQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#hylight.guess_width.WidthModel.SINGLE_ES_FREQ" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.duschinsky">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">duschinsky</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phonons_b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.duschinsky" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">duschinsky</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phonons_b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.duschinsky" title="Link to this definition">¶</a></dt>
 <dd><p>Dushinsky matrix from b to a <span class="math notranslate nohighlight">\(S_{a \gets b}\)</span>.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.effective_phonon_energy">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">effective_phonon_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega_eff_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.effective_phonon_energy" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">effective_phonon_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega_eff_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.effective_phonon_energy" title="Link to this definition">¶</a></dt>
 <dd><p>Compute an effective phonon energy in eV following the strategy of omega_eff_type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -437,7 +499,7 @@ It is only required if omega_eff_type is ONED_FREQ.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.expected_width">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">expected_width</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_eff_type=&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width_model=WidthModel.ONED</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.expected_width" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">expected_width</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_eff_type=&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width_model=WidthModel.ONED</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.expected_width" title="Link to this definition">¶</a></dt>
 <dd><p>Compute a spectrum without free parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -465,7 +527,7 @@ It is only required if omega_eff_type is ONED_FREQ.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.gradiant_at">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">gradiant_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.gradiant_at" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">gradiant_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.gradiant_at" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the gradient of the PES at the position of delta_R.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -484,7 +546,7 @@ It is only required if omega_eff_type is ONED_FREQ.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.guess_width">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">guess_width</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e=0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_eff_type=&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width_model=WidthModel.ONED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trial_line_sig=0.02</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.guess_width" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">guess_width</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_shift_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e=0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_eff_type=&lt;hylight.guess_width.OmegaEff</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width_model=WidthModel.ONED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trial_line_sig=0.02</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.guess_width" title="Link to this definition">¶</a></dt>
 <dd><p>Try to guess the width of the line from a 1D semi-classical model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -511,7 +573,7 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.integrate">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.integrate" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.integrate" title="Link to this definition">¶</a></dt>
 <dd><p>Integrate a function over x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -528,7 +590,7 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.sigma">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_em</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_e</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.sigma" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_em</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_e</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.sigma" title="Link to this definition">¶</a></dt>
 <dd><p>Temperature dependant standard deviation of the lineshape.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -544,7 +606,7 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.sigma_full_nd">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">sigma_full_nd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.sigma_full_nd" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">sigma_full_nd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.sigma_full_nd" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the width of the ZPL for the <code class="xref py py-attr docutils literal notranslate"><span class="pre">ExPES.FULL_ND</span></code> mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -563,57 +625,57 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.sigma_hybrid">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">sigma_hybrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_e</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.sigma_hybrid" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">sigma_hybrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_e</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.sigma_hybrid" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the width of the ZPL for the <code class="xref py py-attr docutils literal notranslate"><span class="pre">ExPES.SINGLE_ES_FREQ</span></code> mode.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.guess_width.variance">
-<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.variance" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.guess_width.</span></span><span class="sig-name descname"><span class="pre">variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.guess_width.variance" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the variance of a random variable of distribution y.</p>
 </dd></dl>
 
 </section>
 <section id="module-hylight.loader">
-<span id="hylight-loader-module"></span><h2>hylight.loader module<a class="headerlink" href="#module-hylight.loader" title="Link to this heading">#</a></h2>
+<span id="hylight-loader-module"></span><h2>hylight.loader module<a class="headerlink" href="#module-hylight.loader" title="Link to this heading">¶</a></h2>
 <p>Wrapper for the npz loader.</p>
 </section>
 <section id="module-hylight.mode">
-<span id="hylight-mode-module"></span><h2>hylight.mode module<a class="headerlink" href="#module-hylight.mode" title="Link to this heading">#</a></h2>
+<span id="hylight-mode-module"></span><h2>hylight.mode module<a class="headerlink" href="#module-hylight.mode" title="Link to this heading">¶</a></h2>
 <p>Vibrational mode and related utilities.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.mode.CellMismatch">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">CellMismatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reason</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.CellMismatch" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">CellMismatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reason</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.CellMismatch" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A falsy value explaining how the cell are not matching.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.mode.Mask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mask" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mask" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>An energy based mask for the set of modes.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mask.accept">
-<span class="sig-name descname"><span class="pre">accept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hylight.mode.Mask.accept" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">accept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hylight.mode.Mask.accept" title="Link to this definition">¶</a></dt>
 <dd><p>Return True if value is not under the mask.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mask.add_interval">
-<span class="sig-name descname"><span class="pre">add_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#hylight.mode.Mask.add_interval" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">add_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#hylight.mode.Mask.add_interval" title="Link to this definition">¶</a></dt>
 <dd><p>Add a new interval to the mask.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mask.as_bool">
-<span class="sig-name descname"><span class="pre">as_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ener</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.Mask.as_bool" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">as_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ener</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.Mask.as_bool" title="Link to this definition">¶</a></dt>
 <dd><p>Convert to a boolean <cite>np.ndarray</cite> based on <cite>ener</cite>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mask.from_bias">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.mode.Mask" title="hylight.mode.Mask"><span class="pre">Mask</span></a></span></span><a class="headerlink" href="#hylight.mode.Mask.from_bias" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.mode.Mask" title="hylight.mode.Mask"><span class="pre">Mask</span></a></span></span><a class="headerlink" href="#hylight.mode.Mask.from_bias" title="Link to this definition">¶</a></dt>
 <dd><p>Create a mask that reject modes of energy between 0 and <cite>bias</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -627,7 +689,7 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mask.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mask.plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mask.plot" title="Link to this definition">¶</a></dt>
 <dd><p>Add a graphical representation of the mask to a plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -644,7 +706,7 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mask.reject">
-<span class="sig-name descname"><span class="pre">reject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hylight.mode.Mask.reject" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hylight.mode.Mask.reject" title="Link to this definition">¶</a></dt>
 <dd><p>Return True if <cite>value</cite> is under the mask.</p>
 </dd></dl>
 
@@ -652,44 +714,44 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.mode.Mode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenvector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenvector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The representation of a vibrational mode.</p>
 <p>It stores the eigenvector and eigendisplacement.
 It can be used to project other displacement on the eigenvector.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.energies">
-<span class="sig-name descname"><span class="pre">energies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.energies" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">energies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.energies" title="Link to this definition">¶</a></dt>
 <dd><p>Return the energy participation of each atom to the mode.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="hylight.mode.Mode.energy_cm1">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_cm1</span></span><a class="headerlink" href="#hylight.mode.Mode.energy_cm1" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_cm1</span></span><a class="headerlink" href="#hylight.mode.Mode.energy_cm1" title="Link to this definition">¶</a></dt>
 <dd><p>Energy of the mode in <span class="math notranslate nohighlight">\(cm^{-1}\)</span>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="hylight.mode.Mode.energy_eV">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_eV</span></span><a class="headerlink" href="#hylight.mode.Mode.energy_eV" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_eV</span></span><a class="headerlink" href="#hylight.mode.Mode.energy_eV" title="Link to this definition">¶</a></dt>
 <dd><p>Energy of the mode in eV.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="hylight.mode.Mode.energy_meV">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_meV</span></span><a class="headerlink" href="#hylight.mode.Mode.energy_meV" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_meV</span></span><a class="headerlink" href="#hylight.mode.Mode.energy_meV" title="Link to this definition">¶</a></dt>
 <dd><p>Energy of the mode in meV.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="hylight.mode.Mode.energy_si">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_si</span></span><a class="headerlink" href="#hylight.mode.Mode.energy_si" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_si</span></span><a class="headerlink" href="#hylight.mode.Mode.energy_si" title="Link to this definition">¶</a></dt>
 <dd><p>Energy of the mode in J.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.huang_rhys">
-<span class="sig-name descname"><span class="pre">huang_rhys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_R</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#hylight.mode.Mode.huang_rhys" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">huang_rhys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_R</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#hylight.mode.Mode.huang_rhys" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the Huang-Rhyes factor.</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
@@ -705,7 +767,7 @@ It can be used to project other displacement on the eigenvector.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.localization_ratio">
-<span class="sig-name descname"><span class="pre">localization_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.localization_ratio" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">localization_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.localization_ratio" title="Link to this definition">¶</a></dt>
 <dd><p>Quantify the localization of the mode over the supercell.</p>
 <p>See also <a class="reference internal" href="#hylight.mode.Mode.participation_ratio" title="hylight.mode.Mode.participation_ratio"><code class="xref py py-func docutils literal notranslate"><span class="pre">participation_ratio()</span></code></a>.</p>
 <p>1: fully delocalized
@@ -714,7 +776,7 @@ It can be used to project other displacement on the eigenvector.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.participation_ratio">
-<span class="sig-name descname"><span class="pre">participation_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.participation_ratio" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">participation_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.participation_ratio" title="Link to this definition">¶</a></dt>
 <dd><p>Fraction of atoms active in the mode.</p>
 <p>R J Bell et al 1970 J. Phys. C: Solid State Phys. 3 2111
 <a class="reference external" href="https://doi.org/10.1088/0022-3719/3/10/013">https://doi.org/10.1088/0022-3719/3/10/013</a></p>
@@ -734,38 +796,38 @@ eigendisplacement <span class="math notranslate nohighlight">\(\eta\)</span>.</p
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.per_species_n_eff">
-<span class="sig-name descname"><span class="pre">per_species_n_eff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.per_species_n_eff" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">per_species_n_eff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.per_species_n_eff" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the number of atoms participating to the mode for a given species.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.per_species_pr">
-<span class="sig-name descname"><span class="pre">per_species_pr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.per_species_pr" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">per_species_pr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.per_species_pr" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the fraction of atoms participation to the mode for a given species.</p>
 <p>See also <a class="reference internal" href="#hylight.mode.Mode.per_species_n_eff" title="hylight.mode.Mode.per_species_n_eff"><code class="xref py py-func docutils literal notranslate"><span class="pre">per_species_n_eff()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.project">
-<span class="sig-name descname"><span class="pre">project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#hylight.mode.Mode.project" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#hylight.mode.Mode.project" title="Link to this definition">¶</a></dt>
 <dd><p>Project delta_Q onto the eigenvector.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.project_coef2">
-<span class="sig-name descname"><span class="pre">project_coef2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#hylight.mode.Mode.project_coef2" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">project_coef2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#hylight.mode.Mode.project_coef2" title="Link to this definition">¶</a></dt>
 <dd><p>Square lenght of the projection of delta_Q onto the eigenvector.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.project_coef2_R">
-<span class="sig-name descname"><span class="pre">project_coef2_R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_R</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#hylight.mode.Mode.project_coef2_R" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">project_coef2_R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_R</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#hylight.mode.Mode.project_coef2_R" title="Link to this definition">¶</a></dt>
 <dd><p>Square lenght of the projection of delta_R onto the eigenvector.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.set_lattice">
-<span class="sig-name descname"><span class="pre">set_lattice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#hylight.mode.Mode.set_lattice" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_lattice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#hylight.mode.Mode.set_lattice" title="Link to this definition">¶</a></dt>
 <dd><p>Change the representation to another lattice.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -779,14 +841,14 @@ eigendisplacement <span class="math notranslate nohighlight">\(\eta\)</span>.</p
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.to_jmol">
-<span class="sig-name descname"><span class="pre">to_jmol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.to_jmol" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_jmol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.to_jmol" title="Link to this definition">¶</a></dt>
 <dd><p>Write a mode into a Jmol file.</p>
 <p>See <a class="reference internal" href="hylight.jmol.html#hylight.jmol.export" title="hylight.jmol.export"><code class="xref py py-func docutils literal notranslate"><span class="pre">hylight.jmol.export()</span></code></a> for the parameters.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.mode.Mode.to_traj">
-<span class="sig-name descname"><span class="pre">to_traj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framerate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.to_traj" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_traj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framerate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.Mode.to_traj" title="Link to this definition">¶</a></dt>
 <dd><p>Produce a ase trajectory for animation purpose.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -803,13 +865,13 @@ eigendisplacement <span class="math notranslate nohighlight">\(\eta\)</span>.</p
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.angle">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.angle" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.angle" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the angle in radians between two 3D vectors.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.dynamical_matrix">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">dynamical_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.dynamical_matrix" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">dynamical_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.dynamical_matrix" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieve the dynamical matrix from a set of modes.</p>
 <p>Note that if some modes are missing the computation will fail.</p>
 <dl class="field-list simple">
@@ -821,7 +883,7 @@ eigendisplacement <span class="math notranslate nohighlight">\(\eta\)</span>.</p
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.generate_basis">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">generate_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.generate_basis" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">generate_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.generate_basis" title="Link to this definition">¶</a></dt>
 <dd><p>Generate an orthonormal basis with the rows of seed as first rows.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -837,7 +899,7 @@ are the rows of <code class="code docutils literal notranslate"><span class="pre
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.get_HR_factors">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">get_HR_factors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R_tot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hylight.mode.Mask" title="hylight.mode.Mask"><span class="pre">Mask</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.get_HR_factors" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">get_HR_factors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R_tot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hylight.mode.Mask" title="hylight.mode.Mask"><span class="pre">Mask</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.get_HR_factors" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the Huang-Rhys factors for all the real modes with energy above bias.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -852,13 +914,13 @@ are the rows of <code class="code docutils literal notranslate"><span class="pre
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.get_energies">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">get_energies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hylight.mode.Mask" title="hylight.mode.Mask"><span class="pre">Mask</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.get_energies" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">get_energies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hylight.mode.Mask" title="hylight.mode.Mask"><span class="pre">Mask</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.get_energies" title="Link to this definition">¶</a></dt>
 <dd><p>Return an array of mode energies in SI.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.modes_from_dynmat">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">modes_from_dynmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynmat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.modes_from_dynmat" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">modes_from_dynmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynmat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.modes_from_dynmat" title="Link to this definition">¶</a></dt>
 <dd><p>Compute vibrational modes from the dynamical matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -878,7 +940,7 @@ are the rows of <code class="code docutils literal notranslate"><span class="pre
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.orthonormalize">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">orthonormalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_skip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.orthonormalize" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">orthonormalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_skip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.orthonormalize" title="Link to this definition">¶</a></dt>
 <dd><p>Ensure that the vectors of m are orthonormal.</p>
 <p>Change the rows from n_seed up inplace to make them orthonormal.</p>
 <dl class="field-list simple">
@@ -894,7 +956,7 @@ They must be orthonormal already.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.project_on_asr">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">project_on_asr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.project_on_asr" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">project_on_asr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masses</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mode.project_on_asr" title="Link to this definition">¶</a></dt>
 <dd><p>Enforce accoustic sum rule.</p>
 <p>Project the input matrix on the space of ASR abiding matrices and return
 the projections.</p>
@@ -902,23 +964,23 @@ the projections.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.rot_c_to_v">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">rot_c_to_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.rot_c_to_v" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">rot_c_to_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#hylight.mode.rot_c_to_v" title="Link to this definition">¶</a></dt>
 <dd><p>Rotation matrix from Cartesian basis to Vibrational basis (right side).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.mode.same_cell">
-<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">same_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.mode.CellMismatch" title="hylight.mode.CellMismatch"><span class="pre">CellMismatch</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span></span><a class="headerlink" href="#hylight.mode.same_cell" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.mode.</span></span><span class="sig-name descname"><span class="pre">same_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.mode.CellMismatch" title="hylight.mode.CellMismatch"><span class="pre">CellMismatch</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span></span><a class="headerlink" href="#hylight.mode.same_cell" title="Link to this definition">¶</a></dt>
 <dd><p>Compare two lattice vectors matrix and return True if they describe the same cell.</p>
 </dd></dl>
 
 </section>
-<section id="module-hylight.mono_phonon">
-<span id="hylight-mono-phonon-module"></span><h2>hylight.mono_phonon module<a class="headerlink" href="#module-hylight.mono_phonon" title="Link to this heading">#</a></h2>
+<section id="module-hylight.mono_mode">
+<span id="hylight-mono-mode-module"></span><h2>hylight.mono_mode module<a class="headerlink" href="#module-hylight.mono_mode" title="Link to this heading">¶</a></h2>
 <p>Simulation of luminescence spectra in 1D model.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.mono_phonon.compute_spectrum">
-<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.compute_spectrum" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.mono_mode.compute_spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.mono_mode.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_mode.compute_spectrum" title="Link to this definition">¶</a></dt>
 <dd><p>Compute a spectrum from 1D model with experimental like inputs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -937,40 +999,40 @@ if ommited, an array ranging from 0 to 3*e_zpl will be created.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.mono_phonon.huang_rhys">
-<span class="sig-prename descclassname"><span class="pre">hylight.mono_phonon.</span></span><span class="sig-name descname"><span class="pre">huang_rhys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stokes_shift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_phonon.huang_rhys" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.mono_mode.huang_rhys">
+<span class="sig-prename descclassname"><span class="pre">hylight.mono_mode.</span></span><span class="sig-name descname"><span class="pre">huang_rhys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stokes_shift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_phonon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.mono_mode.huang_rhys" title="Link to this definition">¶</a></dt>
 <dd><p>Huang-Rhys factor from the Stokes shift and the phonon energy.</p>
 </dd></dl>
 
 </section>
-<section id="module-hylight.multi_phonons">
-<span id="hylight-multi-phonons-module"></span><h2>hylight.multi_phonons module<a class="headerlink" href="#module-hylight.multi_phonons" title="Link to this heading">#</a></h2>
+<section id="module-hylight.multi_modes">
+<span id="hylight-multi-modes-module"></span><h2>hylight.multi_modes module<a class="headerlink" href="#module-hylight.multi_modes" title="Link to this heading">¶</a></h2>
 <p>Simulation of spectra in nD model.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="hylight.multi_phonons.LineShape">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">LineShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.LineShape" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.LineShape">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">LineShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.LineShape" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
 <p>Line shape type.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="hylight.multi_phonons.LineShape.GAUSSIAN">
-<span class="sig-name descname"><span class="pre">GAUSSIAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#hylight.multi_phonons.LineShape.GAUSSIAN" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.LineShape.GAUSSIAN">
+<span class="sig-name descname"><span class="pre">GAUSSIAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#hylight.multi_modes.LineShape.GAUSSIAN" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="hylight.multi_phonons.LineShape.LORENTZIAN">
-<span class="sig-name descname"><span class="pre">LORENTZIAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#hylight.multi_phonons.LineShape.LORENTZIAN" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.LineShape.LORENTZIAN">
+<span class="sig-name descname"><span class="pre">LORENTZIAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#hylight.multi_modes.LineShape.LORENTZIAN" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="hylight.multi_phonons.LineShape.NONE">
-<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#hylight.multi_phonons.LineShape.NONE" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.LineShape.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#hylight.multi_modes.LineShape.NONE" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.compute_delta_R">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">compute_delta_R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.compute_delta_R" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.compute_delta_R">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">compute_delta_R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.compute_delta_R" title="Link to this definition">¶</a></dt>
 <dd><p>Return <span class="math notranslate nohighlight">\(\Delta R\)</span> in A.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -986,14 +1048,14 @@ if ommited, an array ranging from 0 to 3*e_zpl will be created.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.compute_spectrum">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwhm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e=0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T=0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.compute_spectrum" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.compute_spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">compute_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwhm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_max=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_e=0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape=LineShape.GAUSSIAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_convolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_fn=&lt;function</span> <span class="pre">hamming&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T=0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.compute_spectrum" title="Link to this definition">¶</a></dt>
 <dd><p>Compute a luminescence spectrum with the time-dependant formulation with an arbitrary linewidth.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>phonons</strong> – list of modes (see <code class="xref py py-func docutils literal notranslate"><span class="pre">load_phonons()</span></code>) or path to load the modes</p></li>
-<li><p><strong>delta_R</strong> – displacement in A in a numpy array (see <a class="reference internal" href="#hylight.multi_phonons.compute_delta_R" title="hylight.multi_phonons.compute_delta_R"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_delta_R()</span></code></a>)
+<li><p><strong>delta_R</strong> – displacement in A in a numpy array (see <a class="reference internal" href="#hylight.multi_modes.compute_delta_R" title="hylight.multi_modes.compute_delta_R"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_delta_R()</span></code></a>)
 or tuple of two paths <code class="code docutils literal notranslate"><span class="pre">(pos_gs,</span> <span class="pre">pos_es)</span></code></p></li>
 <li><p><strong>zpl</strong> – zero phonon line energy in eV</p></li>
 <li><p><strong>fwhm</strong> – <p>ZPL lineshape full width at half maximum in eV or None</p>
@@ -1007,7 +1069,7 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 <li><p><strong>resolution_e</strong> – (optional, <code class="code docutils literal notranslate"><span class="pre">1e-3</span></code>) energy resolution in eV</p></li>
 <li><p><strong>load_phonons</strong> – a function to read phonons from files.</p></li>
 <li><p><strong>mask</strong> – a <a class="reference internal" href="#hylight.mode.Mask" title="hylight.mode.Mask"><code class="xref py py-class docutils literal notranslate"><span class="pre">mode.Mask</span></code></a> instance to select modes base on frequencies</p></li>
-<li><p><strong>shape</strong> – the lineshape (a <a class="reference internal" href="#hylight.multi_phonons.LineShape" title="hylight.multi_phonons.LineShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineShape</span></code></a> instance)</p></li>
+<li><p><strong>shape</strong> – the lineshape (a <a class="reference internal" href="#hylight.multi_modes.LineShape" title="hylight.multi_modes.LineShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineShape</span></code></a> instance)</p></li>
 <li><p><strong>pre_convolve</strong> – (float, optional, None) if not None, standard deviation of a pre convolution gaussian</p></li>
 <li><p><strong>window_fn</strong> – windowing function in the form provided by numpy (see <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.hamming()</span></code>)</p></li>
 </ul>
@@ -1019,14 +1081,14 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.duschinsky">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">duschinsky</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phonons_b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.duschinsky" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.duschinsky">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">duschinsky</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phonons_b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.duschinsky" title="Link to this definition">¶</a></dt>
 <dd><p>Dushinsky matrix from b to a <span class="math notranslate nohighlight">\(S_{a \\gets b}\)</span>.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.dynmatshow">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">dynmatshow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dynmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.dynmatshow" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.dynmatshow">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">dynmatshow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dynmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.dynmatshow" title="Link to this definition">¶</a></dt>
 <dd><p>Plot the dynamical matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1040,14 +1102,14 @@ or tuple of two paths <code class="code docutils literal notranslate"><span clas
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.fc_spectrum">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">fc_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.fc_spectrum" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.fc_spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">fc_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.fc_spectrum" title="Link to this definition">¶</a></dt>
 <dd><p>Build arrays for plotting a spectrum energy spectral function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.freq_from_finite_diff">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">freq_from_finite_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.freq_from_finite_diff" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.freq_from_finite_diff">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">freq_from_finite_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.freq_from_finite_diff" title="Link to this definition">¶</a></dt>
 <dd><p>Compute a vibration energy from three energy points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1065,21 +1127,21 @@ middle point and the sides.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.hr_spectrum">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">hr_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.hr_spectrum" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.hr_spectrum">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">hr_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.hr_spectrum" title="Link to this definition">¶</a></dt>
 <dd><p>Build arrays for plotting a spectrum phonon spectral function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.make_line_shape">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">make_line_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_si</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.make_line_shape" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.make_line_shape">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">make_line_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_si</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.make_line_shape" title="Link to this definition">¶</a></dt>
 <dd><p>Create the lineshape function in time space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t</strong> – the time array (in s)</p></li>
 <li><p><strong>sigma_si</strong> – the standard deviation of the line</p></li>
-<li><p><strong>shape</strong> – the type of lineshape (an instance of <a class="reference internal" href="#hylight.multi_phonons.LineShape" title="hylight.multi_phonons.LineShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineShape</span></code></a>)</p></li>
+<li><p><strong>shape</strong> – the type of lineshape (an instance of <a class="reference internal" href="#hylight.multi_modes.LineShape" title="hylight.multi_modes.LineShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineShape</span></code></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1089,8 +1151,8 @@ middle point and the sides.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.plot_spectral_function">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">plot_spectral_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cm1=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpl_params=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.plot_spectral_function" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.plot_spectral_function">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">plot_spectral_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poscar_es</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_phonons=&lt;function</span> <span class="pre">load_phonons&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cm1=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpl_params=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.plot_spectral_function" title="Link to this definition">¶</a></dt>
 <dd><p>Plot a two panel representation of the spectral function of the distorsion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1112,19 +1174,19 @@ middle point and the sides.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hylight.multi_phonons.rect">
-<span class="sig-prename descclassname"><span class="pre">hylight.multi_phonons.</span></span><span class="sig-name descname"><span class="pre">rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_phonons.rect" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="hylight.multi_modes.rect">
+<span class="sig-prename descclassname"><span class="pre">hylight.multi_modes.</span></span><span class="sig-name descname"><span class="pre">rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.multi_modes.rect" title="Link to this definition">¶</a></dt>
 <dd><p>A dummy windowing function that works like numpy.hamming, but as no effect on data.</p>
 </dd></dl>
 
 </section>
 <section id="module-hylight.npz">
-<span id="hylight-npz-module"></span><h2>hylight.npz module<a class="headerlink" href="#module-hylight.npz" title="Link to this heading">#</a></h2>
+<span id="hylight-npz-module"></span><h2>hylight.npz module<a class="headerlink" href="#module-hylight.npz" title="Link to this heading">¶</a></h2>
 <p>Serialization of modes to numpy zipped file.</p>
 <p>See also <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.savez()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.load()</span></code>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.npz.archive_modes">
-<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">archive_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.archive_modes" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">archive_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.archive_modes" title="Link to this definition">¶</a></dt>
 <dd><p>Store modes in dest using numpy’s npz format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1141,59 +1203,59 @@ middle point and the sides.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.npz.load_phonons">
-<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">load_phonons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.load_phonons" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">load_phonons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.load_phonons" title="Link to this definition">¶</a></dt>
 <dd><p>Load modes from a Hylight archive.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.npz.pops_and_masses">
-<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">pops_and_masses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.pops_and_masses" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.npz.</span></span><span class="sig-name descname"><span class="pre">pops_and_masses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.npz.pops_and_masses" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="module-hylight.struct">
-<span id="hylight-struct-module"></span><h2>hylight.struct module<a class="headerlink" href="#module-hylight.struct" title="Link to this heading">#</a></h2>
+<span id="hylight-struct-module"></span><h2>hylight.struct module<a class="headerlink" href="#module-hylight.struct" title="Link to this heading">¶</a></h2>
 <p>A generic representation of a crystal cell.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hylight.struct.Struct">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.struct.</span></span><span class="sig-name descname"><span class="pre">Struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.struct.Struct" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.struct.</span></span><span class="sig-name descname"><span class="pre">Struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.struct.Struct" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A general description of a periodic crystal cell.</p>
 <p>Store all the required infos to describe a given set of atomic positions.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="hylight.struct.Struct.atoms">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">atoms</span></span><a class="headerlink" href="#hylight.struct.Struct.atoms" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">atoms</span></span><a class="headerlink" href="#hylight.struct.Struct.atoms" title="Link to this definition">¶</a></dt>
 <dd><p>List the species names in an order matching <cite>self.raw</cite>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.struct.Struct.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.struct.Struct" title="hylight.struct.Struct"><span class="pre">Struct</span></a></span></span><a class="headerlink" href="#hylight.struct.Struct.copy" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.struct.Struct" title="hylight.struct.Struct"><span class="pre">Struct</span></a></span></span><a class="headerlink" href="#hylight.struct.Struct.copy" title="Link to this definition">¶</a></dt>
 <dd><p>Return a copy of the structure.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.struct.Struct.from_mode">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.struct.Struct" title="hylight.struct.Struct"><span class="pre">Struct</span></a></span></span><a class="headerlink" href="#hylight.struct.Struct.from_mode" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hylight.struct.Struct" title="hylight.struct.Struct"><span class="pre">Struct</span></a></span></span><a class="headerlink" href="#hylight.struct.Struct.from_mode" title="Link to this definition">¶</a></dt>
 <dd><p>Extract the cell from a <a class="reference internal" href="#hylight.mode.Mode" title="hylight.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">hylight.mode.Mode</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.struct.Struct.get_offset">
-<span class="sig-name descname"><span class="pre">get_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.struct.Struct.get_offset" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.struct.Struct.get_offset" title="Link to this definition">¶</a></dt>
 <dd><p>Return the index offset of the given species block in <a class="reference internal" href="#hylight.struct.Struct.raw" title="hylight.struct.Struct.raw"><code class="xref py py-attr docutils literal notranslate"><span class="pre">raw</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="hylight.struct.Struct.raw">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#hylight.struct.Struct.raw" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#hylight.struct.Struct.raw" title="Link to this definition">¶</a></dt>
 <dd><p>Return an array of atomic positions.</p>
 <p>This can be modified overwritten, but not modified in place.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hylight.struct.Struct.sp_at">
-<span class="sig-name descname"><span class="pre">sp_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.struct.Struct.sp_at" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sp_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.struct.Struct.sp_at" title="Link to this definition">¶</a></dt>
 <dd><p>Return the name of the species at the given index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1207,13 +1269,13 @@ middle point and the sides.</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="hylight.struct.Struct.species_names">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">species_names</span></span><a class="headerlink" href="#hylight.struct.Struct.species_names" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">species_names</span></span><a class="headerlink" href="#hylight.struct.Struct.species_names" title="Link to this definition">¶</a></dt>
 <dd><p>Names of species in the same order as found in the raw positions.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="hylight.struct.Struct.system_name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">system_name</span></span><a class="headerlink" href="#hylight.struct.Struct.system_name" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">system_name</span></span><a class="headerlink" href="#hylight.struct.Struct.system_name" title="Link to this definition">¶</a></dt>
 <dd><p>The name of the system, eventually generated from formula.</p>
 <p>Can be overwritten.</p>
 </dd></dl>
@@ -1222,23 +1284,23 @@ middle point and the sides.</p></li>
 
 </section>
 <section id="module-hylight.typing">
-<span id="hylight-typing-module"></span><h2>hylight.typing module<a class="headerlink" href="#module-hylight.typing" title="Link to this heading">#</a></h2>
+<span id="hylight-typing-module"></span><h2>hylight.typing module<a class="headerlink" href="#module-hylight.typing" title="Link to this heading">¶</a></h2>
 <p>Helper module for type annotations.</p>
 <p>Should help with variable support of typing across versions of python and libraries.</p>
 </section>
 <section id="module-hylight.utils">
-<span id="hylight-utils-module"></span><h2>hylight.utils module<a class="headerlink" href="#module-hylight.utils" title="Link to this heading">#</a></h2>
+<span id="hylight-utils-module"></span><h2>hylight.utils module<a class="headerlink" href="#module-hylight.utils" title="Link to this heading">¶</a></h2>
 <p>Pervasive utilities.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="hylight.utils.InputError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">InputError</span></span><a class="headerlink" href="#hylight.utils.InputError" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">InputError</span></span><a class="headerlink" href="#hylight.utils.InputError" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
 <p>An exception raised when the input files are not as expected.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.gaussian">
-<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.gaussian" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.gaussian" title="Link to this definition">¶</a></dt>
 <dd><p>Evaluate a Gaussian function on e.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1257,7 +1319,7 @@ middle point and the sides.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.gen_translat">
-<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">gen_translat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.gen_translat" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">gen_translat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.gen_translat" title="Link to this definition">¶</a></dt>
 <dd><p>Generate all translations to adjacent cells</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1268,7 +1330,7 @@ middle point and the sides.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.measure_fwhm">
-<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">measure_fwhm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.measure_fwhm" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">measure_fwhm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.measure_fwhm" title="Link to this definition">¶</a></dt>
 <dd><p>Measure the full width at half maximum of a given spectrum.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -1291,7 +1353,7 @@ select_interval to make a window around a single band.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.parse_formatted_table">
-<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">parse_formatted_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.parse_formatted_table" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">parse_formatted_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.parse_formatted_table" title="Link to this definition">¶</a></dt>
 <dd><p>Parse a table of numbers from a list of string with a regex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1307,7 +1369,7 @@ All the groups defined in format will be converted to float64 by numpy.</p></li>
 </dd>
 </dl>
 <section id="example">
-<h3>Example:<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<h3>Example:<a class="headerlink" href="#example" title="Link to this heading">¶</a></h3>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_formatted_table</span><span class="p">([</span><span class="s2">&quot;a=0.56 b=0.8 c=0.9&quot;</span><span class="p">],</span> <span class="s2">&quot;a=(.*) b=(.*) c=(.*)&quot;</span><span class="p">)</span>
 <span class="go">np.array([[0.56, 0.8, 0.9]])</span>
 </pre></div>
@@ -1317,19 +1379,19 @@ All the groups defined in format will be converted to float64 by numpy.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.periodic_diff">
-<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">periodic_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.periodic_diff" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">periodic_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.periodic_diff" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the displacement between ref and disp, accounting for periodic conditions.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.periodic_dist">
-<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">periodic_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.periodic_dist" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">periodic_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.periodic_dist" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the distance between ref and disp, accounting for periodic conditions.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hylight.utils.select_interval">
-<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">select_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.select_interval" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hylight.utils.</span></span><span class="sig-name descname"><span class="pre">select_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hylight.utils.select_interval" title="Link to this definition">¶</a></dt>
 <dd><p>Extract an interval of a spectrum and return the windows x and y arrays.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1348,6 +1410,18 @@ between emin and emax.</p></li>
 <dd class="field-even"><p><code class="code docutils literal notranslate"><span class="pre">(windowed_x,</span> <span class="pre">windowed_y)</span></code></p>
 </dd>
 </dl>
+</dd></dl>
+
+</section>
+<section id="module-hylight">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hylight" title="Link to this heading">¶</a></h2>
+<p>The Hylight package.</p>
+<p>Copyright (c) 2024, Théo Cavignac &lt;<a class="reference external" href="mailto:theo&#46;cavignac+dev&#37;&#52;&#48;gmail&#46;com">theo<span>&#46;</span>cavignac+dev<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;, The PyDEF team &lt;<a class="reference external" href="mailto:camille&#46;latouche&#37;&#52;&#48;cnrs-imn&#46;fr">camille<span>&#46;</span>latouche<span>&#64;</span>cnrs-imn<span>&#46;</span>fr</a>&gt;
+Licensed under the EUPL</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hylight.setup_logging">
+<span class="sig-prename descclassname"><span class="pre">hylight.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hylight.setup_logging" title="Link to this definition">¶</a></dt>
+<dd><p>Setup module logging.</p>
 </dd></dl>
 
 </section>
@@ -1374,7 +1448,7 @@ between emin and emax.</p></li>
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">BaZrO3:Ti study</div>
+                <div class="title">Al<sub>2</sub>O<sub>3</sub>:Ti study</div>
                 
               </div>
             </a>
@@ -1415,7 +1489,8 @@ between emin and emax.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">hylight package</a><ul>
-<li><a class="reference internal" href="#hylight.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-hylight.constants">hylight.constants module</a></li>
 <li><a class="reference internal" href="#module-hylight.guess_width">hylight.guess_width module</a><ul>
 <li><a class="reference internal" href="#hylight.guess_width.OmegaEff"><code class="docutils literal notranslate"><span class="pre">OmegaEff</span></code></a><ul>
@@ -1488,28 +1563,28 @@ between emin and emax.</p></li>
 <li><a class="reference internal" href="#hylight.mode.same_cell"><code class="docutils literal notranslate"><span class="pre">same_cell()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-hylight.mono_phonon">hylight.mono_phonon module</a><ul>
-<li><a class="reference internal" href="#hylight.mono_phonon.compute_spectrum"><code class="docutils literal notranslate"><span class="pre">compute_spectrum()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.mono_phonon.huang_rhys"><code class="docutils literal notranslate"><span class="pre">huang_rhys()</span></code></a></li>
+<li><a class="reference internal" href="#module-hylight.mono_mode">hylight.mono_mode module</a><ul>
+<li><a class="reference internal" href="#hylight.mono_mode.compute_spectrum"><code class="docutils literal notranslate"><span class="pre">compute_spectrum()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.mono_mode.huang_rhys"><code class="docutils literal notranslate"><span class="pre">huang_rhys()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-hylight.multi_phonons">hylight.multi_phonons module</a><ul>
-<li><a class="reference internal" href="#hylight.multi_phonons.LineShape"><code class="docutils literal notranslate"><span class="pre">LineShape</span></code></a><ul>
-<li><a class="reference internal" href="#hylight.multi_phonons.LineShape.GAUSSIAN"><code class="docutils literal notranslate"><span class="pre">LineShape.GAUSSIAN</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.LineShape.LORENTZIAN"><code class="docutils literal notranslate"><span class="pre">LineShape.LORENTZIAN</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.LineShape.NONE"><code class="docutils literal notranslate"><span class="pre">LineShape.NONE</span></code></a></li>
+<li><a class="reference internal" href="#module-hylight.multi_modes">hylight.multi_modes module</a><ul>
+<li><a class="reference internal" href="#hylight.multi_modes.LineShape"><code class="docutils literal notranslate"><span class="pre">LineShape</span></code></a><ul>
+<li><a class="reference internal" href="#hylight.multi_modes.LineShape.GAUSSIAN"><code class="docutils literal notranslate"><span class="pre">LineShape.GAUSSIAN</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.LineShape.LORENTZIAN"><code class="docutils literal notranslate"><span class="pre">LineShape.LORENTZIAN</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.LineShape.NONE"><code class="docutils literal notranslate"><span class="pre">LineShape.NONE</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#hylight.multi_phonons.compute_delta_R"><code class="docutils literal notranslate"><span class="pre">compute_delta_R()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.compute_spectrum"><code class="docutils literal notranslate"><span class="pre">compute_spectrum()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.duschinsky"><code class="docutils literal notranslate"><span class="pre">duschinsky()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.dynmatshow"><code class="docutils literal notranslate"><span class="pre">dynmatshow()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.fc_spectrum"><code class="docutils literal notranslate"><span class="pre">fc_spectrum()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.freq_from_finite_diff"><code class="docutils literal notranslate"><span class="pre">freq_from_finite_diff()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.hr_spectrum"><code class="docutils literal notranslate"><span class="pre">hr_spectrum()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.make_line_shape"><code class="docutils literal notranslate"><span class="pre">make_line_shape()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.plot_spectral_function"><code class="docutils literal notranslate"><span class="pre">plot_spectral_function()</span></code></a></li>
-<li><a class="reference internal" href="#hylight.multi_phonons.rect"><code class="docutils literal notranslate"><span class="pre">rect()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.compute_delta_R"><code class="docutils literal notranslate"><span class="pre">compute_delta_R()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.compute_spectrum"><code class="docutils literal notranslate"><span class="pre">compute_spectrum()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.duschinsky"><code class="docutils literal notranslate"><span class="pre">duschinsky()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.dynmatshow"><code class="docutils literal notranslate"><span class="pre">dynmatshow()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.fc_spectrum"><code class="docutils literal notranslate"><span class="pre">fc_spectrum()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.freq_from_finite_diff"><code class="docutils literal notranslate"><span class="pre">freq_from_finite_diff()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.hr_spectrum"><code class="docutils literal notranslate"><span class="pre">hr_spectrum()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.make_line_shape"><code class="docutils literal notranslate"><span class="pre">make_line_shape()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.plot_spectral_function"><code class="docutils literal notranslate"><span class="pre">plot_spectral_function()</span></code></a></li>
+<li><a class="reference internal" href="#hylight.multi_modes.rect"><code class="docutils literal notranslate"><span class="pre">rect()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-hylight.npz">hylight.npz module</a><ul>
@@ -1544,6 +1619,10 @@ between emin and emax.</p></li>
 <li><a class="reference internal" href="#hylight.utils.select_interval"><code class="docutils literal notranslate"><span class="pre">select_interval()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#module-hylight">Module contents</a><ul>
+<li><a class="reference internal" href="#hylight.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1556,9 +1635,9 @@ between emin and emax.</p></li>
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=8d563738"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../_static/scripts/furo.js?v=4e2eecee"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}, "svg": {"fontCache": "global"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
