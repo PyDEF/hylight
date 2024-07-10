@@ -19,7 +19,7 @@ For you own workstation, we recommend that you enable **all optional features**:
 
 ## Usage
 
-To learn how to use Hylight, you can read [documentation and tutorial](https://hylight.github.io/) (or the [PDF version](./public/latex/hylight.pdf))
+To learn how to use Hylight, you can read [documentation and tutorial](https://pydef.github.io/hylight) (or the [PDF version](./public/latex/hylight.pdf))
 
 ## Attribution
 
@@ -31,7 +31,7 @@ This is a non viral copyleft license, to be compared to MPL.
 However, unlike the MPL, it is available in all official languages of the EU,
 including authors own language, french.
 
-See [./LICENSE]
+See [LICENSE](https://github.com/PyDEF/hylight/blob/main/LICENSE)
 
 ### Citing Hylight
 

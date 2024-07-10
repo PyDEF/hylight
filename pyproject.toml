@@ -29,7 +29,7 @@ classifiers = [
 [project.urls]
 
 repository = "https://github.com/PyDEF/hylight"
-documentation = "https://hylight.github.io/"
+documentation = "https://pydef.github.io/hylight"
 
 [project.optional-dependencies]
 dev = [
